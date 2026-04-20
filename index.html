@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Rainbow Preschool - Under Bunnyland preschool</title>
+  <meta name="description"
+    content="Rainbow Preschool under Bunnyland Preschool - Where every child's journey is celebrated with color, laughter, and high-quality early education." />
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&amp;family=Poppins:wght@300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Tailwind Configuration -->
+  <script src="scripts/tailwind-config.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/animations.css" />
+</head>
+
+<body class="bg-background selection:bg-primary-container selection:text-on-primary-container">
+
+  <!-- =============================================
+       TopAppBar / Navigation
+       ============================================= -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 pt-3">
+    <nav
+      class="bg-[#fffadf]/80 dark:bg-stone-900/80 backdrop-blur-xl shadow-[0_20px_50px_rgba(255,87,34,0.05)] rounded-b-[3rem] w-full max-w-7xl mx-auto flex flex-col justify-center items-center py-4 px-8 transition-all duration-300">
+      <div class="flex flex-col items-center text-center w-full relative">
+        <span class="text-2xl font-black text-orange-600 dark:text-orange-400 font-headline tracking-tight">Rainbow
+          Preschool</span>
+        <span class="text-xs font-bold text-stone-500 uppercase tracking-[0.2em]">Under Bunnyland Preschool</span>
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-toggle"
+          class="md:hidden absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors"
+          aria-label="Open menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+      <div class="hidden md:flex gap-6 mt-3 items-center text-sm">
+        <a class="text-orange-700 dark:text-orange-300 border-b-4 border-orange-500 rounded-full px-3 py-1 font-medium hover:scale-105 transition-transform duration-300"
+          href="#gallery">Gallery</a>
+        <a class="text-stone-600 dark:text-stone-400 font-medium hover:text-orange-500 hover:scale-105 transition-transform duration-300"
+          href="#about">About us</a>
+        <a class="text-stone-600 dark:text-stone-400 font-medium hover:text-orange-500 hover:scale-105 transition-transform duration-300"
+          href="#activities">Activities</a>
+        <a class="text-stone-600 dark:text-stone-400 font-medium hover:text-orange-500 hover:scale-105 transition-transform duration-300"
+          href="#reviews">Reviews</a>
+        <a class="bg-primary text-on-primary px-5 py-1.5 rounded-full font-bold hover:scale-105 transition-transform duration-300 active:scale-95"
+          href="#enquiry">Register Now</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+
+  <!-- Mobile Menu Panel -->
+  <div id="mobile-menu-panel" class="mobile-menu-panel">
+    <div class="flex justify-between items-center mb-6">
+      <span class="text-xl font-bold text-orange-600 font-headline">Menu</span>
+      <button onclick="document.getElementById('mobile-menu-overlay').click()"
+        class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center" aria-label="Close menu">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <a href="#hero">Home</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About Us</a>
+    <a href="#activities">Activities</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+    <a href="#enquiry" class="!bg-primary !text-white !text-center !rounded-full !font-bold !mt-4">Register Now</a>
+  </div>
+
+  <main class="pt-32">
+
+    <!-- =============================================
+         Section 1: Hero
+         ============================================= -->
+    <section class="relative overflow-hidden px-6 py-12 md:py-24" id="hero">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-8 relative z-10 reveal-left">
+          <div
+            class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full font-bold text-sm">
+            <span class="material-symbols-outlined text-sm">auto_awesome</span>
+            ADMISSIONS OPEN 2024-25
+          </div>
+          <h1 class="font-headline text-5xl md:text-7xl font-extrabold text-on-background leading-tight tracking-tight">
+            Learning with <span class="text-primary">Fun</span> and <span class="text-tertiary">Creativity</span>
+          </h1>
+          <p class="text-lg text-on-surface-variant max-w-lg leading-relaxed">
+            Where every child's journey is celebrated with color, laughter, and high-quality early education. Welcome to
+            the Bunnyland family!
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-primary/20"
+              href="#enquiry">Enroll Now</a>
+            <a class="bg-surface-container-high text-on-surface px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300"
+              href="#contact">Visit Us</a>
+          </div>
+        </div>
+        <div class="relative reveal-right">
+          <div
+            class="absolute -top-10 -right-10 w-64 h-64 bg-tertiary-container rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse">
+          </div>
+          <div
+            class="absolute -bottom-10 -left-10 w-64 h-64 bg-secondary-container rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-700">
+          </div>
+          <div class="relative rounded-xl overflow-hidden shadow-2xl border-8 border-surface-container">
+            <img class="w-full h-full object-cover"
+              alt="Happy preschool children playing with colorful building blocks in a sunlit modern classroom"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlIgo5XNl_Su1oMZdySGSgzUhwOddUxHIXufo-7n3P_Lost4G_FOOrZx0Ud738JelGpkZADhtZr13m5hjzDjEMv00-31m2CKtyZ0XHvBBZ1nJUaUYHaC4L0Ng-LYa1tFKNOBTpSG9pAGMRXI6CuSKHR05-sk0FQFQvwyMjWlzPVsqxb3N3kVHltiqYjvalMo4nbErINqPpoCkF03J3fXDbkeydZ118RzgAhHpjYIP0TgyNr7z3HJE813miJv7v9LbKaN9G3-xjBVg" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         Section 2: Gallery
+         ============================================= -->
+    <section class="py-20 bg-surface-container-low curved-edge-t curved-edge-b" id="gallery">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+          <h2 class="font-headline text-4xl md:text-5xl font-bold mb-4">Gallery</h2>
+          <div class="h-2 w-24 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 reveal-stagger reveal">
+          <!-- Gallery: Large Feature Image -->
+          <div class="col-span-2 row-span-2 rounded-xl overflow-hidden group">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              loading="lazy"
+              data-alt="Spacious modern preschool classroom with colorful wooden furniture and learning stations"
+              alt="Spacious modern preschool classroom with colorful wooden furniture and learning stations"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD9JtGTu5yxULCHpF89vK3hgrFugisyXsDiXVItF_c-ig9zxEmi3HqQ9p0N5wd277ySco1HaCYuD0CHXUMED6Vs8PKC-R0o72d7mwGunw-CQ4nggI4OmhCtKK8euJhIX8lDFjya90qfOEaZS-viESWwAz7Ga-J82hiuJrQrSkh6Vm1I0lwu6SicvBlUanFW7DDucKfp9ll2WIyj01IMaUV7YN1L1oqw4iBTuaEkg0nsWoqpS4ec6Gubw9oTqxZprpwjpDyHoYRLno" />
+          </div>
+          <!-- Gallery: Painting -->
+          <div class="rounded-xl overflow-hidden group h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              loading="lazy" data-alt="Children's hands painting with bright watercolors on large sheets of paper"
+              alt="Children's hands painting with bright watercolors on large sheets of paper"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS2qNhF4C_vnP4AYpxAnSGSupw4iQtlsnUE1nk1Ai__D2SMKArt2gIvUs2gBRoT6oqyf6k8Jfvf38BGXAGxBZlZXf59yFjWA4V2sFuROLt5vqKtn7Qc1UR82OAU4QeypjYMKsshEWsLeTydPPEcF7hOtsbR9M50DcWzVpENbVFH-axQ1mTxq0xZQ1jSbwVoeEXIqsyCSdYdnjUdAqshDUyw6_hIyhlrEyjR6a7L4swkmCv-FnZivdLKwiEj3frYLW3otELDzjJt_w" />
+          </div>
+          <!-- Gallery: Playground -->
+          <div class="rounded-xl overflow-hidden group h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              loading="lazy"
+              data-alt="Outdoor playground with soft safe flooring, a small slide, and a wooden climbing frame"
+              alt="Outdoor playground with soft safe flooring, a small slide, and a wooden climbing frame"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwohwAfsGjLTRonrLcEnP63Cej5YkTLI_nj8Mc5c2IvZEGrh6xDm-ISISznBiyq_RE9zAUK7YUpu2LbuuonN-Q7sX3BEtCMJ_b4B8D3iX5e76oPvtPd0I_PjNEQUnptDVqdwEAB9_VpRgRWGg25j3pG1hzJbBiLkqjN9opf1X41pLLKCEXwAzG1nx2qBiy6BboxN0O_xj2ztfggtx2i00-8sQLydyUQ9VzuHSf-FDwl0YHfbTf7loAx3kmFf4qfS1eETem9a9lKTM" />
+          </div>
+          <!-- Gallery: Story Time -->
+          <div class="col-span-2 rounded-xl overflow-hidden group h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              loading="lazy" data-alt="Children sitting in a circle during story time with a teacher in a cozy corner"
+              alt="Children sitting in a circle during story time with a teacher in a cozy corner"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqBkE9CfiFSGBmhj6HJNEWipi3PPHeDUn--dOMOrGJF_HiMONXYrY9hHH5fB3Phhwu-AzmXIBw1ORMSST_uwBCsgbPJQt__qFRRyEwgkMnn1UIRfOBSk-mGrr0uQG0POaHlJsjawKiJf3xNa9Pf0g-Bl7-BjAx9iu9rCdSDIcK5UxE1eQtaOduP204KVKC0Rfl3nDmRHQ4y3Kgu2UTlWYjo7WV92ER8DoufS9CEpGVfZvk-rt2Ien6KAVuRKR-lzZqKCmxUBzo8os" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         Section 3: About Us
+         ============================================= -->
+    <section class="py-24 px-6" id="about">
+      <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-1/2 reveal-left">
+          <div class="relative">
+            <div class="absolute inset-0 bg-primary transform rotate-3 rounded-xl scale-105 opacity-10"></div>
+            <img class="relative z-10 rounded-xl shadow-xl" loading="lazy"
+              alt="Smiling preschool teacher interacting warmly with two young children"
+              data-alt="smiling preschool teacher interacting warmly with two young children in a playful learning environment"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbLNXvQiDAIJcElKg9ndAidbY7RfX5AL7hylBACh4JADoYsrHvfQCp3DaOF5AxvykUQcVJgmDSiQRKdVM6wedTqS2oi96U_qbsgnZWrHWZQucd_r9kyU2lJemRdX5ZkpvbDNtpqEI5BJpJbdtNElVm_EKYS76NaSBgRC3RhPjbiyctCepcnlqNoRpYtqnV2pxMRPTW-cqT0Uq9f2lbYNRsda5720dAAJ0zgJNRq3L6bzhCFWhR9No0R88xC1xukH7K_7dD_yT9dHY" />
+          </div>
+        </div>
+        <div class="lg:w-1/2 space-y-6 reveal-right">
+          <span class="text-tertiary font-bold tracking-widest uppercase">About us</span>
+          <h2 class="font-headline text-4xl md:text-5xl font-bold text-on-background">Nurturing Tomorrow's Leaders Today
+          </h2>
+          <p class="text-lg text-on-surface-variant leading-relaxed">
+            At Rainbow Preschool, we believe every child is a unique spectrum of potential. Our Bunnyland campus
+            provides a safe, stimulating, and inclusive environment where play is the primary language of learning.
+          </p>
+          <p class="text-lg text-on-surface-variant leading-relaxed">
+            Our curriculum is designed to foster critical thinking, social empathy, and creative expression through a
+            blend of structured guidance and free exploration.
+          </p>
+          <div class="grid grid-cols-2 gap-6 pt-4">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-secondary text-3xl">verified_user</span>
+              <span class="font-bold">Safe Environment</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary text-3xl">school</span>
+              <span class="font-bold">Expert Staff</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         Section 4: Activities (Bento Grid)
+         ============================================= -->
+    <section class="py-24 bg-surface-container-high curved-edge-t" id="activities">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 reveal">
+          <h2 class="font-headline text-4xl md:text-5xl font-bold mb-4">Beyond the Books</h2>
+          <p class="text-on-surface-variant">Holistic development through playful engagement</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 reveal-stagger reveal">
+
+          <!-- Activity: Art & Drawing -->
+          <div
+            class="md:col-span-2 bg-surface-container-lowest p-8 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-sm">
+            <div class="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-on-primary-container text-3xl">palette</span>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Art &amp; Drawing</h3>
+            <p class="text-on-surface-variant mb-6">Unleashing imagination through colors, textures, and various
+              artistic mediums.</p>
+            <img class="rounded-lg h-40 w-full object-cover" loading="lazy"
+              alt="Vibrant kid's drawings and finger paintings on a classroom wall"
+              data-alt="close up of vibrant kid's drawings and finger paintings on a classroom wall"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDIeek86440-4z4Dm0RJaUbZkcWxEquAlV_5cyu2qtrbfPQ-7nokY_gjtxSy4vyg8sQJKBI4e0CXOQC3y7JdjVXiO0xV4pmj9XkjJ-pLbqNN-GFjlWD8VF3hocVXQVtCPbZHcDb3Fx9owvIkD2F5-KH2SUJZVfDv8d_ZGnWBHjTZO5NlJgI-RcIjWJkvonla0P7EJ2h4gknPdNrgOsNs0PDGNWixyYJy1QJVL2qmQ1nqJlppkvomNb0TuTd_wbOZaQ91Qo6upKaPY" />
+          </div>
+
+          <!-- Activity: Dance & Rhythm -->
+          <div
+            class="bg-secondary-container p-8 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-sm flex flex-col justify-between">
+            <div>
+              <div
+                class="w-16 h-16 bg-on-secondary-fixed text-white rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-3xl">music_note</span>
+              </div>
+              <h3 class="text-2xl font-bold mb-4">Dance &amp; Rhythm</h3>
+              <p class="text-on-secondary-container">Developing motor skills and coordination through fun musical
+                movements.</p>
+            </div>
+          </div>
+
+          <!-- Activity: Storytelling -->
+          <div
+            class="bg-tertiary-container p-8 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="w-16 h-16 bg-on-tertiary-fixed text-white rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-3xl">menu_book</span>
+              </div>
+              <h3 class="text-2xl font-bold mb-4">Storytelling</h3>
+              <p class="text-on-tertiary-container">Building language skills and empathy through magical narrative
+                journeys.</p>
+            </div>
+          </div>
+
+          <!-- Activity: Outdoor Games -->
+          <div
+            class="md:col-span-4 bg-surface-bright p-8 rounded-xl hover:scale-[1.01] transition-all duration-300 shadow-sm flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2">
+              <div class="w-16 h-16 bg-orange-200 rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-orange-600 text-3xl">sports_soccer</span>
+              </div>
+              <h3 class="text-2xl font-bold mb-4">Outdoor Games</h3>
+              <p class="text-on-surface-variant">Active play in our secure playground to build strength and teamwork
+                spirit.</p>
+            </div>
+            <div class="md:w-1/2">
+              <img class="rounded-lg h-48 w-full object-cover" loading="lazy"
+                alt="Sunny green outdoor play area with children playing"
+                data-alt="wide shot of a sunny green outdoor play area with children playing tag and organized games"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyGNdWOpmEumCwOXA-Co-MTyWCTk_t2rKatP6SiROnyHs1ynHFyx0zdXv3dX_EuIvvMVmdApP1ZAFFePCM3T6XrKHXLKna4PPmFv3sEwQovqG9XpxH1Sy9vC_-o_Ej_KipsGvAh6I26-vAjH5-SgVXJMq5_QWsc4HKWIlyS7RAabJv700njmZ7mk-GoozyzO7ohVUvfn2GFJlrO69S1EBYZzMsw2ZLWeyoSybnR2qrcKOZhwR9ePdDlWdFFm-rt2WOxPBubRZFfvA" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         Section 5: Reviews (Carousel)
+         ============================================= -->
+    <section class="py-24 px-6 overflow-hidden" id="reviews">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4 reveal">
+          <div>
+            <h2 class="font-headline text-4xl md:text-5xl font-bold mb-4">Parent Stories</h2>
+            <p class="text-on-surface-variant">Trusted by families in our community</p>
+          </div>
+          <div class="flex gap-2">
+            <button id="review-prev"
+              class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors"
+              aria-label="Previous review">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button id="review-next"
+              class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors"
+              aria-label="Next review">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+        </div>
+        <div class="overflow-hidden reveal">
+          <div class="reviews-track">
+
+            <!-- Review Card 1 -->
+            <div class="review-card">
+              <div class="bg-surface-container-low p-10 rounded-xl relative h-full">
+                <div class="flex gap-1 mb-6 text-orange-500">
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                </div>
+                <p class="text-lg italic mb-8 leading-relaxed">"The warmth and care my son receives at Rainbow is
+                  unmatched.
+                  He has grown so much in his social skills and curiosity!"</p>
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-full bg-orange-200"></div>
+                  <div>
+                    <h4 class="font-bold">Sarah Jenkins</h4>
+                    <p class="text-sm opacity-60">Mother of Leo (4 yrs)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review Card 2 -->
+            <div class="review-card">
+              <div class="bg-surface-container-low p-10 rounded-xl relative h-full">
+                <div class="flex gap-1 mb-6 text-orange-500">
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                </div>
+                <p class="text-lg italic mb-8 leading-relaxed">"Excellent teachers and a fantastic curriculum. The
+                  facility
+                  is clean, safe, and very welcoming for kids."</p>
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-full bg-blue-200"></div>
+                  <div>
+                    <h4 class="font-bold">Mark Thompson</h4>
+                    <p class="text-sm opacity-60">Father of Mia (3 yrs)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review Card 3 -->
+            <div class="review-card">
+              <div class="bg-surface-container-low p-10 rounded-xl relative h-full">
+                <div class="flex gap-1 mb-6 text-orange-500">
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                </div>
+                <p class="text-lg italic mb-8 leading-relaxed">"The communication with parents is wonderful. I feel
+                  connected to my daughter's daily activities through their reports."</p>
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-full bg-pink-200"></div>
+                  <div>
+                    <h4 class="font-bold">Elena Rodriguez</h4>
+                    <p class="text-sm opacity-60">Mother of Sofia (5 yrs)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         Section 6: Enquiry Form
+         ============================================= -->
+    <section class="py-24 px-6 bg-primary text-on-primary curved-edge-t curved-edge-b" id="enquiry">
+      <div class="max-w-4xl mx-auto reveal">
+        <div class="text-center mb-12">
+          <h2 class="font-headline text-4xl md:text-5xl font-bold mb-4">Start Their Journey</h2>
+          <p class="opacity-90">Fill out the form below and our admissions team will get in touch shortly.</p>
+        </div>
+        <form id="enquiry-form" class="space-y-6" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="block font-bold">Your Name</label>
+              <input
+                class="w-full bg-on-primary/10 border-none rounded-md p-4 placeholder:text-on-primary/50 focus:ring-4 focus:ring-tertiary-fixed outline-none transition-all"
+                placeholder="Enter your full name" type="text" required />
+              <span class="form-error-msg"><span class="material-symbols-outlined" style="font-size:0.9rem">error</span>
+                Please enter your name</span>
+            </div>
+            <div class="space-y-2">
+              <label class="block font-bold">Child's Age</label>
+              <input
+                class="w-full bg-on-primary/10 border-none rounded-md p-4 placeholder:text-on-primary/50 focus:ring-4 focus:ring-tertiary-fixed outline-none transition-all"
+                placeholder="e.g. 3 years" type="text" required />
+              <span class="form-error-msg"><span class="material-symbols-outlined" style="font-size:0.9rem">error</span>
+                Please enter child's age</span>
+            </div>
+            <div class="space-y-2">
+              <label class="block font-bold">Phone Number</label>
+              <input
+                class="w-full bg-on-primary/10 border-none rounded-md p-4 placeholder:text-on-primary/50 focus:ring-4 focus:ring-tertiary-fixed outline-none transition-all"
+                placeholder="+1 (555) 000-0000" type="tel" required />
+              <span class="form-error-msg"><span class="material-symbols-outlined" style="font-size:0.9rem">error</span>
+                Enter a valid phone (10+ digits)</span>
+            </div>
+            <div class="space-y-2">
+              <label class="block font-bold">Inquiry For</label>
+              <select
+                class="w-full bg-on-primary/10 border-none rounded-md p-4 text-on-primary focus:ring-4 focus:ring-tertiary-fixed outline-none transition-all">
+                <option class="text-on-background">General Inquiry</option>
+                <option class="text-on-background">Enrollment</option>
+                <option class="text-on-background">School Visit</option>
+              </select>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="block font-bold">Message</label>
+            <textarea
+              class="w-full bg-on-primary/10 border-none rounded-md p-4 placeholder:text-on-primary/50 focus:ring-4 focus:ring-tertiary-fixed outline-none transition-all"
+              placeholder="Tell us about your requirements..." rows="4" required></textarea>
+            <span class="form-error-msg"><span class="material-symbols-outlined" style="font-size:0.9rem">error</span>
+              Please enter a message</span>
+          </div>
+          <button
+            class="w-full bg-secondary-fixed text-on-secondary-fixed py-5 rounded-full font-black text-xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
+            type="submit">Send Message</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- =============================================
+         Section 7: Contact Us
+         ============================================= -->
+    <section class="py-24 px-6" id="contact">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+        <div class="space-y-12 reveal-left">
+          <div>
+            <h2 class="font-headline text-4xl font-bold mb-8">Get in Touch</h2>
+            <div class="space-y-6">
+              <div class="flex items-start gap-4">
+                <div class="bg-primary-container p-3 rounded-full text-on-primary-container">
+                  <span class="material-symbols-outlined">location_on</span>
+                </div>
+                <div>
+                  <h4 class="font-bold">Our Address</h4>
+                  <p class="text-on-surface-variant">123 Bunny Lane, Rainbow District, Kidsville 56789</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="bg-secondary-container p-3 rounded-full text-on-secondary-container">
+                  <span class="material-symbols-outlined">call</span>
+                </div>
+                <div>
+                  <h4 class="font-bold">Call Us</h4>
+                  <p class="text-on-surface-variant">+1 (555) 123-4567</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="bg-tertiary-container p-3 rounded-full text-on-tertiary-container">
+                  <span class="material-symbols-outlined">mail</span>
+                </div>
+                <div>
+                  <h4 class="font-bold">Email Us</h4>
+                  <p class="text-on-surface-variant">hello@rainbowpreschool.edu</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-surface-container p-8 rounded-xl reveal-right">
+          <h3 class="text-2xl font-bold mb-6">Quick Contact Form</h3>
+          <form id="contact-form" class="space-y-4" novalidate>
+            <div>
+              <input class="w-full rounded-md border-none bg-surface-container-highest p-4" placeholder="Name"
+                type="text" required />
+              <span class="contact-error-msg"><span class="material-symbols-outlined"
+                  style="font-size:0.9rem">error</span> Please enter your name</span>
+            </div>
+            <div>
+              <input class="w-full rounded-md border-none bg-surface-container-highest p-4" placeholder="Email Address"
+                type="email" required />
+              <span class="contact-error-msg"><span class="material-symbols-outlined"
+                  style="font-size:0.9rem">error</span> Enter a valid email address</span>
+            </div>
+            <div>
+              <textarea class="w-full rounded-md border-none bg-surface-container-highest p-4"
+                placeholder="Your Message" rows="3" required></textarea>
+              <span class="contact-error-msg"><span class="material-symbols-outlined"
+                  style="font-size:0.9rem">error</span> Please enter a message</span>
+            </div>
+            <button class="bg-tertiary text-on-tertiary w-full py-4 rounded-full font-bold" type="submit">Submit
+              Form</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =============================================
+       Footer
+       ============================================= -->
+  <footer class="bg-orange-50 dark:bg-stone-950 rounded-t-[4rem] mt-12 px-6 py-16" id="footer">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+
+      <!-- Footer: School Info -->
+      <div class="space-y-6">
+        <div class="text-2xl font-bold text-orange-600 font-headline">Rainbow Preschool</div>
+        <p class="text-stone-500 text-sm leading-relaxed">
+          Bunnyland Campus offers a nurturing environment where children grow through creativity and compassion.
+        </p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3 text-stone-600">
+            <span class="material-symbols-outlined text-sm">schedule</span>
+            <span class="text-sm font-medium">Mon–Fri: 9 AM – 2 PM</span>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <a class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 hover:bg-orange-600 hover:text-white transition-all"
+            href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <span class="material-symbols-outlined text-xl">brand_family</span>
+          </a>
+          <a class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 hover:bg-orange-600 hover:text-white transition-all"
+            href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <span class="material-symbols-outlined text-xl">video_camera_front</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer: Quick Links -->
+      <div class="space-y-6">
+        <h4 class="font-bold text-stone-800">Quick Links</h4>
+        <ul class="space-y-4 text-stone-500 text-sm">
+          <li><a class="hover:text-orange-400 underline decoration-2 underline-offset-4 transition-all"
+              href="#activities">Our
+              Curriculum</a></li>
+          <li><a class="hover:text-orange-400 underline decoration-2 underline-offset-4 transition-all"
+              href="#about">Meet
+              the Teachers</a></li>
+          <li><a class="hover:text-orange-400 underline decoration-2 underline-offset-4 transition-all"
+              href="#contact">School
+              Timings</a></li>
+          <li><a class="hover:text-orange-400 underline decoration-2 underline-offset-4 transition-all"
+              href="#enquiry">Admissions</a></li>
+          <li><a class="hover:text-orange-400 underline decoration-2 underline-offset-4 transition-all"
+              href="#footer">Location</a></li>
+        </ul>
+      </div>
+
+      <!-- Footer: Map (Google Maps Embed) -->
+      <div class="space-y-6">
+        <h4 class="font-bold text-stone-800">Find Us</h4>
+        <div class="rounded-xl overflow-hidden h-48 w-full shadow-lg">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019112792498!2d-122.41941548468204!3d37.77492977975892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064c1cfbd21%3A0xa]4c6cb63a59e32!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1700000000000"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Rainbow Preschool Location on Google Maps">
+          </iframe>
+        </div>
+      </div>
+
+    </div>
+    <div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-orange-100 text-center">
+      <p class="text-stone-400 text-sm">© 2024 Rainbow Preschool - Bunnyland Campus. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- =============================================
+       Gallery Lightbox Overlay
+       ============================================= -->
+  <div id="lightbox-overlay" class="lightbox-overlay">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close lightbox">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <img id="lightbox-img" src="" alt="Gallery image preview" />
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Main Interactive Script -->
+  <script src="scripts/main.js"></script>
+
+</body>
+
+</html>
