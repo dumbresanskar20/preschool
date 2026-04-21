@@ -1,0 +1,164 @@
+/* ===================================================
+   Rainbow Preschool – Main Stylesheet
+   Under Bunnyland Preschool
+   =================================================== */
+
+/* --- Base Styles --- */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fffadf;
+  color: #1e1c00;
+}
+
+/* --- Material Symbols Configuration --- */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+/* --- Navigation Glass Effect --- */
+.glass-nav {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* --- Section Curved Edges --- */
+.curved-edge-b {
+  border-bottom-left-radius: 4rem;
+  border-bottom-right-radius: 4rem;
+}
+
+.curved-edge-t {
+  border-top-left-radius: 4rem;
+  border-top-right-radius: 4rem;
+}
+
+/* ===================================================
+   Enhanced Typography – Bold Playful Headings
+   =================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 800;
+}
+
+h1 {
+  font-size: 1.12em;
+  /* ~12% increase relative to existing size */
+}
+
+h2 {
+  font-size: 1.12em;
+}
+
+h3 {
+  font-size: 1.1em;
+}
+
+h4 {
+  font-size: 1.1em;
+}
+
+/* ===================================================
+   3D Button Depth Effect – Colors Untouched
+   =================================================== */
+
+/* All pill/CTA buttons */
+a[href="#enquiry"].bg-primary,
+a[href="#enquiry"].bg-secondary-fixed,
+a[href="#contact"].bg-surface-container-high,
+a.bg-primary,
+button[type="submit"],
+.mobile-menu-panel a.\!bg-primary {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+a[href="#enquiry"].bg-primary:hover,
+a[href="#enquiry"].bg-secondary-fixed:hover,
+a[href="#contact"].bg-surface-container-high:hover,
+a.bg-primary:hover,
+button[type="submit"]:hover,
+.mobile-menu-panel a.\!bg-primary:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+a[href="#enquiry"].bg-primary:active,
+a[href="#enquiry"].bg-secondary-fixed:active,
+a[href="#contact"].bg-surface-container-high:active,
+a.bg-primary:active,
+button[type="submit"]:active,
+.mobile-menu-panel a.\!bg-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Tertiary button (contact form submit) */
+button.bg-tertiary {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+button.bg-tertiary:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+button.bg-tertiary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Secondary-fixed button (enquiry form submit) */
+button.bg-secondary-fixed {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+button.bg-secondary-fixed:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+button.bg-secondary-fixed:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Surface-container-high button (Visit Us) */
+a.bg-surface-container-high {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+a.bg-surface-container-high:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+a.bg-surface-container-high:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* --- Corner Logos --- */
+.logo {
+  position: absolute;
+  top: 10px;
+  width: 100px;
+  height: auto;
+  z-index: 60;
+}
+
+.left-logo {
+  left: 10px;
+}
+
+.right-logo {
+  right: 10px;
+}
