@@ -1,0 +1,379 @@
+/* ===================================================
+   Under Construction Overlay — Rainbow Preschool
+   =================================================== */
+
+/* --- Google Font: Nunito (playful, rounded) --- */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+/* ---- 1. Blur the main page content ---- */
+#main-content {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.8s ease, opacity 0.8s ease;
+}
+
+#main-content.revealed {
+  filter: blur(0px);
+  pointer-events: auto;
+  user-select: auto;
+}
+
+/* ---- 2. Dark semi-transparent overlay ---- */
+#uc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 10, 40, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+  transition: opacity 0.8s ease;
+  /* Starfield background */
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(255, 182, 193, 0.18) 0%, transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(173, 216, 230, 0.18) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 153, 0.08) 0%, transparent 60%),
+    rgba(15, 10, 40, 0.72);
+}
+
+#uc-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- 3. Card ---- */
+.uc-card {
+  font-family: 'Nunito', 'Baloo 2', sans-serif;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 2.5rem;
+  padding: 3rem 2.5rem 2.5rem;
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  box-shadow:
+    0 8px 60px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255,255,255,0.05) inset;
+  position: relative;
+  overflow: hidden;
+  animation: uc-fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---- 4. Floating animated shapes ---- */
+.uc-shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.uc-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.45;
+  animation: uc-float linear infinite;
+}
+
+.uc-shape-1 {
+  width: 90px; height: 90px;
+  background: radial-gradient(circle, #ffb3c6, #ff85a1);
+  top: -20px; left: -20px;
+  animation-duration: 7s;
+}
+.uc-shape-2 {
+  width: 60px; height: 60px;
+  background: radial-gradient(circle, #b3e5fc, #81d4fa);
+  top: 10px; right: 30px;
+  animation-duration: 9s;
+  animation-delay: -3s;
+}
+.uc-shape-3 {
+  width: 45px; height: 45px;
+  background: radial-gradient(circle, #fff9c4, #fff176);
+  bottom: 30px; left: 50px;
+  animation-duration: 8s;
+  animation-delay: -1.5s;
+}
+.uc-shape-4 {
+  width: 70px; height: 70px;
+  background: radial-gradient(circle, #c8e6c9, #a5d6a7);
+  bottom: -20px; right: -10px;
+  animation-duration: 11s;
+  animation-delay: -4s;
+}
+
+/* Stars scattered in the overlay */
+.uc-star {
+  position: fixed;
+  width: 6px; height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0;
+  animation: uc-twinkle ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ---- 5. Emoji & Title ---- */
+.uc-emoji {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 0.25rem;
+  animation: uc-bounce 2s ease-in-out infinite;
+}
+
+.uc-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 900;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #ffb3c6 0%, #ffd700 40%, #a8edea 80%, #b3e5fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.uc-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 600;
+  margin-bottom: 2rem;
+  letter-spacing: 0.01em;
+}
+
+/* ---- 6. Countdown Timer ---- */
+.uc-countdown-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.85rem;
+}
+
+.uc-countdown {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.25rem;
+}
+
+.uc-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.uc-num {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 900;
+  line-height: 1;
+  min-width: 68px;
+  padding: 0.65rem 0.5rem;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.uc-num::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.18;
+}
+
+.uc-num-days {
+  background: rgba(255, 179, 198, 0.25);
+  color: #ffb3c6;
+  border: 1.5px solid rgba(255, 179, 198, 0.4);
+}
+.uc-num-days::before { background: #ffb3c6; }
+
+.uc-num-hours {
+  background: rgba(179, 229, 252, 0.25);
+  color: #b3e5fc;
+  border: 1.5px solid rgba(179, 229, 252, 0.4);
+}
+.uc-num-hours::before { background: #b3e5fc; }
+
+.uc-num-mins {
+  background: rgba(255, 249, 196, 0.25);
+  color: #fff9c4;
+  border: 1.5px solid rgba(255, 249, 196, 0.4);
+}
+.uc-num-mins::before { background: #fff9c4; }
+
+.uc-num-secs {
+  background: rgba(200, 230, 201, 0.25);
+  color: #c8e6c9;
+  border: 1.5px solid rgba(200, 230, 201, 0.4);
+}
+.uc-num-secs::before { background: #c8e6c9; }
+
+.uc-unit-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.uc-separator {
+  font-size: 2rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.3);
+  align-self: flex-start;
+  padding-top: 0.65rem;
+  line-height: 1;
+}
+
+/* Tick animation for seconds */
+.uc-num.tick {
+  transform: scale(1.08);
+}
+
+
+
+
+
+/* ---- 10. Clouds ---- */
+.uc-clouds {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9998;
+}
+
+.uc-cloud {
+  position: absolute;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.07);
+  animation: uc-driftCloud linear infinite;
+}
+
+.uc-cloud::before,
+.uc-cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.uc-cloud-1 {
+  width: 180px; height: 50px;
+  top: 12%; left: -200px;
+  animation-duration: 28s;
+}
+.uc-cloud-1::before {
+  width: 80px; height: 80px;
+  top: -40px; left: 30px;
+}
+.uc-cloud-1::after {
+  width: 60px; height: 60px;
+  top: -30px; left: 80px;
+}
+
+.uc-cloud-2 {
+  width: 140px; height: 40px;
+  top: 55%; left: -160px;
+  animation-duration: 35s;
+  animation-delay: -12s;
+}
+.uc-cloud-2::before {
+  width: 65px; height: 65px;
+  top: -35px; left: 20px;
+}
+.uc-cloud-2::after {
+  width: 50px; height: 50px;
+  top: -25px; left: 65px;
+}
+
+.uc-cloud-3 {
+  width: 110px; height: 32px;
+  top: 78%; left: -130px;
+  animation-duration: 22s;
+  animation-delay: -6s;
+}
+.uc-cloud-3::before {
+  width: 50px; height: 50px;
+  top: -28px; left: 15px;
+}
+.uc-cloud-3::after {
+  width: 38px; height: 38px;
+  top: -22px; left: 52px;
+}
+
+/* ---- 11. Keyframe Animations ---- */
+@keyframes uc-fadeInUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+@keyframes uc-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes uc-float {
+  0%   { transform: translate(0, 0)   rotate(0deg); }
+  33%  { transform: translate(12px, -16px) rotate(10deg); }
+  66%  { transform: translate(-8px, 10px)  rotate(-8deg); }
+  100% { transform: translate(0, 0)   rotate(0deg); }
+}
+
+@keyframes uc-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50%       { opacity: 0.8; transform: scale(1.2); }
+}
+
+@keyframes uc-driftCloud {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(100vw + 250px)); }
+}
+
+/* ---- 12. Responsive ---- */
+@media (max-width: 480px) {
+  .uc-card {
+    padding: 2rem 1.25rem 1.75rem;
+    border-radius: 1.75rem;
+  }
+
+  .uc-countdown {
+    gap: 0.5rem;
+  }
+
+  .uc-num {
+    min-width: 54px;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .uc-separator {
+    padding-top: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .uc-notify-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .uc-notify-input,
+  .uc-notify-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
