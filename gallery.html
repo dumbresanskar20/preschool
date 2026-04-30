@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Gallery – Rainbow Preschool</title>
+  <meta name="description" content="Photo gallery of Rainbow Preschool – Bunnyland Campus." />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="scripts/tailwind-config.js"></script>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/animations.css" />
+  <style>
+    .filter-btn {
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background: #b81d27;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(184, 29, 39, 0.35);
+    }
+
+    /* Masonry grid */
+    .photo-grid {
+      columns: 2;
+      column-gap: 1rem;
+    }
+
+    @media(min-width: 640px) {
+      .photo-grid {
+        columns: 3;
+      }
+    }
+
+    @media(min-width: 1024px) {
+      .photo-grid {
+        columns: 4;
+      }
+    }
+
+    .photo-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .photo-item img {
+      width: 100%;
+      display: block;
+      border-radius: 1rem;
+      transition: transform 0.4s ease;
+    }
+
+    .photo-item:hover img {
+      transform: scale(1.06);
+    }
+
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 1rem;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      gap: 0.4rem;
+    }
+
+    .photo-item:hover .photo-overlay {
+      opacity: 1;
+    }
+
+    .photo-overlay span {
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 5rem 1rem;
+      color: #aaa;
+    }
+
+    /* Lightbox nav */
+    .lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lb-nav:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    #lb-prev {
+      left: 1.5rem;
+    }
+
+    #lb-next {
+      right: 1.5rem;
+    }
+
+    .lb-caption {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.4rem 1.2rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+
+<body class="bg-background selection:bg-primary-container selection:text-on-primary-container">
+
+  <header class="fixed top-0 left-0 right-0 z-50 px-3 pt-3">
+    <nav class="cute-nav w-full mx-auto">
+      <div class="cute-nav-brand">
+        <img src="assets/img1.jpeg" class="cute-logo" alt="Logo Left">
+        <div class="text-center flex-1">
+          <span class="brand-title">🌈 Rainbow Preschool</span>
+          <span class="brand-subtitle">✨ Under Bunnyland Preschool ✨</span>
+        </div>
+        <img src="assets/img2.png" class="cute-logo" alt="Logo Right">
+        <button class="cute-hamburger md:hidden" id="mob-btn-g" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="cute-nav-links hidden md:flex">
+        <a href="index.html"      class="nav-pill pill-home">🏠 Home</a>
+        <a href="gallery.html"    class="nav-pill pill-gallery pill-active">🖼️ Gallery</a>
+        <a href="activities.html" class="nav-pill pill-activities">🎨 Activities</a>
+        <a href="index.html#about"   class="nav-pill pill-about">👨‍🏫 About Us</a>
+        <a href="index.html#enquiry" class="nav-pill pill-register">✨ Register Now</a>
+      </div>
+      <div class="cute-mob-links" id="mob-nav-g">
+        <a href="index.html"      class="nav-pill pill-home">🏠 Home</a>
+        <a href="gallery.html"    class="nav-pill pill-gallery">🖼️ Gallery</a>
+        <a href="activities.html" class="nav-pill pill-activities">🎨 Activities</a>
+        <a href="index.html#about"   class="nav-pill pill-about">👨‍🏫 About Us</a>
+        <a href="index.html#enquiry" class="nav-pill pill-register">✨ Register Now</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="pt-44">
+
+    <!-- Hero -->
+    <section class="relative px-6 py-14 text-center overflow-hidden">
+      <div
+        class="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary-container rounded-full opacity-20 blur-3xl pointer-events-none">
+      </div>
+      <div class="relative z-10 reveal">
+        <span
+          class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full font-bold text-sm mb-4">
+          <span class="material-symbols-outlined text-sm">photo_library</span> Our Moments
+        </span>
+        <h1 class="font-headline text-5xl md:text-6xl font-extrabold text-on-background mb-4">School <span
+            class="text-primary">Gallery</span></h1>
+        <p class="text-on-surface-variant max-w-xl mx-auto">Beautiful memories captured at Rainbow Preschool – smiles,
+          creativity, and growth every day.</p>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="px-6 pb-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-wrap gap-2 mb-8" id="filter-bar">
+          <button class="filter-btn active px-5 py-2 rounded-full bg-surface-container font-semibold text-sm"
+            data-cat="all">All</button>
+          <button class="filter-btn px-5 py-2 rounded-full bg-surface-container font-semibold text-sm"
+            data-cat="classroom">Classroom</button>
+          <button class="filter-btn px-5 py-2 rounded-full bg-surface-container font-semibold text-sm"
+            data-cat="events">Events</button>
+          <button class="filter-btn px-5 py-2 rounded-full bg-surface-container font-semibold text-sm"
+            data-cat="celebrations">Celebrations</button>
+          <button class="filter-btn px-5 py-2 rounded-full bg-surface-container font-semibold text-sm"
+            data-cat="outdoor">Outdoor</button>
+        </div>
+
+        <!-- Photo Grid (rendered by JS) -->
+        <div id="photo-grid" class="photo-grid"></div>
+        <div id="empty-state" class="empty-state hidden">
+          <span class="material-symbols-outlined text-6xl mb-4 block">photo_library</span>
+          <p class="text-xl font-semibold mb-2">No photos yet</p>
+          <p class="text-sm">Add photos by editing the PHOTOS array in the script below.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-orange-50 rounded-t-[4rem] mt-12 px-6 py-10 text-center">
+    <p class="text-stone-400 text-sm">© 2024 Rainbow Preschool – Bunnyland Campus. All rights reserved.</p>
+    <a href="index.html" class="text-orange-500 text-sm font-semibold hover:underline mt-2 inline-block">← Back to
+      Home</a>
+  </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox-overlay" class="lightbox-overlay">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close"><span
+        class="material-symbols-outlined">close</span></button>
+    <button class="lb-nav" id="lb-prev"><span class="material-symbols-outlined">chevron_left</span></button>
+    <img id="lightbox-img" src="" alt="" />
+    <button class="lb-nav" id="lb-next"><span class="material-symbols-outlined">chevron_right</span></button>
+    <div class="lb-caption" id="lb-caption"></div>
+  </div>
+
+  <!-- WhatsApp -->
+  <a id="whatsapp-float"
+    href="https://wa.me/+917083350502?text=Hello%2C%20I%20am%20interested%20in%20Rainbow%20Preschool." target="_blank"
+    rel="noopener noreferrer" aria-label="WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="30" height="30" fill="none">
+      <circle cx="24" cy="24" r="24" fill="#25D366" />
+      <path fill="#fff"
+        d="M34.5 13.5A14.44 14.44 0 0 0 24 9C16.27 9 10 15.27 10 23a13.94 13.94 0 0 0 1.87 7L10 39l9.24-1.84A14 14 0 0 0 24 38.5c7.73 0 14-6.27 14-14a13.94 13.94 0 0 0-3.5-11zM24 36a11.93 11.93 0 0 1-6.08-1.66l-.44-.26-4.55.9.93-4.44-.28-.46A12 12 0 1 1 24 36zm6.61-8.94c-.36-.18-2.14-1.06-2.47-1.18s-.57-.18-.81.18-1 1.18-1.2 1.42-.44.27-.8.09a10.17 10.17 0 0 1-3-1.85 11.24 11.24 0 0 1-2.07-2.58c-.22-.36 0-.56.16-.74s.36-.44.54-.66a2.46 2.46 0 0 0 .36-.6.65.65 0 0 0 0-.63c-.09-.18-.81-1.95-1.11-2.67s-.59-.6-.81-.61h-.69a1.32 1.32 0 0 0-.96.45 4 4 0 0 0-1.26 3 7 7 0 0 0 1.47 3.69 16 16 0 0 0 6.12 5.42c.86.37 1.53.59 2.05.76a4.93 4.93 0 0 0 2.27.14 3.68 3.68 0 0 0 2.41-1.71 3 3 0 0 0 .21-1.71c-.09-.16-.33-.25-.69-.43z" />
+    </svg>
+    <span class="whatsapp-tooltip">Chat with us!</span>
+  </a>
+
+  <script>
+    // ============================================================
+    //  ADD YOUR PHOTOS HERE
+    //  Each photo needs:
+    //    src  – path to the image, e.g. "assets/photos/pic1.jpg"
+    //    name – caption shown in the lightbox
+    //    cat  – category: "classroom" | "events" | "celebrations" | "outdoor"
+    // ============================================================
+    const PHOTOS = [
+      { src: "assets/img1.jpeg", name: "Our Classroom", cat: "classroom" },
+      { src: "assets/img2.png", name: "Annual Day", cat: "events" },
+      // { src: "assets/photos/outdoor1.jpg",   name: "Playground",   cat: "outdoor"   },
+    ];
+    // ============================================================
+
+    let currentCat = 'all';
+    let lbPhotos = [], lbIndex = 0;
+
+    function filteredPhotos() {
+      return currentCat === 'all' ? PHOTOS : PHOTOS.filter(p => p.cat === currentCat);
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('photo-grid');
+      const empty = document.getElementById('empty-state');
+      const fp = filteredPhotos();
+      grid.innerHTML = '';
+      if (fp.length === 0) { empty.classList.remove('hidden'); return; }
+      empty.classList.add('hidden');
+      fp.forEach((photo, i) => {
+        const div = document.createElement('div');
+        div.className = 'photo-item';
+        div.innerHTML = `
+          <img src="${photo.src}" alt="${photo.name}" loading="lazy" class="loaded" />
+          <div class="photo-overlay">
+            <span class="material-symbols-outlined text-base">open_in_full</span>
+            <span>${photo.name}</span>
+          </div>`;
+        div.onclick = () => openLightbox(i, fp);
+        grid.appendChild(div);
+      });
+    }
+
+    // Filters
+    document.getElementById('filter-bar').addEventListener('click', e => {
+      const btn = e.target.closest('[data-cat]');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      renderGrid();
+    });
+
+    // Lightbox
+    function openLightbox(i, arr) {
+      lbPhotos = arr; lbIndex = i; showLb();
+      document.getElementById('lightbox-overlay').classList.add('active');
+    }
+    function showLb() {
+      const p = lbPhotos[lbIndex];
+      document.getElementById('lightbox-img').src = p.src;
+      document.getElementById('lb-caption').textContent = `${p.name} · ${p.cat}`;
+    }
+    document.getElementById('lightbox-close').onclick = () => document.getElementById('lightbox-overlay').classList.remove('active');
+    document.getElementById('lightbox-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('lightbox-overlay')) document.getElementById('lightbox-overlay').classList.remove('active');
+    });
+    document.getElementById('lb-prev').onclick = e => { e.stopPropagation(); lbIndex = (lbIndex - 1 + lbPhotos.length) % lbPhotos.length; showLb(); };
+    document.getElementById('lb-next').onclick = e => { e.stopPropagation(); lbIndex = (lbIndex + 1) % lbPhotos.length; showLb(); };
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox-overlay').classList.contains('active')) return;
+      if (e.key === 'ArrowLeft') { lbIndex = (lbIndex - 1 + lbPhotos.length) % lbPhotos.length; showLb(); }
+      if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbPhotos.length; showLb(); }
+      if (e.key === 'Escape') document.getElementById('lightbox-overlay').classList.remove('active');
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('revealed');
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    renderGrid();
+
+    // Mobile nav toggle
+    document.getElementById('mob-btn-g').addEventListener('click', () => {
+      document.getElementById('mob-nav-g').classList.toggle('open');
+    });
+  </script>
+</body>
+
+</html>
