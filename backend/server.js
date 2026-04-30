@@ -24,6 +24,7 @@ app.use('/api/review',       require('./routes/review'));
 app.use('/api/program',      require('./routes/program'));
 app.use('/api/announcement', require('./routes/announcement'));
 app.use('/api/content',      require('./routes/content'));
+app.use('/api/contact',      require('./routes/contact'));
 
 // ─── Admin Panel Route ────────────────────────────────────────
 app.get('/admin', (req, res) => {

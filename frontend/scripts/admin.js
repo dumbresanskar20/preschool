@@ -86,6 +86,7 @@ window.showTab = function(tabId) {
   if (tabId === 'reviews') loadReviewsList();
   if (tabId === 'programs') loadProgramsList();
   if (tabId === 'announcements') loadAnnouncementsList();
+  if (tabId === 'messages') loadMessagesList();
   if (tabId === 'content') loadContentData();
 };
 
@@ -162,6 +163,16 @@ async function loadAnnouncementsList() {
       <button onclick="deleteItem('/announcement/${a._id}', loadAnnouncementsList)" class="text-red-500 hover:underline">Delete</button>
     </td></tr>`;
   }).join('');
+}
+
+async function loadMessagesList() {
+  const res = await adminFetch('/contact');
+  if(!res.success) return;
+  const tbody = document.getElementById('list-messages');
+  tbody.innerHTML = res.data.map(m => `
+    <tr class="border-b"><td class="p-4">${new Date(m.createdAt).toLocaleDateString()}</td><td class="p-4 font-bold">${m.name}</td><td class="p-4"><a href="mailto:${m.email}" class="text-blue-500 hover:underline">${m.email}</a></td><td class="p-4 text-sm">${m.message}</td>
+    <td class="p-4"><button onclick="deleteItem('/contact/${m._id}', loadMessagesList)" class="text-red-500 hover:underline">Delete</button></td></tr>
+  `).join('');
 }
 
 async function loadContentData() {

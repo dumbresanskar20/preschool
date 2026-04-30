@@ -195,6 +195,41 @@
     });
   }
 
+  // ── Contact form ───────────────────────────────────────────────
+  function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      const name = form.querySelector('input[name="name"]').value.trim();
+      const email = form.querySelector('input[name="email"]').value.trim();
+      const message = form.querySelector('textarea[name="message"]').value.trim();
+
+      if (!name || !email || !message) {
+        showLocalToast('Please fill out all contact fields.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      try {
+        const res = await submitContact({ name, email, message });
+        if (res.success) {
+          showLocalToast('Message sent successfully!', 'success');
+          form.reset();
+        } else {
+          showLocalToast(res.message || 'Failed to send message.');
+        }
+      } catch {
+        showLocalToast('Network error. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Submit Form';
+      }
+    });
+  }
+
   // ── Init ───────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
     loadPrograms();
@@ -203,5 +238,6 @@
     loadContent();
     initRegistrationForm();
     initReviewForm();
+    initContactForm();
   });
 })();

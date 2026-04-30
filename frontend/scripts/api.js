@@ -3,11 +3,20 @@
  * All backend calls go through this module.
  */
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = '/api';
 
 /* ── Registration ─────────────────────────────── */
 async function submitRegistration(data) {
   const r = await fetch(`${API_BASE}/registration`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  return r.json();
+}
+
+/* ── Contact ──────────────────────────────────── */
+async function submitContact(data) {
+  const r = await fetch(`${API_BASE}/contact`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
