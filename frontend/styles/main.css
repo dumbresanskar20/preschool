@@ -1,0 +1,384 @@
+/* ===================================================
+   Rainbow Preschool – Main Stylesheet
+   Under Bunnyland Preschool
+   =================================================== */
+
+/* --- Base Styles --- */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fffadf;
+  color: #1e1c00;
+}
+
+/* --- Material Symbols Configuration --- */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+/* --- Navigation Glass Effect --- */
+.glass-nav {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* --- Section Curved Edges --- */
+.curved-edge-b {
+  border-bottom-left-radius: 4rem;
+  border-bottom-right-radius: 4rem;
+}
+
+.curved-edge-t {
+  border-top-left-radius: 4rem;
+  border-top-right-radius: 4rem;
+}
+
+/* ===================================================
+   Enhanced Typography – Bold Playful Headings
+   =================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 800;
+}
+
+h1 {
+  font-size: 1.12em;
+  /* ~12% increase relative to existing size */
+}
+
+h2 {
+  font-size: 1.12em;
+}
+
+h3 {
+  font-size: 1.1em;
+}
+
+h4 {
+  font-size: 1.1em;
+}
+
+/* ===================================================
+   3D Button Depth Effect – Colors Untouched
+   =================================================== */
+
+/* All pill/CTA buttons */
+a[href="#enquiry"].bg-primary,
+a[href="#enquiry"].bg-secondary-fixed,
+a[href="#contact"].bg-surface-container-high,
+a.bg-primary,
+button[type="submit"],
+.mobile-menu-panel a.\!bg-primary {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+a[href="#enquiry"].bg-primary:hover,
+a[href="#enquiry"].bg-secondary-fixed:hover,
+a[href="#contact"].bg-surface-container-high:hover,
+a.bg-primary:hover,
+button[type="submit"]:hover,
+.mobile-menu-panel a.\!bg-primary:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+a[href="#enquiry"].bg-primary:active,
+a[href="#enquiry"].bg-secondary-fixed:active,
+a[href="#contact"].bg-surface-container-high:active,
+a.bg-primary:active,
+button[type="submit"]:active,
+.mobile-menu-panel a.\!bg-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Tertiary button (contact form submit) */
+button.bg-tertiary {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+button.bg-tertiary:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+button.bg-tertiary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Secondary-fixed button (enquiry form submit) */
+button.bg-secondary-fixed {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+button.bg-secondary-fixed:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+button.bg-secondary-fixed:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Surface-container-high button (Visit Us) */
+a.bg-surface-container-high {
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+a.bg-surface-container-high:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+a.bg-surface-container-high:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================================
+   Cute Navbar
+   =================================================== */
+
+.cute-nav {
+  background: linear-gradient(135deg, #fffde7 0%, #fff8f0 50%, #fef9ff 100%);
+  border-radius: 1.75rem;
+  padding: 0.9rem 1.25rem 0.85rem;
+  box-shadow: 0 8px 28px rgba(255, 120, 0, 0.13), 0 2px 8px rgba(0,0,0,0.05);
+  border: 2px solid rgba(255, 180, 50, 0.28);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.cute-nav-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2.5px dashed rgba(251, 146, 60, 0.28);
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.cute-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid rgba(251, 146, 60, 0.45);
+  box-shadow: 0 3px 10px rgba(251, 146, 60, 0.25);
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #c2410c;
+  line-height: 1.15;
+  display: block;
+}
+
+.brand-subtitle {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #92400e;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 1px;
+}
+
+.cute-nav-links {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Nav pills */
+.nav-pill {
+  padding: 0.42rem 0.95rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(.34, 1.56, .64, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  white-space: nowrap;
+  line-height: 1;
+}
+.nav-pill:hover  { transform: scale(1.09) translateY(-2px); }
+.nav-pill:active { transform: scale(0.95); }
+
+.pill-home       { background: #dbeafe; color: #1e40af; }
+.pill-home:hover { background: #bfdbfe; color: #1e3a8a; }
+
+.pill-gallery       { background: #fce7f3; color: #9d174d; }
+.pill-gallery:hover { background: #fbcfe8; color: #831843; }
+
+.pill-activities       { background: #dcfce7; color: #166534; }
+.pill-activities:hover { background: #bbf7d0; color: #14532d; }
+
+.pill-about       { background: #ede9fe; color: #6d28d9; }
+.pill-about:hover { background: #ddd6fe; color: #5b21b6; }
+
+.pill-reviews       { background: #fef9c3; color: #854d0e; }
+.pill-reviews:hover { background: #fef08a; color: #713f12; }
+
+.pill-register {
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: #fff;
+  box-shadow: 0 3px 14px rgba(249, 115, 22, 0.35);
+}
+.pill-register:hover {
+  box-shadow: 0 5px 20px rgba(249, 115, 22, 0.5);
+  color: #fff;
+}
+
+.pill-active {
+  box-shadow: 0 3px 12px rgba(0,0,0,0.14);
+  filter: brightness(0.94);
+}
+
+/* Mobile hamburger */
+.cute-hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ffecd2;
+  border: none;
+  border-radius: 0.65rem;
+  padding: 0.5rem 0.55rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: absolute;
+  right: 0;
+}
+.cute-hamburger span {
+  display: block;
+  width: 20px;
+  height: 2.5px;
+  background: #c2410c;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+.cute-hamburger:hover { background: #fed7aa; }
+
+/* Mobile dropdown */
+.cute-mob-links {
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 0.7rem;
+  border-top: 2px dashed rgba(251,146,60,0.25);
+  margin-top: 0.4rem;
+  display: none;
+}
+.cute-mob-links.open { display: flex; }
+.cute-mob-links .nav-pill {
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  font-size: 0.88rem;
+}
+
+/* ===================================================
+   Floating WhatsApp Button
+   =================================================== */
+
+#whatsapp-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  width: 62px;
+  height: 62px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45), 0 2px 8px rgba(0,0,0,0.15);
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease;
+  animation: wa-bounce-in 0.6s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+/* Pulsing ring around the button */
+#whatsapp-float::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 3px solid rgba(37, 211, 102, 0.5);
+  animation: wa-pulse-ring 2s ease-out infinite;
+}
+
+#whatsapp-float:hover {
+  transform: scale(1.12) translateY(-3px);
+  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.55), 0 4px 12px rgba(0,0,0,0.15);
+}
+
+#whatsapp-float:active {
+  transform: scale(0.95);
+}
+
+/* Tooltip */
+.whatsapp-tooltip {
+  position: absolute;
+  right: 74px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: 20px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.whatsapp-tooltip::after {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-left-color: #1a1a1a;
+  border-right: 0;
+}
+
+#whatsapp-float:hover .whatsapp-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Animations */
+@keyframes wa-bounce-in {
+  0% { opacity: 0; transform: scale(0.3) translateY(40px); }
+  70% { transform: scale(1.08) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes wa-pulse-ring {
+  0%   { transform: scale(1); opacity: 0.7; }
+  60%  { transform: scale(1.35); opacity: 0; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
