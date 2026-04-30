@@ -216,7 +216,11 @@
       try {
         const res = await submitContact({ name, email, message });
         if (res.success) {
-          showLocalToast('Message sent successfully!', 'success');
+          if (res.emailStatus && res.emailStatus !== 'Sent successfully') {
+            alert('Data saved, but email failed to send: ' + res.emailStatus);
+          } else {
+            showLocalToast('Message sent successfully!', 'success');
+          }
           form.reset();
         } else {
           showLocalToast(res.message || 'Failed to send message.');
