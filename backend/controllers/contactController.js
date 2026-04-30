@@ -21,7 +21,7 @@ exports.submitContact = async (req, res) => {
 
       const mailOptions = {
         from: process.env.EMAIL_USER || email,
-        to: 'dumbresanskar23@gmail.com',
+        to: 'bunnylandtalegaon@gmail.com',
         subject: `New Contact Form Submission from ${name}`,
         text: `You have received a new contact message:\n\nName: ${name}\nEmail: ${email}\nMessage:\n${message}`
       };
