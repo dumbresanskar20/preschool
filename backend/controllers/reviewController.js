@@ -35,12 +35,19 @@ exports.createReview = async (req, res) => {
           <h2 style="color: #f97316;">Hello ${parentName}!</h2>
           <p>Thank you for sharing your experience with <strong>Rainbow Preschool</strong>.</p>
           <p>We have successfully received your review. We deeply appreciate your feedback and support.</p>
+          
+          <div style="background: #fff8f0; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f97316;">
+            <strong>Your Rating:</strong> ${rating} / 5 ⭐<br><br>
+            <strong>Your Review:</strong><br>
+            <i style="color: #555;">"${reviewText}"</i>
+          </div>
+
           <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
           <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
           <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Rainbow Preschool Team</p>
         </div>
       `,
-      text: `Hello ${parentName}, Thank you for sharing your experience with Rainbow Preschool. We have successfully received your review and deeply appreciate your feedback.`
+      text: `Hello ${parentName},\n\nThank you for sharing your experience with Rainbow Preschool. We have successfully received your review and deeply appreciate your feedback.\n\nYour Rating: ${rating} / 5\nYour Review: "${reviewText}"`
     });
 
     if (!autoReplyRes.success) {
