@@ -1,37 +1,40 @@
 const nodemailer = require('nodemailer');
 
-// Create a singleton transporter
+// 3. Verify Transporter Configuration at Runtime
+console.log("DEBUG: Initializing Mailer...");
+console.log("DEBUG: EMAIL_USER exists:", !!process.env.EMAIL_USER);
+console.log("DEBUG: EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  connectionTimeout: 15000,
-  greetingTimeout: 15000
+  connectionTimeout: 20000,
+  greetingTimeout: 20000
 });
 
-// Verify connection configuration on startup
-if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-  transporter.verify((error, success) => {
-    if (error) {
-      console.error('❌ Mailer Verification Error:', error);
-    } else {
-      console.log('📧 Mailer is ready to take messages');
-    }
-  });
-}
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('❌ Mailer Runtime Error:', error);
+  } else {
+    console.log('📧 Mailer is authenticated and ready to send.');
+  }
+});
 
 /**
- * Utility to send emails using Nodemailer
+ * Utility to send emails with detailed logging
  */
 const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
   try {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("❌ EMAIL_USER or EMAIL_PASS missing at runtime.");
       return { success: false, message: 'Email credentials not configured.' };
     }
 
-    console.log(`📧 Sending email to: ${to || process.env.EMAIL_USER}`);
+    // 1. Verify Trigger Execution
+    console.log(`DEBUG: Preparing to send email to: ${to || process.env.EMAIL_USER}`);
 
     const mailOptions = {
       from: `"${fromName || 'Bunnyland Preschool'}" <${process.env.EMAIL_USER}>`,
@@ -42,10 +45,15 @@ const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
       html: html
     };
 
+    // 6. Ensure API is awaited properly
     const info = await transporter.sendMail(mailOptions);
+    
+    // 2. Add Detailed Logging for Email Sending
+    console.log("✅ Email sent successfully:", info.response);
     return { success: true, info };
   } catch (error) {
-    console.error('❌ SendEmail Error:', error);
+    // 2. Add Detailed Logging for failures
+    console.error("❌ Email failed for:", to || 'Admin', error);
     return { success: false, error: error.message };
   }
 };

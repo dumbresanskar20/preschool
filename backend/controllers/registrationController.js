@@ -3,6 +3,9 @@ const sendEmail = require('../config/mailer');
 
 // POST /api/registration
 exports.createRegistration = async (req, res) => {
+  // 4. Confirm API is hit from Frontend
+  console.log("DEBUG: API /registration hit");
+
   try {
     const body = req.body;
     const parentName = body.parentName || body.name;
@@ -29,50 +32,51 @@ exports.createRegistration = async (req, res) => {
       message 
     });
 
-    // Send emails in background sequentially
-    (async () => {
-      try {
-        // 1. Notification to School
-        await sendEmail({
-          subject: `New Registration Inquiry: ${inquiryType}`,
-          text: `Parent: ${parentName}\nChild's Age: ${childAge}\nPhone: ${phone}\nEmail: ${email}\nInquiry For: ${inquiryType}\nMessage: ${message}`,
-          replyTo: email,
-          fromName: 'Bunnyland Admissions'
-        });
+    // 7. Ensure response is returned AFTER email logic (Sequential execution)
+    // 1. Notification to School
+    console.log("DEBUG: Sending registration notification to school...");
+    await sendEmail({
+      subject: `New Registration Inquiry: ${inquiryType}`,
+      text: `Parent: ${parentName}\nChild's Age: ${childAge}\nPhone: ${phone}\nEmail: ${email}\nInquiry For: ${inquiryType}\nMessage: ${message}`,
+      replyTo: email,
+      fromName: 'Bunnyland Admissions'
+    });
 
-        // Small delay
-        await new Promise(r => setTimeout(r, 1000));
+    // Small delay
+    await new Promise(r => setTimeout(r, 1000));
 
-        // 2. Auto-reply to Parent
-        await sendEmail({
-          to: email,
-          subject: 'Registration Inquiry Received - Bunnyland Preschool',
-          html: `
-            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-              <h2 style="color: #c2410c;">Dear ${parentName},</h2>
-              <p>Warm greetings from <strong>Bunnyland Preschool!</strong></p>
-              <p>Thank you for inquiring about our programs. We have received your registration details for your child (Age: ${childAge}).</p>
-              <p>Our admissions team will review your inquiry and contact you shortly at <strong>${phone}</strong> to discuss the next steps.</p>
-              <div style="background: #fff8f0; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f97316;">
-                <strong>Your Message:</strong><br>
-                <i style="color: #555;">"${message}"</i>
-              </div>
-              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-              <p style="font-size: 0.9rem; color: #666;">This is an automated confirmation of your inquiry.</p>
-              <p style="font-weight: bold; color: #c2410c;">Best Regards,<br>Admissions Office<br>Bunnyland Preschool</p>
-            </div>
-          `,
-          text: `Dear ${parentName}, Thank you for your inquiry at Bunnyland Preschool. We have received your details and will contact you soon.`
-        });
-        console.log('✅ Registration emails processed successfully.');
-      } catch (err) {
-        console.error('❌ Background Registration Email Error:', err);
-      }
-    })();
+    // 2. Auto-reply to Parent
+    console.log(`DEBUG: Sending auto-reply to parent: ${email}`);
+    const autoReplyRes = await sendEmail({
+      to: email,
+      subject: 'Registration Inquiry Received - Bunnyland Preschool',
+      html: `
+        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+          <h2 style="color: #c2410c;">Dear ${parentName},</h2>
+          <p>Warm greetings from <strong>Bunnyland Preschool!</strong></p>
+          <p>Thank you for inquiring about our programs. We have received your registration details for your child (Age: ${childAge}).</p>
+          <p>Our admissions team will review your inquiry and contact you shortly at <strong>${phone}</strong> to discuss the next steps.</p>
+          <div style="background: #fff8f0; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f97316;">
+            <strong>Your Message:</strong><br>
+            <i style="color: #555;">"${message}"</i>
+          </div>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <p style="font-size: 0.9rem; color: #666;">This is an automated confirmation of your inquiry.</p>
+          <p style="font-weight: bold; color: #c2410c;">Best Regards,<br>Admissions Office<br>Bunnyland Preschool</p>
+        </div>
+      `,
+      text: `Dear ${parentName}, Thank you for your inquiry at Bunnyland Preschool. We have received your details and will contact you soon.`
+    });
+
+    if (autoReplyRes.success) {
+      console.log("DEBUG: All registration emails sent successfully.");
+    } else {
+      console.warn("DEBUG: Registration auto-reply might have failed.");
+    }
 
     res.status(201).json({ success: true, message: 'Registration submitted! A confirmation email has been sent to you.', data: reg });
   } catch (err) {
-    console.error('Registration Error:', err);
+    console.error('❌ Registration API Error:', err);
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
   }
 };

@@ -2,6 +2,9 @@ const Contact = require('../models/Contact');
 const sendEmail = require('../config/mailer');
 
 exports.submitContact = async (req, res) => {
+  // 4. Confirm API is hit from Frontend
+  console.log("DEBUG: API /contact hit");
+
   try {
     const { name, email, message } = req.body;
     if (!name || !email || !message) {
@@ -9,41 +12,42 @@ exports.submitContact = async (req, res) => {
     }
     const contact = await Contact.create({ name, email, message });
 
-    // Send emails in background sequentially to avoid Gmail spam/security filters
-    (async () => {
-      try {
-        // 1. Notification to School
-        await sendEmail({
-          subject: `New Contact Message from ${name}`,
-          text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-          replyTo: email,
-          fromName: 'Bunnyland Website'
-        });
+    // 7. Ensure response is returned AFTER email logic (Sequential execution)
+    // 1. Notification to School
+    console.log("DEBUG: Sending notification to school...");
+    await sendEmail({
+      subject: `New Contact Message from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+      replyTo: email,
+      fromName: 'Bunnyland Website'
+    });
 
-        // Small delay between emails
-        await new Promise(r => setTimeout(r, 1000));
+    // Small delay to ensure Gmail handles sequential messages
+    await new Promise(r => setTimeout(r, 1000));
 
-        // 2. Auto-reply to User
-        await sendEmail({
-          to: email,
-          subject: 'Message Received - Bunnyland Preschool',
-          html: `
-            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-              <h2 style="color: #f97316;">Hello ${name}!</h2>
-              <p>Thank you for reaching out to <strong>Bunnyland Preschool</strong>.</p>
-              <p>We have received your message and our team will get back to you as soon as possible.</p>
-              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-              <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
-              <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Bunnyland Preschool Team</p>
-            </div>
-          `,
-          text: `Hello ${name}, Thank you for reaching out to Bunnyland Preschool. We have received your message and will get back to you soon.`
-        });
-        console.log('✅ Contact emails processed successfully.');
-      } catch (err) {
-        console.error('❌ Background Email Error:', err);
-      }
-    })();
+    // 2. Auto-reply to User
+    console.log(`DEBUG: Sending auto-reply to user: ${email}`);
+    const autoReplyRes = await sendEmail({
+      to: email,
+      subject: 'Message Received - Bunnyland Preschool',
+      html: `
+        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+          <h2 style="color: #f97316;">Hello ${name}!</h2>
+          <p>Thank you for reaching out to <strong>Bunnyland Preschool</strong>.</p>
+          <p>We have received your message and our team will get back to you as soon as possible.</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
+          <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Bunnyland Preschool Team</p>
+        </div>
+      `,
+      text: `Hello ${name}, Thank you for reaching out to Bunnyland Preschool. We have received your message and will get back to you soon.`
+    });
+
+    if (autoReplyRes.success) {
+       console.log("DEBUG: All emails sent successfully for contact form.");
+    } else {
+       console.warn("DEBUG: Auto-reply might have failed, check mailer logs.");
+    }
 
     res.status(201).json({ 
       success: true, 
@@ -51,7 +55,7 @@ exports.submitContact = async (req, res) => {
       data: contact 
     });
   } catch (err) {
-    console.error('Contact Error:', err);
+    console.error('❌ Contact API Error:', err);
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
   }
 };
