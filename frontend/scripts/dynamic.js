@@ -163,11 +163,11 @@
           showLocalToast('Registration submitted! A confirmation email has been sent to you.', 'success');
           form.reset();
         } else {
-          showLocalToast(dbRes.message || 'Database saving failed.', 'error');
+          showLocalToast(dbRes.message || dbRes.error || 'Registration failed.', 'error');
         }
       } catch (err) {
         console.error('Submission error:', err);
-        showLocalToast('An error occurred. Please try again.', 'error');
+        showLocalToast(err.message || 'An error occurred. Please try again.', 'error');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Send Message';
@@ -240,11 +240,11 @@
           showLocalToast('Message sent successfully! Check your email for confirmation.', 'success');
           form.reset();
         } else {
-          showLocalToast(dbRes.message || 'Database saving failed.', 'error');
+          showLocalToast(dbRes.message || dbRes.error || 'Message failed.', 'error');
         }
       } catch (err) {
         console.error('Submission error:', err);
-        showLocalToast('An error occurred. Please try again.', 'error');
+        showLocalToast(err.message || 'An error occurred. Please try again.', 'error');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Submit Form';
