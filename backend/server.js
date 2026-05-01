@@ -46,8 +46,14 @@ app.use((err, req, res, next) => {
 });
 
 // ─── Start Server ─────────────────────────────────────────────
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`🔑 Admin panel  → http://localhost:${PORT}/admin`);
+  
+  // Check for email credentials
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.warn('⚠️ WARNING: EMAIL_USER or EMAIL_PASS is not defined in environment variables!');
+  } else {
+    console.log('📧 Email service is configured and ready.');
+  }
 });
