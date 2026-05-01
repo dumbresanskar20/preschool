@@ -77,7 +77,7 @@ exports.createRegistration = async (req, res) => {
     res.status(201).json({ success: true, message: 'Registration submitted! A confirmation email has been sent to you.', data: reg });
   } catch (err) {
     console.error('❌ Registration API Error:', err);
-    res.status(500).json({ success: false, message: 'Server error.', error: err.message });
+    res.status(500).json({ success: false, message: err.message, error: err.message });
   }
 };
 

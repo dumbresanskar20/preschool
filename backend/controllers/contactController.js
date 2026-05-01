@@ -56,7 +56,7 @@ exports.submitContact = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ Contact API Error:', err);
-    res.status(500).json({ success: false, message: 'Server error.', error: err.message });
+    res.status(500).json({ success: false, message: err.message, error: err.message });
   }
 };
 
