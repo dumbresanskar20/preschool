@@ -43,7 +43,7 @@ const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
     console.log(`DEBUG: Preparing to send email to: ${to || process.env.EMAIL_USER}`);
 
     const mailOptions = {
-      from: `"${fromName || 'Bunnyland Preschool'}" <${process.env.EMAIL_USER}>`,
+      from: `"${fromName || 'Rainbow Preschool'}" <${process.env.EMAIL_USER}>`,
       to: to || process.env.EMAIL_USER,
       replyTo: replyTo || process.env.EMAIL_USER,
       subject: subject,

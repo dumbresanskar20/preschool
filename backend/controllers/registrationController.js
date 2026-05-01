@@ -39,7 +39,7 @@ exports.createRegistration = async (req, res) => {
       subject: `New Registration Inquiry: ${inquiryType}`,
       text: `Parent: ${parentName}\nChild's Age: ${childAge}\nPhone: ${phone}\nEmail: ${email}\nInquiry For: ${inquiryType}\nMessage: ${message}`,
       replyTo: email,
-      fromName: 'Bunnyland Admissions'
+      fromName: 'Rainbow Admissions'
     });
 
     // Small delay
@@ -49,11 +49,11 @@ exports.createRegistration = async (req, res) => {
     console.log(`DEBUG: Sending auto-reply to parent: ${email}`);
     const autoReplyRes = await sendEmail({
       to: email,
-      subject: 'Registration Inquiry Received - Bunnyland Preschool',
+      subject: 'Registration Inquiry Received - Rainbow Preschool',
       html: `
         <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
           <h2 style="color: #c2410c;">Dear ${parentName},</h2>
-          <p>Warm greetings from <strong>Bunnyland Preschool!</strong></p>
+          <p>Warm greetings from <strong>Rainbow Preschool!</strong></p>
           <p>Thank you for inquiring about our programs. We have received your registration details for your child (Age: ${childAge}).</p>
           <p>Our admissions team will review your inquiry and contact you shortly at <strong>${phone}</strong> to discuss the next steps.</p>
           <div style="background: #fff8f0; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f97316;">
@@ -62,10 +62,10 @@ exports.createRegistration = async (req, res) => {
           </div>
           <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
           <p style="font-size: 0.9rem; color: #666;">This is an automated confirmation of your inquiry.</p>
-          <p style="font-weight: bold; color: #c2410c;">Best Regards,<br>Admissions Office<br>Bunnyland Preschool</p>
+          <p style="font-weight: bold; color: #c2410c;">Best Regards,<br>Admissions Office<br>Rainbow Preschool</p>
         </div>
       `,
-      text: `Dear ${parentName}, Thank you for your inquiry at Bunnyland Preschool. We have received your details and will contact you soon.`
+      text: `Dear ${parentName}, Thank you for your inquiry at Rainbow Preschool. We have received your details and will contact you soon.`
     });
 
     if (autoReplyRes.success) {
