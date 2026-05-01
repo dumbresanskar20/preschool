@@ -29,3 +29,21 @@ exports.deleteGalleryImage = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
 };
+
+// PUT /api/gallery/order
+exports.updateGalleryOrder = async (req, res) => {
+  try {
+    const { orderings } = req.body; // Array of { id, order }
+    if (!orderings || !Array.isArray(orderings)) {
+      return res.status(400).json({ success: false, message: 'Invalid data' });
+    }
+    
+    await Promise.all(orderings.map(item => 
+      Gallery.findByIdAndUpdate(item.id, { order: item.order })
+    ));
+    
+    res.json({ success: true, message: 'Gallery order updated.' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Server error', error: err.message });
+  }
+};

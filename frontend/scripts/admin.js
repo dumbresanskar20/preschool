@@ -245,16 +245,51 @@ async function loadGalleryList() {
   const res = await fetchGallery();
   if(!res.success) return;
   const container = document.getElementById('list-gallery');
-  container.innerHTML = res.data.map(img => `
+  container.innerHTML = res.data.map((img, index) => `
     <div class="relative group border rounded-lg overflow-hidden h-40">
       <img src="${img.imageUrl}" class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-        <button onclick="deleteItem('/gallery/${img._id}', loadGalleryList)" class="bg-white text-red-600 px-3 py-1 rounded text-sm font-bold">Delete</button>
+      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+        <div class="flex gap-2">
+          <button onclick="moveGalleryItem('${img._id}', -1)" class="bg-blue-600 text-white p-1 rounded hover:bg-blue-700" title="Move Up">
+            <span class="material-symbols-outlined text-sm">arrow_upward</span>
+          </button>
+          <button onclick="moveGalleryItem('${img._id}', 1)" class="bg-blue-600 text-white p-1 rounded hover:bg-blue-700" title="Move Down">
+            <span class="material-symbols-outlined text-sm">arrow_downward</span>
+          </button>
+        </div>
+        <button onclick="deleteItem('/gallery/${img._id}', loadGalleryList)" class="bg-white text-red-600 px-3 py-1 rounded text-sm font-bold hover:bg-red-50">Delete</button>
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-white/90 p-1 text-[10px] truncate">${img.altText}</div>
     </div>
   `).join('');
 }
+
+window.moveGalleryItem = async function(id, direction) {
+  const res = await fetchGallery();
+  if (!res.success) return;
+  
+  let items = res.data;
+  const index = items.findIndex(item => item._id === id);
+  if (index === -1) return;
+  
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= items.length) return;
+  
+  // Swap items
+  [items[index], items[newIndex]] = [items[newIndex], items[index]];
+  
+  // Create ordering array for backend
+  const orderings = items.map((item, idx) => ({ id: item._id, order: idx }));
+  
+  const saveRes = await adminFetch('/gallery/order', {
+    method: 'PUT',
+    body: JSON.stringify({ orderings })
+  });
+  
+  if (saveRes.success) {
+    loadGalleryList();
+  }
+};
 
 window.deleteItem = async function(endpoint, callback) {
   if(!confirm('Are you sure you want to delete this item?')) return;
