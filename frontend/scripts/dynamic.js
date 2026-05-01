@@ -160,27 +160,8 @@
         });
 
         if (dbRes.success) {
-          // Step 2: Send email via FormSubmit AJAX
-          const formData = new FormData(form);
-          
-          // Add IST Timestamp
-          const now = new Date();
-          const istTime = now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true });
-          formData.append("Submission Time (IST)", istTime);
-
-          const fsRes = await fetch("https://formsubmit.co/ajax/bunnylandtalegaon@gmail.com", {
-            method: "POST",
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-          });
-
-          if (fsRes.ok) {
-            showLocalToast('Registration submitted! We will contact you soon.', 'success');
-            form.reset();
-          } else {
-            console.error('FormSubmit Error:', await fsRes.text());
-            showLocalToast('Data saved, but email delivery failed. Please check your Inbox/Spam for a FormSubmit activation email.', 'error');
-          }
+          showLocalToast('Registration submitted! A confirmation email has been sent to you.', 'success');
+          form.reset();
         } else {
           showLocalToast(dbRes.message || 'Database saving failed.', 'error');
         }
@@ -256,27 +237,8 @@
         const dbRes = await submitContact({ name, email, message });
         
         if (dbRes.success) {
-          // Step 2: Send email via FormSubmit AJAX
-          const formData = new FormData(form);
-
-          // Add IST Timestamp
-          const now = new Date();
-          const istTime = now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true });
-          formData.append("Submission Time (IST)", istTime);
-
-          const fsRes = await fetch("https://formsubmit.co/ajax/bunnylandtalegaon@gmail.com", {
-            method: "POST",
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-          });
-
-          if (fsRes.ok) {
-            showLocalToast('Message sent successfully!', 'success');
-            form.reset();
-          } else {
-            console.error('FormSubmit Error:', await fsRes.text());
-            showLocalToast('Message saved, but email failed. Check FormSubmit activation.', 'error');
-          }
+          showLocalToast('Message sent successfully! Check your email for confirmation.', 'success');
+          form.reset();
         } else {
           showLocalToast(dbRes.message || 'Database saving failed.', 'error');
         }

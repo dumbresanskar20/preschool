@@ -264,9 +264,8 @@ a.bg-surface-container-high:active {
   border-radius: 0.65rem;
   padding: 0.5rem 0.55rem;
   cursor: pointer;
-  transition: background 0.2s;
-  position: absolute;
-  right: 0;
+  transition: all 0.2s;
+  box-shadow: 0 3px 8px rgba(251, 146, 60, 0.15);
 }
 .cute-hamburger span {
   display: block;

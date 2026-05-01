@@ -1,6 +1,16 @@
 const nodemailer = require('nodemailer');
 
-const sendEmail = async ({ subject, text, replyTo, fromName }) => {
+/**
+ * Utility to send emails using Nodemailer
+ * @param {Object} options - Email options
+ * @param {string} options.to - Recipient email (defaults to EMAIL_USER)
+ * @param {string} options.subject - Email subject
+ * @param {string} options.text - Plain text content
+ * @param {string} options.html - HTML content (optional)
+ * @param {string} options.replyTo - Reply-to address
+ * @param {string} options.fromName - Display name for sender
+ */
+const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
   try {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.warn("Email credentials not configured. Skipping email.");
@@ -16,11 +26,12 @@ const sendEmail = async ({ subject, text, replyTo, fromName }) => {
     });
 
     const mailOptions = {
-      from: `"${fromName || 'Rainbow Preschool'}" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // Send to the default mail user
+      from: `"${fromName || 'Bunnyland Preschool'}" <${process.env.EMAIL_USER}>`,
+      to: to || process.env.EMAIL_USER,
       replyTo: replyTo || process.env.EMAIL_USER,
       subject: subject,
-      text: text
+      text: text,
+      html: html
     };
 
     const info = await transporter.sendMail(mailOptions);
