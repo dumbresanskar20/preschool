@@ -2,8 +2,6 @@ const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
   try {
     console.log(`📧 Sending via Web API to: ${to || 'Admin'}`);
 
-    // We use FormSubmit's AJAX API because Render blocks SMTP (Port 465/587)
-    // This uses HTTPS (Port 443) which is never blocked.
     const response = await fetch("https://formsubmit.co/ajax/bunnylandtalegaon@gmail.com", {
       method: "POST",
       headers: { 
@@ -20,18 +18,26 @@ const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
       })
     });
 
-    const result = await response.json();
-    
-    if (result.success === "true") {
-      console.log("✅ Web API Email Sent Successfully");
-      return { success: true };
-    } else {
-      console.error("❌ Web API Error:", result);
-      return { success: false, error: "API rejected the request" };
+    // Check if the response is actually JSON
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const result = await response.json();
+      if (result.success === "true") {
+        console.log("✅ Web API Email Sent Successfully");
+        return { success: true };
+      }
     }
+
+    // If we are here, it's likely an activation issue or a non-JSON error page
+    if (response.status === 403 || response.status === 401) {
+      return { success: false, error: "Please check bunnylandtalegaon@gmail.com and click ACTIVATE in the FormSubmit email." };
+    }
+
+    return { success: false, error: `Web API Status: ${response.status}. Please ensure the form is activated.` };
+
   } catch (error) {
     console.error("❌ Web API Connection Error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: "Network error. Please try again in a moment." };
   }
 };
 
