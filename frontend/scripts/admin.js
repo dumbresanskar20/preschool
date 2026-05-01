@@ -246,8 +246,8 @@ async function loadGalleryList() {
   if(!res.success) return;
   const container = document.getElementById('list-gallery');
   container.innerHTML = res.data.map((img, index) => `
-    <div class="relative group border rounded-lg overflow-hidden h-40">
-      <img src="${img.imageUrl}" class="w-full h-full object-cover">
+    <div data-id="${img._id}" class="relative group border rounded-lg overflow-hidden h-40 cursor-move bg-white shadow-sm">
+      <img src="${img.imageUrl}" class="w-full h-full object-cover pointer-events-none">
       <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
         <div class="flex gap-2">
           <button onclick="moveGalleryItem('${img._id}', -1)" class="bg-blue-600 text-white p-1 rounded hover:bg-blue-700" title="Move Up">
@@ -259,9 +259,26 @@ async function loadGalleryList() {
         </div>
         <button onclick="deleteItem('/gallery/${img._id}', loadGalleryList)" class="bg-white text-red-600 px-3 py-1 rounded text-sm font-bold hover:bg-red-50">Delete</button>
       </div>
-      <div class="absolute bottom-0 left-0 right-0 bg-white/90 p-1 text-[10px] truncate">${img.altText}</div>
+      <div class="absolute bottom-0 left-0 right-0 bg-white/90 p-1 text-[10px] truncate pointer-events-none">${img.altText}</div>
     </div>
   `).join('');
+
+  // Initialize Sortable
+  new Sortable(container, {
+    animation: 150,
+    ghostClass: 'opacity-50',
+    onEnd: async function() {
+      const orderings = Array.from(container.children).map((el, idx) => ({
+        id: el.getAttribute('data-id'),
+        order: idx
+      }));
+      
+      await adminFetch('/gallery/order', {
+        method: 'PUT',
+        body: JSON.stringify({ orderings })
+      });
+    }
+  });
 }
 
 window.moveGalleryItem = async function(id, direction) {
