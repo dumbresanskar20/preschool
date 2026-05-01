@@ -68,11 +68,11 @@ exports.createRegistration = async (req, res) => {
       text: `Dear ${parentName}, Thank you for your inquiry at Rainbow Preschool. We have received your details and will contact you soon.`
     });
 
-    if (autoReplyRes.success) {
-      console.log("DEBUG: All registration emails sent successfully.");
-    } else {
-      console.warn("DEBUG: Registration auto-reply might have failed.");
+    if (!autoReplyRes.success) {
+      throw new Error(`Registration email failed: ${autoReplyRes.error || 'Unknown Error'}`);
     }
+
+    console.log("DEBUG: All registration emails sent successfully.");
 
     res.status(201).json({ success: true, message: 'Registration submitted! A confirmation email has been sent to you.', data: reg });
   } catch (err) {

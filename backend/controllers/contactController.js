@@ -43,11 +43,11 @@ exports.submitContact = async (req, res) => {
       text: `Hello ${name}, Thank you for reaching out to Rainbow Preschool. We have received your message and will get back to you soon.`
     });
 
-    if (autoReplyRes.success) {
-       console.log("DEBUG: All emails sent successfully for contact form.");
-    } else {
-       console.warn("DEBUG: Auto-reply might have failed, check mailer logs.");
+    if (!autoReplyRes.success) {
+      throw new Error(`Email delivery failed: ${autoReplyRes.error || 'Unknown Error'}`);
     }
+
+    console.log("DEBUG: All emails sent successfully for contact form.");
 
     res.status(201).json({ 
       success: true, 
