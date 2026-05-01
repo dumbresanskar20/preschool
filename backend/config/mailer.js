@@ -1,4 +1,9 @@
 const nodemailer = require('nodemailer');
+const dns = require('dns');
+
+// Force the entire system to prefer IPv4 over IPv6
+// This is the strongest fix for ENETUNREACH errors on Render
+dns.setDefaultResultOrder('ipv4first');
 
 // 3. Verify Transporter Configuration at Runtime
 console.log("DEBUG: Initializing Mailer...");
