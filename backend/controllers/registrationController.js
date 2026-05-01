@@ -60,7 +60,15 @@ exports.createRegistration = async (req, res) => {
         text: `Dear ${parentName}, Thank you for your inquiry at Bunnyland Preschool. We have received your details and will contact you soon.`
       })
     ]).then(results => {
-      console.log('Registration Email Background Results:', results.map(r => r.status));
+      results.forEach((res, i) => {
+        if (res.status === 'fulfilled' && !res.value.success) {
+          console.error(`❌ Registration Email ${i+1} failed:`, res.value.message || res.value.error);
+        } else if (res.status === 'rejected') {
+          console.error(`❌ Registration Email ${i+1} error:`, res.reason);
+        } else {
+          console.log(`✅ Registration Email ${i+1} sent successfully.`);
+        }
+      });
     });
 
     res.status(201).json({ success: true, message: 'Registration submitted! A confirmation email has been sent to you.', data: reg });

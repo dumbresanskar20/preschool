@@ -35,7 +35,15 @@ exports.submitContact = async (req, res) => {
         text: `Hello ${name}, Thank you for reaching out to Bunnyland Preschool. We have received your message and will get back to you soon.`
       })
     ]).then(results => {
-      console.log('Email Background Processing Results:', results.map(r => r.status));
+      results.forEach((res, i) => {
+        if (res.status === 'fulfilled' && !res.value.success) {
+          console.error(`❌ Email ${i+1} failed:`, res.value.message || res.value.error);
+        } else if (res.status === 'rejected') {
+          console.error(`❌ Email ${i+1} error:`, res.reason);
+        } else {
+          console.log(`✅ Email ${i+1} sent successfully.`);
+        }
+      });
     });
 
     res.status(201).json({ 
