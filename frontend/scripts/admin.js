@@ -163,7 +163,7 @@ async function loadRegistrations() {
   if(!res.success) return;
   const tbody = document.getElementById('list-registrations');
   tbody.innerHTML = res.data.map(r => `
-    <tr class="border-b"><td class="p-4">${new Date(r.createdAt).toLocaleDateString()}</td><td class="p-4 font-bold">${r.parentName}</td><td class="p-4">${r.childAge}</td><td class="p-4">${r.phone}</td><td class="p-4">${r.inquiryType}</td><td class="p-4 text-sm">${r.message}</td>
+    <tr class="border-b"><td class="p-4">${new Date(r.createdAt).toLocaleDateString()}</td><td class="p-4 font-bold">${r.parentName}</td><td class="p-4"><a href="mailto:${r.email}" class="text-blue-500 hover:underline">${r.email || 'N/A'}</a></td><td class="p-4">${r.childAge}</td><td class="p-4">${r.phone}</td><td class="p-4">${r.inquiryType}</td><td class="p-4 text-sm">${r.message}</td>
     <td class="p-4"><button onclick="deleteItem('/registration/${r._id}', loadRegistrations)" class="text-red-500 hover:underline">Delete</button></td></tr>
   `).join('');
 }
@@ -173,7 +173,7 @@ async function loadReviewsList() {
   if(!res.success) return;
   const tbody = document.getElementById('list-reviews');
   tbody.innerHTML = res.data.map(r => `
-    <tr class="border-b"><td class="p-4">${r.parentName}</td><td class="p-4">${r.rating}/5</td><td class="p-4 text-sm">${r.reviewText}</td>
+    <tr class="border-b"><td class="p-4">${r.parentName}</td><td class="p-4"><a href="mailto:${r.email}" class="text-blue-500 hover:underline">${r.email || 'N/A'}</a></td><td class="p-4">${r.rating}/5</td><td class="p-4 text-sm">${r.reviewText}</td>
     <td class="p-4"><span class="${r.isApproved ? 'text-green-500' : 'text-orange-500'} font-bold">${r.isApproved ? 'Approved' : 'Pending'}</span></td>
     <td class="p-4">
       <button onclick="toggleReview('${r._id}', ${!r.isApproved})" class="text-blue-500 hover:underline mr-2">${r.isApproved ? 'Reject' : 'Approve'}</button>
