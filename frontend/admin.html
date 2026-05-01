@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Admin Dashboard | Rainbow Preschool</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
   <style>
-    body { font-family: 'Poppins', sans-serif; background-color: #f3f4f6; }
-    .hidden { display: none !important; }
-    .tab-active { border-bottom: 2px solid #b81d27; color: #b81d27; font-weight: bold; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .tab-active {
+      border-bottom: 2px solid #b81d27;
+      color: #b81d27;
+      font-weight: bold;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Login View -->
@@ -19,10 +34,13 @@
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
       <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Admin Login</h2>
       <form id="login-form" class="space-y-4">
-        <div><input id="login-user" type="text" placeholder="Username" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-red-500" required></div>
-        <div><input id="login-pass" type="password" placeholder="Password" class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-red-500" required></div>
+        <div><input id="login-user" type="text" placeholder="Username"
+            class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-red-500" required></div>
+        <div><input id="login-pass" type="password" placeholder="Password"
+            class="w-full p-3 border rounded-lg outline-none focus:ring-2 focus:ring-red-500" required></div>
         <p id="login-err" class="text-red-500 text-sm hidden">Invalid credentials</p>
-        <button type="submit" class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700 transition">Login</button>
+        <button type="submit"
+          class="w-full bg-red-600 text-white p-3 rounded-lg font-bold hover:bg-red-700 transition">Login</button>
       </form>
     </div>
   </div>
@@ -36,28 +54,50 @@
         <h1 class="text-xl font-bold text-red-600">Rainbow Admin</h1>
       </div>
       <nav class="flex-1 p-4 space-y-2">
-        <button onclick="showTab('dashboard')" class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Dashboard</button>
-        <button onclick="showTab('registrations')" class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Registrations</button>
-        <button onclick="showTab('reviews')" class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Reviews</button>
-        <button onclick="showTab('programs')" class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Programs</button>
-        <button onclick="showTab('announcements')" class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Announcements</button>
-        <button onclick="showTab('messages')" class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Messages</button>
-        <button onclick="showTab('content')" class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Content</button>
+        <button onclick="showTab('dashboard')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Dashboard</button>
+        <button onclick="showTab('registrations')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Registrations</button>
+        <button onclick="showTab('reviews')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Reviews</button>
+        <button onclick="showTab('programs')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Programs</button>
+        <button onclick="showTab('announcements')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Announcements</button>
+        <button onclick="showTab('messages')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Messages</button>
+        <button onclick="showTab('gallery')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Gallery</button>
+        <button onclick="showTab('content')"
+          class="w-full text-left p-3 rounded-lg hover:bg-red-50 focus:bg-red-50">Content</button>
       </nav>
-      <div class="p-4 border-t"><button onclick="logout()" class="w-full text-left p-3 text-red-600 font-bold">Logout</button></div>
+      <div class="p-4 border-t"><button onclick="logout()"
+          class="w-full text-left p-3 text-red-600 font-bold">Logout</button></div>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 p-8 overflow-y-auto">
-      
+
       <!-- Tab: Dashboard -->
       <section id="tab-dashboard" class="tab-content">
         <h2 class="text-3xl font-bold mb-6">Overview</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div class="bg-white p-6 rounded-xl shadow-sm"><p class="text-gray-500">Registrations</p><h3 id="stat-reg" class="text-3xl font-bold">0</h3></div>
-          <div class="bg-white p-6 rounded-xl shadow-sm"><p class="text-gray-500">Total Reviews</p><h3 id="stat-rev" class="text-3xl font-bold">0</h3></div>
-          <div class="bg-white p-6 rounded-xl shadow-sm"><p class="text-gray-500">Pending Reviews</p><h3 id="stat-pend" class="text-3xl font-bold text-orange-500">0</h3></div>
-          <div class="bg-white p-6 rounded-xl shadow-sm"><p class="text-gray-500">Programs</p><h3 id="stat-prog" class="text-3xl font-bold">0</h3></div>
+          <div class="bg-white p-6 rounded-xl shadow-sm">
+            <p class="text-gray-500">Registrations</p>
+            <h3 id="stat-reg" class="text-3xl font-bold">0</h3>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm">
+            <p class="text-gray-500">Total Reviews</p>
+            <h3 id="stat-rev" class="text-3xl font-bold">0</h3>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm">
+            <p class="text-gray-500">Pending Reviews</p>
+            <h3 id="stat-pend" class="text-3xl font-bold text-orange-500">0</h3>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm">
+            <p class="text-gray-500">Programs</p>
+            <h3 id="stat-prog" class="text-3xl font-bold">0</h3>
+          </div>
         </div>
       </section>
 
@@ -66,9 +106,17 @@
         <h2 class="text-2xl font-bold mb-4">Registrations</h2>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
           <table class="w-full text-left">
-            <thead class="bg-gray-50 text-gray-600"><tr class="p-4">
-              <th class="p-4 border-b">Date</th><th class="p-4 border-b">Parent Name</th><th class="p-4 border-b">Child Age</th><th class="p-4 border-b">Phone</th><th class="p-4 border-b">Type</th><th class="p-4 border-b">Message</th><th class="p-4 border-b">Actions</th>
-            </tr></thead>
+            <thead class="bg-gray-50 text-gray-600">
+              <tr class="p-4">
+                <th class="p-4 border-b">Date</th>
+                <th class="p-4 border-b">Parent Name</th>
+                <th class="p-4 border-b">Child Age</th>
+                <th class="p-4 border-b">Phone</th>
+                <th class="p-4 border-b">Type</th>
+                <th class="p-4 border-b">Message</th>
+                <th class="p-4 border-b">Actions</th>
+              </tr>
+            </thead>
             <tbody id="list-registrations"></tbody>
           </table>
         </div>
@@ -79,9 +127,15 @@
         <h2 class="text-2xl font-bold mb-4">Reviews</h2>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
           <table class="w-full text-left">
-            <thead class="bg-gray-50 text-gray-600"><tr class="p-4">
-              <th class="p-4 border-b">Parent Name</th><th class="p-4 border-b">Rating</th><th class="p-4 border-b">Review</th><th class="p-4 border-b">Status</th><th class="p-4 border-b">Actions</th>
-            </tr></thead>
+            <thead class="bg-gray-50 text-gray-600">
+              <tr class="p-4">
+                <th class="p-4 border-b">Parent Name</th>
+                <th class="p-4 border-b">Rating</th>
+                <th class="p-4 border-b">Review</th>
+                <th class="p-4 border-b">Status</th>
+                <th class="p-4 border-b">Actions</th>
+              </tr>
+            </thead>
             <tbody id="list-reviews"></tbody>
           </table>
         </div>
@@ -91,23 +145,32 @@
       <section id="tab-programs" class="tab-content hidden">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-2xl font-bold">Programs</h2>
-          <button onclick="document.getElementById('prog-form-container').classList.toggle('hidden')" class="bg-red-600 text-white px-4 py-2 rounded-lg">Add Program</button>
+          <button onclick="document.getElementById('prog-form-container').classList.toggle('hidden')"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg">Add Program</button>
         </div>
         <div id="prog-form-container" class="hidden bg-white p-6 rounded-xl shadow-sm mb-6">
           <form id="form-program" class="space-y-4">
             <input id="prog-id" type="hidden">
             <div class="grid grid-cols-2 gap-4">
               <input id="prog-title" type="text" placeholder="Title" class="border p-3 rounded outline-none" required>
-              <input id="prog-age" type="text" placeholder="Age Group" class="border p-3 rounded outline-none" required>
-              <input id="prog-img" type="text" placeholder="Image URL (optional)" class="border p-3 rounded outline-none col-span-2">
-              <textarea id="prog-desc" placeholder="Description" class="border p-3 rounded outline-none col-span-2" required></textarea>
+              <input id="prog-age" type="text" placeholder="Age Group (eg: 2-3 years)"
+                class="border p-3 rounded outline-none" required>
+              <textarea id="prog-desc" placeholder="Description" class="border p-3 rounded outline-none col-span-2"
+                required></textarea>
             </div>
             <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded">Save</button>
           </form>
         </div>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
           <table class="w-full text-left">
-            <thead class="bg-gray-50 text-gray-600"><tr><th class="p-4 border-b">Title</th><th class="p-4 border-b">Age Group</th><th class="p-4 border-b">Description</th><th class="p-4 border-b">Actions</th></tr></thead>
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="p-4 border-b">Title</th>
+                <th class="p-4 border-b">Age Group</th>
+                <th class="p-4 border-b">Description</th>
+                <th class="p-4 border-b">Actions</th>
+              </tr>
+            </thead>
             <tbody id="list-programs"></tbody>
           </table>
         </div>
@@ -117,7 +180,8 @@
       <section id="tab-announcements" class="tab-content hidden">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-2xl font-bold">Announcements</h2>
-          <button onclick="document.getElementById('ann-form-container').classList.toggle('hidden')" class="bg-red-600 text-white px-4 py-2 rounded-lg">Add Notice</button>
+          <button onclick="document.getElementById('ann-form-container').classList.toggle('hidden')"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg">Add Notice</button>
         </div>
         <div id="ann-form-container" class="hidden bg-white p-6 rounded-xl shadow-sm mb-6">
           <form id="form-announcement" class="space-y-4">
@@ -129,9 +193,49 @@
         </div>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
           <table class="w-full text-left">
-            <thead class="bg-gray-50 text-gray-600"><tr><th class="p-4 border-b">Date</th><th class="p-4 border-b">Title</th><th class="p-4 border-b">Description</th><th class="p-4 border-b">Actions</th></tr></thead>
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="p-4 border-b">Date</th>
+                <th class="p-4 border-b">Title</th>
+                <th class="p-4 border-b">Description</th>
+                <th class="p-4 border-b">Actions</th>
+              </tr>
+            </thead>
             <tbody id="list-announcements"></tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- Tab: Gallery -->
+      <section id="tab-gallery" class="tab-content hidden">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold">Gallery Management</h2>
+          <button onclick="document.getElementById('gal-form-container').classList.toggle('hidden')"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg">Add Image</button>
+        </div>
+        <div id="gal-form-container" class="hidden bg-white p-6 rounded-xl shadow-sm mb-6">
+          <form id="form-gallery" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Choose Image (Local Storage)</label>
+                <input id="gal-file" type="file" accept="image/*" class="w-full border p-2 rounded outline-none bg-gray-50">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">OR Enter Image URL</label>
+                <input id="gal-url" type="text" placeholder="https://example.com/image.jpg" class="w-full border p-3 rounded outline-none">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Alt Text (Description)</label>
+                <input id="gal-alt" type="text" placeholder="e.g. Children playing in garden" class="w-full border p-3 rounded outline-none" required>
+              </div>
+            </div>
+            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded font-bold hover:bg-green-700">Add to Gallery</button>
+          </form>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden p-6">
+          <div id="list-gallery" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Dynamic Gallery Items -->
+          </div>
         </div>
       </section>
 
@@ -140,9 +244,15 @@
         <h2 class="text-2xl font-bold mb-4">Contact Messages</h2>
         <div class="bg-white rounded-xl shadow-sm overflow-hidden">
           <table class="w-full text-left">
-            <thead class="bg-gray-50 text-gray-600"><tr class="p-4">
-              <th class="p-4 border-b">Date</th><th class="p-4 border-b">Name</th><th class="p-4 border-b">Email</th><th class="p-4 border-b">Message</th><th class="p-4 border-b">Actions</th>
-            </tr></thead>
+            <thead class="bg-gray-50 text-gray-600">
+              <tr class="p-4">
+                <th class="p-4 border-b">Date</th>
+                <th class="p-4 border-b">Name</th>
+                <th class="p-4 border-b">Email</th>
+                <th class="p-4 border-b">Message</th>
+                <th class="p-4 border-b">Actions</th>
+              </tr>
+            </thead>
             <tbody id="list-messages"></tbody>
           </table>
         </div>
@@ -153,12 +263,17 @@
         <h2 class="text-2xl font-bold mb-4">Website Content</h2>
         <div class="bg-white p-6 rounded-xl shadow-sm">
           <form id="form-content" class="space-y-4">
-            <div><label class="block font-bold mb-1">About Text</label><textarea id="cont-about" rows="4" class="w-full border p-3 rounded"></textarea></div>
+            <div><label class="block font-bold mb-1">About Text</label><textarea id="cont-about" rows="4"
+                class="w-full border p-3 rounded"></textarea></div>
             <div class="grid grid-cols-2 gap-4">
-              <div><label class="block font-bold mb-1">Contact Email</label><input id="cont-email" type="text" class="w-full border p-3 rounded"></div>
-              <div><label class="block font-bold mb-1">Phone Number</label><input id="cont-phone" type="text" class="w-full border p-3 rounded"></div>
-              <div class="col-span-2"><label class="block font-bold mb-1">Address</label><input id="cont-address" type="text" class="w-full border p-3 rounded"></div>
-              <div class="col-span-2"><label class="block font-bold mb-1">School Timings</label><input id="cont-timings" type="text" class="w-full border p-3 rounded"></div>
+              <div><label class="block font-bold mb-1">Contact Email</label><input id="cont-email" type="text"
+                  class="w-full border p-3 rounded"></div>
+              <div><label class="block font-bold mb-1">Phone Number</label><input id="cont-phone" type="text"
+                  class="w-full border p-3 rounded"></div>
+              <div class="col-span-2"><label class="block font-bold mb-1">Address</label><input id="cont-address"
+                  type="text" class="w-full border p-3 rounded"></div>
+              <div class="col-span-2"><label class="block font-bold mb-1">School Timings</label><input id="cont-timings"
+                  type="text" class="w-full border p-3 rounded"></div>
             </div>
             <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">Update Content</button>
           </form>
@@ -171,4 +286,5 @@
   <script src="scripts/api.js"></script>
   <script src="scripts/admin.js"></script>
 </body>
+
 </html>

@@ -3,15 +3,23 @@ const Registration = require('../models/Registration');
 // POST /api/registration
 exports.createRegistration = async (req, res) => {
   try {
-    const { parentName, childAge, phone, inquiryType, message } = req.body;
-    if (!parentName || !childAge || !phone || !message) {
+    const { name, age, phone, email, inquiry, message } = req.body;
+    if (!name || !age || !phone || !email || !message) {
       return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
     const phoneDigits = phone.replace(/\D/g, '');
     if (phoneDigits.length < 10) {
       return res.status(400).json({ success: false, message: 'Enter a valid phone number (min 10 digits).' });
     }
-    const reg = await Registration.create({ parentName, childAge, phone, inquiryType, message });
+    const reg = await Registration.create({ 
+      parentName: name, 
+      childAge: age, 
+      phone, 
+      email, 
+      inquiryType: inquiry, 
+      message 
+    });
+
     res.status(201).json({ success: true, message: 'Registration submitted successfully!', data: reg });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });

@@ -1,5 +1,4 @@
 const Contact = require('../models/Contact');
-const nodemailer = require('nodemailer');
 
 exports.submitContact = async (req, res) => {
   try {
@@ -9,35 +8,11 @@ exports.submitContact = async (req, res) => {
     }
     const contact = await Contact.create({ name, email, message });
 
-    // Send Email
-    let emailStatus = 'Sent successfully';
-    try {
-      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        throw new Error("Email credentials not configured in environment variables.");
-      }
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        }
-      });
-
-      const mailOptions = {
-        from: `"${name}" <${process.env.EMAIL_USER}>`,
-        replyTo: email,
-        to: 'bunnylandtalegaon@gmail.com',
-        subject: `New Contact Form Submission from ${name}`,
-        text: `You have received a new contact message:\n\nName: ${name}\nEmail: ${email}\nMessage:\n${message}`
-      };
-
-      await transporter.sendMail(mailOptions);
-    } catch (mailError) {
-      console.error('Email sending failed:', mailError);
-      emailStatus = mailError.message;
-    }
-
-    res.status(201).json({ success: true, message: 'Message saved to database!', emailStatus, data: contact });
+    res.status(201).json({ 
+      success: true, 
+      message: 'Message saved to database!', 
+      data: contact 
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
   }

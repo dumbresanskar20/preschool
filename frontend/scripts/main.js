@@ -99,146 +99,7 @@
     }
   }
 
-  // --- Enquiry Form ---
-  function initEnquiryForm() {
-    var form = document.getElementById("enquiry-form");
-    if (!form) return;
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      clearFormErrors(form);
-
-      var nameInput = form.querySelector('[placeholder="Enter your full name"]');
-      var ageInput = form.querySelector('[placeholder="e.g. 3 years"]');
-      var phoneInput = form.querySelector('[type="tel"]');
-      var messageInput = form.querySelector("textarea");
-
-      var isValid = true;
-
-      // Name validation
-      if (!nameInput.value.trim()) {
-        showFieldError(
-          nameInput,
-          nameInput.parentElement.querySelector(".form-error-msg"),
-          false
-        );
-        isValid = false;
-      }
-
-      // Age validation
-      if (!ageInput.value.trim()) {
-        showFieldError(
-          ageInput,
-          ageInput.parentElement.querySelector(".form-error-msg"),
-          false
-        );
-        isValid = false;
-      }
-
-      // Phone validation (10 digits)
-      var phoneDigits = phoneInput.value.replace(/\D/g, "");
-      if (phoneDigits.length < 10) {
-        showFieldError(
-          phoneInput,
-          phoneInput.parentElement.querySelector(".form-error-msg"),
-          false
-        );
-        isValid = false;
-      }
-
-      // Message validation
-      if (!messageInput.value.trim()) {
-        showFieldError(
-          messageInput,
-          messageInput.parentElement.querySelector(".form-error-msg"),
-          false
-        );
-        isValid = false;
-      }
-
-      if (!isValid) {
-        showToast("Please fix the errors in the form.", "error");
-        return;
-      }
-
-      // Store in localStorage as backup
-      storeFormData("enquiry_submissions", {
-        name: nameInput.value.trim(),
-        childAge: ageInput.value.trim(),
-        phone: phoneInput.value.trim(),
-        inquiry: form.querySelector("select").value,
-        message: messageInput.value.trim(),
-        timestamp: new Date().toISOString(),
-      });
-
-      // Allow the form to submit to FormSubmit.co
-      form.submit();
-    });
-  }
-
-  // --- Contact Form ---
-  function initContactForm() {
-    var form = document.getElementById("contact-form");
-    if (!form) return;
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      clearFormErrors(form);
-
-      var nameInput = form.querySelector('[placeholder="Name"]');
-      var emailInput = form.querySelector('[placeholder="Email Address"]');
-      var messageInput = form.querySelector('[placeholder="Your Message"]');
-
-      var isValid = true;
-
-      // Name validation
-      if (!nameInput.value.trim()) {
-        showFieldError(
-          nameInput,
-          nameInput.parentElement.querySelector(".contact-error-msg"),
-          true
-        );
-        isValid = false;
-      }
-
-      // Email validation
-      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(emailInput.value.trim())) {
-        showFieldError(
-          emailInput,
-          emailInput.parentElement.querySelector(".contact-error-msg"),
-          true
-        );
-        isValid = false;
-      }
-
-      // Message validation
-      if (!messageInput.value.trim()) {
-        showFieldError(
-          messageInput,
-          messageInput.parentElement.querySelector(".contact-error-msg"),
-          true
-        );
-        isValid = false;
-      }
-
-      if (!isValid) {
-        showToast("Please fill in all fields correctly.", "error");
-        return;
-      }
-
-      // Store in localStorage as backup
-      storeFormData("contact_submissions", {
-        name: nameInput.value.trim(),
-        email: emailInput.value.trim(),
-        message: messageInput.value.trim(),
-        timestamp: new Date().toISOString(),
-      });
-
-      // Allow the form to submit to FormSubmit.co
-      form.submit();
-    });
-  }
 
   // =========================================================
   // 3. Gallery Lightbox
@@ -537,8 +398,7 @@
   // =========================================================
   document.addEventListener("DOMContentLoaded", function () {
     initSmoothScroll();
-    initEnquiryForm();
-    initContactForm();
+
     initLightbox();
     initReviewCarousel();
     initScrollReveal();

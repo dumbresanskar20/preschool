@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // ─── Serve Frontend Static Files ─────────────────────────────
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/uploads', express.static(path.join(__dirname, '../frontend/uploads')));
 
 // ─── API Routes ───────────────────────────────────────────────
 app.use('/api/auth',         require('./routes/auth'));
@@ -25,6 +26,8 @@ app.use('/api/program',      require('./routes/program'));
 app.use('/api/announcement', require('./routes/announcement'));
 app.use('/api/content',      require('./routes/content'));
 app.use('/api/contact',      require('./routes/contact'));
+app.use('/api/gallery',      require('./routes/gallery'));
+app.use('/api/upload',       require('./routes/upload'));
 
 // ─── Admin Panel Route ────────────────────────────────────────
 app.get('/admin', (req, res) => {

@@ -128,6 +128,7 @@
       const name    = document.getElementById('reg-name');
       const age     = document.getElementById('reg-age');
       const phone   = document.getElementById('reg-phone');
+      const email   = document.getElementById('reg-email');
       const inquiry = document.getElementById('reg-inquiry');
       const message = document.getElementById('reg-message');
       const btn     = document.getElementById('reg-submit');
@@ -137,24 +138,55 @@
       if (!name.value.trim())                    showErr(name);
       if (!age.value.trim())                     showErr(age);
       if (phone.value.replace(/\D/g,'').length < 10) showErr(phone);
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value.trim()))  showErr(email);
+
       if (!message.value.trim())                 showErr(message);
       if (!valid) { showLocalToast('Please fix the errors in the form.'); return; }
 
       btn.disabled = true;
-      btn.textContent = 'Sending…';
+      btn.textContent = 'Sending...';
+
       try {
-        const res = await submitRegistration({
-          parentName: name.value.trim(), childAge: age.value.trim(),
-          phone: phone.value.trim(), inquiryType: inquiry.value, message: message.value.trim()
+        // Step 1: Save to local database
+        const dbRes = await submitRegistration({
+          parentName: name.value.trim(), 
+          childAge: age.value.trim(),
+          phone: phone.value.trim(), 
+          email: email.value.trim(),
+          inquiryType: inquiry.value, 
+          message: message.value.trim()
         });
-        if (res.success) {
-          showLocalToast('Registration submitted! We will contact you soon.', 'success');
-          form.reset();
+
+        if (dbRes.success) {
+          // Step 2: Send email via FormSubmit AJAX
+          const formData = new FormData(form);
+          
+          // Add IST Timestamp
+          const now = new Date();
+          const istTime = now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true });
+          formData.append("Submission Time (IST)", istTime);
+
+          const fsRes = await fetch("https://formsubmit.co/ajax/bunnylandtalegaon@gmail.com", {
+            method: "POST",
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if (fsRes.ok) {
+            showLocalToast('Registration submitted! We will contact you soon.', 'success');
+            form.reset();
+          } else {
+            console.error('FormSubmit Error:', await fsRes.text());
+            showLocalToast('Data saved, but email delivery failed. Please check your Inbox/Spam for a FormSubmit activation email.', 'error');
+          }
         } else {
-          showLocalToast(res.message || 'Submission failed.');
+          showLocalToast(dbRes.message || 'Database saving failed.', 'error');
         }
-      } catch {
-        showLocalToast('Network error. Please try again.');
+      } catch (err) {
+        console.error('Submission error:', err);
+        showLocalToast('An error occurred. Please try again.', 'error');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Send Message';
@@ -210,23 +242,47 @@
         showLocalToast('Please fill out all contact fields.');
         return;
       }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showLocalToast('Please enter a valid email address.');
+        return;
+      }
 
       btn.disabled = true;
       btn.textContent = 'Sending...';
+
       try {
-        const res = await submitContact({ name, email, message });
-        if (res.success) {
-          if (res.emailStatus && res.emailStatus !== 'Sent successfully') {
-            alert('Data saved, but email failed to send: ' + res.emailStatus);
-          } else {
+        // Step 1: Save to local database
+        const dbRes = await submitContact({ name, email, message });
+        
+        if (dbRes.success) {
+          // Step 2: Send email via FormSubmit AJAX
+          const formData = new FormData(form);
+
+          // Add IST Timestamp
+          const now = new Date();
+          const istTime = now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: true });
+          formData.append("Submission Time (IST)", istTime);
+
+          const fsRes = await fetch("https://formsubmit.co/ajax/bunnylandtalegaon@gmail.com", {
+            method: "POST",
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if (fsRes.ok) {
             showLocalToast('Message sent successfully!', 'success');
+            form.reset();
+          } else {
+            console.error('FormSubmit Error:', await fsRes.text());
+            showLocalToast('Message saved, but email failed. Check FormSubmit activation.', 'error');
           }
-          form.reset();
         } else {
-          showLocalToast(res.message || 'Failed to send message.');
+          showLocalToast(dbRes.message || 'Database saving failed.', 'error');
         }
-      } catch {
-        showLocalToast('Network error. Please try again.');
+      } catch (err) {
+        console.error('Submission error:', err);
+        showLocalToast('An error occurred. Please try again.', 'error');
       } finally {
         btn.disabled = false;
         btn.textContent = 'Submit Form';
@@ -243,5 +299,86 @@
     initRegistrationForm();
     initReviewForm();
     initContactForm();
+    initGallery();
+  });
+
+  async function initGallery() {
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+
+    try {
+      const res = await fetchGallery();
+      if (res.success && res.data.length > 0) {
+        grid.innerHTML = '';
+        res.data.forEach((img, index) => {
+          const div = document.createElement('div');
+          
+          // Pattern logic: 
+          // index % 4 == 0 -> col-span-2 row-span-2
+          // index % 4 == 1 or 2 -> standard
+          // index % 4 == 3 -> col-span-2
+          
+          let classes = 'rounded-xl overflow-hidden group shadow-md';
+          if (index % 4 === 0) {
+            classes += ' col-span-2 row-span-2 h-[400px] md:h-[528px]';
+          } else if (index % 4 === 3) {
+            classes += ' col-span-2 h-48 md:h-64';
+          } else {
+            classes += ' h-48 md:h-64';
+          }
+
+          const isLocal = img.imageUrl.startsWith('/uploads');
+          const finalUrl = isLocal ? `${window.location.origin}${img.imageUrl}` : img.imageUrl;
+
+          div.className = classes;
+          div.innerHTML = `
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="${finalUrl}"
+              alt="${img.altText || 'Preschool Gallery'}"
+              onclick="openGalleryModal('${finalUrl}')"
+              onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800'; this.onerror=null;" />
+          `;
+          grid.appendChild(div);
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load gallery:', err);
+    }
+  }
+
+  // ── Modal Logic ──────────────────────────────────────────────
+  window.openGalleryModal = function(url) {
+    const modal = document.getElementById('gallery-modal');
+    const img = document.getElementById('modal-img');
+    if (!modal || !img) return;
+    
+    img.src = url;
+    modal.classList.remove('hidden');
+    setTimeout(() => { img.classList.remove('scale-95'); img.classList.add('scale-100'); }, 10);
+    document.body.style.overflow = 'hidden'; // Prevent scroll
+  };
+
+  function closeGalleryModal() {
+    const modal = document.getElementById('gallery-modal');
+    const img = document.getElementById('modal-img');
+    if (!modal || !img) return;
+
+    img.classList.add('scale-95');
+    img.classList.remove('scale-100');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 200);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('gallery-modal');
+    const closeBtn = document.getElementById('modal-close');
+    if (modal) {
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeGalleryModal(); });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeGalleryModal);
+    }
   });
 })();

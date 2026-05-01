@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = {
       title: document.getElementById('prog-title').value,
       ageGroup: document.getElementById('prog-age').value,
-      image: document.getElementById('prog-img').value,
       description: document.getElementById('prog-desc').value
     };
     if (id) await adminFetch(`/program/${id}`, { method: 'PUT', body: JSON.stringify(data) });
@@ -64,6 +63,62 @@ document.addEventListener('DOMContentLoaded', () => {
     await adminFetch('/content', { method: 'PUT', body: JSON.stringify(data) });
     alert('Content updated successfully.');
   });
+
+  document.getElementById('form-gallery').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    const fileInp = document.getElementById('gal-file');
+    const urlInp = document.getElementById('gal-url');
+    const altInp = document.getElementById('gal-alt');
+    
+    let imageUrl = urlInp.value;
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+
+    try {
+      // If file is selected, upload it first
+      if (fileInp.files.length > 0) {
+        btn.textContent = 'Uploading Image...';
+        const formData = new FormData();
+        formData.append('image', fileInp.files[0]);
+        
+        const uploadRes = await fetch(`${API_BASE}/upload`, {
+          method: 'POST',
+          headers: { 'x-admin-token': getAdminToken() },
+          body: formData
+        }).then(r => r.json());
+
+        if (uploadRes.success) {
+          imageUrl = uploadRes.url;
+        } else {
+          throw new Error(uploadRes.message || 'Upload failed');
+        }
+      }
+
+      if (!imageUrl) {
+        throw new Error('Please select a file or enter an image URL.');
+      }
+
+      btn.textContent = 'Saving to Database...';
+      const data = { imageUrl, altText: altInp.value };
+      const res = await adminFetch('/gallery', { method: 'POST', body: JSON.stringify(data) });
+      
+      if (res.success) {
+        alert('Gallery updated successfully!');
+        e.target.reset();
+        document.getElementById('gal-form-container').classList.add('hidden');
+        loadGalleryList();
+      } else {
+        throw new Error(res.message || 'Failed to save to gallery');
+      }
+    } catch (err) {
+      console.error('Gallery Error:', err);
+      alert('Error: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Add to Gallery';
+    }
+  });
 });
 
 function showDashboard() {
@@ -87,6 +142,7 @@ window.showTab = function(tabId) {
   if (tabId === 'programs') loadProgramsList();
   if (tabId === 'announcements') loadAnnouncementsList();
   if (tabId === 'messages') loadMessagesList();
+  if (tabId === 'gallery') loadGalleryList();
   if (tabId === 'content') loadContentData();
 };
 
@@ -138,12 +194,11 @@ async function loadProgramsList() {
   tbody.innerHTML = res.data.map(p => {
     const escTitle = p.title.replace(/'/g, "\\'");
     const escAge = p.ageGroup.replace(/'/g, "\\'");
-    const escImg = (p.image || '').replace(/'/g, "\\'");
     const escDesc = p.description.replace(/'/g, "\\'").replace(/\n/g, '\\n');
     return `
     <tr class="border-b"><td class="p-4 font-bold">${p.title}</td><td class="p-4">${p.ageGroup}</td><td class="p-4 text-sm">${p.description}</td>
     <td class="p-4">
-      <button onclick="editProgram('${p._id}', '${escTitle}', '${escAge}', '${escImg}', '${escDesc}')" class="text-blue-500 hover:underline mr-2">Edit</button>
+      <button onclick="editProgram('${p._id}', '${escTitle}', '${escAge}', '${escDesc}')" class="text-blue-500 hover:underline mr-2">Edit</button>
       <button onclick="deleteItem('/program/${p._id}', loadProgramsList)" class="text-red-500 hover:underline">Delete</button>
     </td></tr>`;
   }).join('');
@@ -186,17 +241,31 @@ async function loadContentData() {
   document.getElementById('cont-timings').value = c.schoolTimings || '';
 }
 
+async function loadGalleryList() {
+  const res = await fetchGallery();
+  if(!res.success) return;
+  const container = document.getElementById('list-gallery');
+  container.innerHTML = res.data.map(img => `
+    <div class="relative group border rounded-lg overflow-hidden h-40">
+      <img src="${img.imageUrl}" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <button onclick="deleteItem('/gallery/${img._id}', loadGalleryList)" class="bg-white text-red-600 px-3 py-1 rounded text-sm font-bold">Delete</button>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 bg-white/90 p-1 text-[10px] truncate">${img.altText}</div>
+    </div>
+  `).join('');
+}
+
 window.deleteItem = async function(endpoint, callback) {
   if(!confirm('Are you sure you want to delete this item?')) return;
   await adminFetch(endpoint, { method: 'DELETE' });
   callback();
 };
 
-window.editProgram = function(id, title, ageGroup, image, description) {
+window.editProgram = function(id, title, ageGroup, description) {
   document.getElementById('prog-id').value = id;
   document.getElementById('prog-title').value = title;
   document.getElementById('prog-age').value = ageGroup;
-  document.getElementById('prog-img').value = image || '';
   document.getElementById('prog-desc').value = description;
   document.getElementById('prog-form-container').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });

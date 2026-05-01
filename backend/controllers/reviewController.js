@@ -11,6 +11,7 @@ exports.createReview = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Rating must be between 1 and 5.' });
     }
     const review = await Review.create({ parentName, rating: Number(rating), reviewText, isApproved: false });
+
     res.status(201).json({ success: true, message: 'Review submitted successfully!', data: review });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });

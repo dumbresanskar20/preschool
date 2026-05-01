@@ -54,6 +54,12 @@ async function fetchContent() {
   return r.json();
 }
 
+/* ── Gallery ─────────────────────────────────── */
+async function fetchGallery() {
+  const r = await fetch(`${API_BASE}/gallery`);
+  return r.json();
+}
+
 /* ── Admin helpers ───────────────────────────── */
 function getAdminToken() { return localStorage.getItem('adminToken') || ''; }
 
