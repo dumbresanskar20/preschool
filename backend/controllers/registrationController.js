@@ -3,8 +3,16 @@ const Registration = require('../models/Registration');
 // POST /api/registration
 exports.createRegistration = async (req, res) => {
   try {
-    const { parentName, childAge, phone, email, inquiryType, message } = req.body;
+    const body = req.body;
+    const parentName = body.parentName || body.name;
+    const childAge = body.childAge || body.age;
+    const phone = body.phone;
+    const email = body.email;
+    const message = body.message;
+    const inquiryType = body.inquiryType || body.inquiry || 'General Inquiry';
+
     if (!parentName || !childAge || !phone || !email || !message) {
+      console.log('Validation Failed. Received:', body);
       return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
     const phoneDigits = phone.replace(/\D/g, '');
