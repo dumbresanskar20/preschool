@@ -9,34 +9,38 @@ exports.submitContact = async (req, res) => {
     }
     const contact = await Contact.create({ name, email, message });
 
-    // 1. Send notification to School
-    await sendEmail({
-      subject: `New Contact Message from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-      replyTo: email,
-      fromName: 'Rainbow Website'
-    });
-
-    // 2. Send Auto-reply to User
-    await sendEmail({
-      to: email,
-      subject: 'Message Received - Bunnyland Preschool',
-      html: `
-        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-          <h2 style="color: #f97316;">Hello ${name}!</h2>
-          <p>Thank you for reaching out to <strong>Bunnyland Preschool</strong>.</p>
-          <p>We have received your message and our team will get back to you as soon as possible.</p>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
-          <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Bunnyland Preschool Team</p>
-        </div>
-      `,
-      text: `Hello ${name}, Thank you for reaching out to Bunnyland Preschool. We have received your message and will get back to you soon.`
+    // Send emails in background to prevent UI hanging
+    Promise.allSettled([
+      // 1. Notification to School
+      sendEmail({
+        subject: `New Contact Message from ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+        replyTo: email,
+        fromName: 'Bunnyland Website'
+      }),
+      // 2. Auto-reply to User
+      sendEmail({
+        to: email,
+        subject: 'Message Received - Bunnyland Preschool',
+        html: `
+          <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+            <h2 style="color: #f97316;">Hello ${name}!</h2>
+            <p>Thank you for reaching out to <strong>Bunnyland Preschool</strong>.</p>
+            <p>We have received your message and our team will get back to you as soon as possible.</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+            <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
+            <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Bunnyland Preschool Team</p>
+          </div>
+        `,
+        text: `Hello ${name}, Thank you for reaching out to Bunnyland Preschool. We have received your message and will get back to you soon.`
+      })
+    ]).then(results => {
+      console.log('Email Background Processing Results:', results.map(r => r.status));
     });
 
     res.status(201).json({ 
       success: true, 
-      message: 'Message sent successfully! A confirmation email has been sent to you.', 
+      message: 'Message sent successfully! Check your email for confirmation.', 
       data: contact 
     });
   } catch (err) {

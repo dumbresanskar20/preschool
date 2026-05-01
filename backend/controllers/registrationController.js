@@ -29,34 +29,38 @@ exports.createRegistration = async (req, res) => {
       message 
     });
 
-    // 1. Send notification to School
-    await sendEmail({
-      subject: `New Registration Inquiry: ${inquiryType}`,
-      text: `Parent: ${parentName}\nChild's Age: ${childAge}\nPhone: ${phone}\nEmail: ${email}\nInquiry For: ${inquiryType}\nMessage: ${message}`,
-      replyTo: email,
-      fromName: 'Rainbow Admissions'
-    });
-
-    // 2. Send Auto-reply to Parent
-    await sendEmail({
-      to: email,
-      subject: 'Registration Inquiry Received - Bunnyland Preschool',
-      html: `
-        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-          <h2 style="color: #c2410c;">Dear ${parentName},</h2>
-          <p>Warm greetings from <strong>Bunnyland Preschool!</strong></p>
-          <p>Thank you for inquiring about our programs. We have received your registration details for your child (Age: ${childAge}).</p>
-          <p>Our admissions team will review your inquiry and contact you shortly at <strong>${phone}</strong> to discuss the next steps.</p>
-          <div style="background: #fff8f0; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f97316;">
-            <strong>Your Message:</strong><br>
-            <i style="color: #555;">"${message}"</i>
+    // Send emails in background
+    Promise.allSettled([
+      // 1. Notification to School
+      sendEmail({
+        subject: `New Registration Inquiry: ${inquiryType}`,
+        text: `Parent: ${parentName}\nChild's Age: ${childAge}\nPhone: ${phone}\nEmail: ${email}\nInquiry For: ${inquiryType}\nMessage: ${message}`,
+        replyTo: email,
+        fromName: 'Bunnyland Admissions'
+      }),
+      // 2. Auto-reply to Parent
+      sendEmail({
+        to: email,
+        subject: 'Registration Inquiry Received - Bunnyland Preschool',
+        html: `
+          <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+            <h2 style="color: #c2410c;">Dear ${parentName},</h2>
+            <p>Warm greetings from <strong>Bunnyland Preschool!</strong></p>
+            <p>Thank you for inquiring about our programs. We have received your registration details for your child (Age: ${childAge}).</p>
+            <p>Our admissions team will review your inquiry and contact you shortly at <strong>${phone}</strong> to discuss the next steps.</p>
+            <div style="background: #fff8f0; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f97316;">
+              <strong>Your Message:</strong><br>
+              <i style="color: #555;">"${message}"</i>
+            </div>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+            <p style="font-size: 0.9rem; color: #666;">This is an automated confirmation of your inquiry.</p>
+            <p style="font-weight: bold; color: #c2410c;">Best Regards,<br>Admissions Office<br>Bunnyland Preschool</p>
           </div>
-          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="font-size: 0.9rem; color: #666;">This is an automated confirmation of your inquiry.</p>
-          <p style="font-weight: bold; color: #c2410c;">Best Regards,<br>Admissions Office<br>Bunnyland Preschool</p>
-        </div>
-      `,
-      text: `Dear ${parentName}, Thank you for your inquiry at Bunnyland Preschool. We have received your details and will contact you soon.`
+        `,
+        text: `Dear ${parentName}, Thank you for your inquiry at Bunnyland Preschool. We have received your details and will contact you soon.`
+      })
+    ]).then(results => {
+      console.log('Registration Email Background Results:', results.map(r => r.status));
     });
 
     res.status(201).json({ success: true, message: 'Registration submitted! A confirmation email has been sent to you.', data: reg });
