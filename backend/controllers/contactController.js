@@ -9,42 +9,41 @@ exports.submitContact = async (req, res) => {
     }
     const contact = await Contact.create({ name, email, message });
 
-    // Send emails in background to prevent UI hanging
-    Promise.allSettled([
-      // 1. Notification to School
-      sendEmail({
-        subject: `New Contact Message from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-        replyTo: email,
-        fromName: 'Bunnyland Website'
-      }),
-      // 2. Auto-reply to User
-      sendEmail({
-        to: email,
-        subject: 'Message Received - Bunnyland Preschool',
-        html: `
-          <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-            <h2 style="color: #f97316;">Hello ${name}!</h2>
-            <p>Thank you for reaching out to <strong>Bunnyland Preschool</strong>.</p>
-            <p>We have received your message and our team will get back to you as soon as possible.</p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
-            <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Bunnyland Preschool Team</p>
-          </div>
-        `,
-        text: `Hello ${name}, Thank you for reaching out to Bunnyland Preschool. We have received your message and will get back to you soon.`
-      })
-    ]).then(results => {
-      results.forEach((res, i) => {
-        if (res.status === 'fulfilled' && !res.value.success) {
-          console.error(`❌ Email ${i+1} failed:`, res.value.message || res.value.error);
-        } else if (res.status === 'rejected') {
-          console.error(`❌ Email ${i+1} error:`, res.reason);
-        } else {
-          console.log(`✅ Email ${i+1} sent successfully.`);
-        }
-      });
-    });
+    // Send emails in background sequentially to avoid Gmail spam/security filters
+    (async () => {
+      try {
+        // 1. Notification to School
+        await sendEmail({
+          subject: `New Contact Message from ${name}`,
+          text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+          replyTo: email,
+          fromName: 'Bunnyland Website'
+        });
+
+        // Small delay between emails
+        await new Promise(r => setTimeout(r, 1000));
+
+        // 2. Auto-reply to User
+        await sendEmail({
+          to: email,
+          subject: 'Message Received - Bunnyland Preschool',
+          html: `
+            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+              <h2 style="color: #f97316;">Hello ${name}!</h2>
+              <p>Thank you for reaching out to <strong>Bunnyland Preschool</strong>.</p>
+              <p>We have received your message and our team will get back to you as soon as possible.</p>
+              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+              <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
+              <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Bunnyland Preschool Team</p>
+            </div>
+          `,
+          text: `Hello ${name}, Thank you for reaching out to Bunnyland Preschool. We have received your message and will get back to you soon.`
+        });
+        console.log('✅ Contact emails processed successfully.');
+      } catch (err) {
+        console.error('❌ Background Email Error:', err);
+      }
+    })();
 
     res.status(201).json({ 
       success: true, 
