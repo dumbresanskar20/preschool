@@ -18,17 +18,16 @@ const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
     }
 
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true, // true for 465, false for other ports
+      service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       },
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      socketTimeout: 10000
+      connectionTimeout: 15000,
+      greetingTimeout: 15000
     });
+
+    console.log(`📧 Attempting to send email via: ${process.env.EMAIL_USER.substring(0, 4)}... @gmail.com`);
 
     const mailOptions = {
       from: `"${fromName || 'Bunnyland Preschool'}" <${process.env.EMAIL_USER}>`,
