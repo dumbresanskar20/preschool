@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Best pre-school in Talegaon Dabhade | Rainbow Preschool</title>
+  <title>Best pre-school in Talegaon Dabhade | Rainbow Preschool Talegaon</title>
   <meta name="description"
     content="Rainbow Preschool under Bunnyland Preschool - Where every child's journey is celebrated with color, laughter, and high-quality early education." />
 
@@ -97,8 +97,8 @@
             Learning with <span class="text-primary">Fun</span> and <span class="text-tertiary">Creativity</span>
           </h1>
           <p class="text-lg text-on-surface-variant max-w-lg leading-relaxed">
-            Where every child's journey is celebrated with color, laughter, and high-quality early education. Welcome to
-            the Bunnyland family!
+            Rainbow Preschool is truly one of the best places for children to learn, grow and enjoy their early
+            childhood education.
           </p>
           <div class="flex flex-wrap gap-4">
             <a class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-primary/20"
@@ -143,12 +143,14 @@
           <h2 class="font-headline text-4xl md:text-5xl font-bold text-on-background">Nurturing Tomorrow's Leaders Today
           </h2>
           <p class="text-lg text-on-surface-variant leading-relaxed">
-            At Rainbow Preschool, we believe every child is a unique spectrum of potential. Our Bunnyland campus
-            provides a safe, stimulating, and inclusive environment where play is the primary language of learning.
+            Rainbow preschool has a team of highly qualified, caring and supportive teachers along with well-trained
+            staff members
+            who always ensure every child feels safe, comfortable and happy.
           </p>
           <p class="text-lg text-on-surface-variant leading-relaxed">
-            Our curriculum is designed to foster critical thinking, social empathy, and creative expression through a
-            blend of structured guidance and free exploration.
+            The advanced learning methods and activity-based teaching techniques help children develop strong
+            communication, creativity and confidence from an early age. The school maintains a very secure, clean and
+            hygienic environment which gives complete peace of mind to parents.
           </p>
           <div class="grid grid-cols-2 gap-6 pt-4">
             <div class="flex items-center gap-3">
@@ -171,7 +173,9 @@
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16 reveal">
           <h2 class="font-headline text-4xl md:text-5xl font-bold mb-4">Our Programs</h2>
-          <p class="text-on-surface-variant">Holistic development through playful engagement</p>
+          <p class="text-on-surface-variant">One of the best things about Rainbow Preschool is the way they celebrate
+            Indian festivals and cultural events with great enthusiasm. These celebrations help children understand our
+            traditions, values and culture in a joyful and educational manner.</p>
         </div>
         <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
           <div class="col-span-3 text-center py-8 text-on-surface-variant">Loading programs...</div>
@@ -194,9 +198,13 @@
       </div>
     </section>
     <!-- Image Lightbox Modal -->
-    <div id="gallery-modal" class="fixed inset-0 z-[100] bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
-      <button id="modal-close" class="absolute top-6 right-6 text-white text-4xl hover:scale-110 transition-transform" aria-label="Close preview">&times;</button>
-      <img id="modal-img" src="" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl scale-95 transition-transform duration-300" alt="Full size preview">
+    <div id="gallery-modal"
+      class="fixed inset-0 z-[100] bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300">
+      <button id="modal-close" class="absolute top-6 right-6 text-white text-4xl hover:scale-110 transition-transform"
+        aria-label="Close preview">&times;</button>
+      <img id="modal-img" src=""
+        class="max-w-full max-h-[90vh] rounded-lg shadow-2xl scale-95 transition-transform duration-300"
+        alt="Full size preview">
     </div>
 
 
@@ -421,8 +429,8 @@
       <div class="space-y-6">
         <div class="text-2xl font-bold text-orange-600 font-headline">Rainbow Preschool</div>
         <p class="text-stone-500 text-sm leading-relaxed">
-          Bunnyland Campus offers a nurturing environment where children grow through creativity and compassion.
-        </p>
+          Rainbow Preschool is truly a fun-filled and educational place where children learn with happiness every single
+          day. Highly recommended for parents who want the best foundation for their child’s bright future </p>
         <div class="space-y-2">
           <div class="flex items-center gap-3 text-stone-600">
             <span class="material-symbols-outlined text-sm">schedule</span>
@@ -507,12 +515,38 @@
     <span class="whatsapp-tooltip">Chat with us!</span>
   </a>
 
+  <!-- =============================================
+       Floating Chatbot Button & Window
+       ============================================= -->
+  <div id="chatbot-float" aria-label="School Chatbot" title="School Chatbot">
+    <span class="material-symbols-outlined" style="color: white; font-size: 32px;">smart_toy</span>
+    <span class="chatbot-tooltip">Ask me anything!</span>
+  </div>
+
+  <div id="chatbot-window">
+    <div class="chat-header">
+      <span>School Assistant 🤖</span>
+      <button class="chat-close" id="chat-close">&times;</button>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div class="chat-msg bot">Hello! Welcome to Rainbow Preschool. How can I help you today?</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off" />
+      <button id="chat-send">
+        <span class="material-symbols-outlined" style="font-size: 20px;">send</span>
+      </button>
+    </div>
+  </div>
+
   <!-- API Layer -->
   <script src="scripts/api.js"></script>
   <!-- Main Interactive Script -->
   <script src="scripts/main.js"></script>
   <!-- Dynamic Content Loader -->
   <script src="scripts/dynamic.js"></script>
+  <!-- Chatbot Script -->
+  <script src="scripts/chatbot.js"></script>
 
 </body>
 
