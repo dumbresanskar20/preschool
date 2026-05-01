@@ -9,9 +9,10 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true, // SSL
-  pool: true,   // Use connection pooling
+  pool: true,
   maxConnections: 1,
   maxMessages: 5,
+  family: 4,    // Force IPv4 to resolve ENETUNREACH on Render
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
