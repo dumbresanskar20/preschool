@@ -11,19 +11,20 @@ console.log("DEBUG: EMAIL_USER exists:", !!process.env.EMAIL_USER);
 console.log("DEBUG: EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: '74.125.200.108', // Direct IPv4 for smtp.gmail.com
   port: 465,
   secure: true, // SSL
   pool: true,
   maxConnections: 1,
   maxMessages: 5,
-  family: 4,    // Force IPv4 to resolve ENETUNREACH on Render
+  family: 4,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
   tls: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
+    servername: 'smtp.gmail.com' // Verify against the domain name, not the IP
   },
   connectionTimeout: 15000,
   socketTimeout: 15000
