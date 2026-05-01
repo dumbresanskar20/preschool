@@ -1,19 +1,55 @@
 const Review = require('../models/Review');
+const sendEmail = require('../config/mailer');
 
 // POST /api/review
 exports.createReview = async (req, res) => {
   try {
-    const { parentName, rating, reviewText } = req.body;
-    if (!parentName || !rating || !reviewText) {
+    const { parentName, email, rating, reviewText } = req.body;
+    if (!parentName || !email || !rating || !reviewText) {
       return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
     if (rating < 1 || rating > 5) {
       return res.status(400).json({ success: false, message: 'Rating must be between 1 and 5.' });
     }
-    const review = await Review.create({ parentName, rating: Number(rating), reviewText, isApproved: false });
+    const review = await Review.create({ parentName, email, rating: Number(rating), reviewText, isApproved: false });
+
+    console.log("DEBUG: Sending notification to school for review...");
+    await sendEmail({
+      to: 'bunnylandtalegaon@gmail.com',
+      subject: `New Review Submitted by ${parentName}`,
+      text: `Name: ${parentName}\nEmail: ${email}\nRating: ${rating}/5\nReview: ${reviewText}\n\nPlease review and approve from the admin dashboard.`,
+      replyTo: email,
+      fromName: 'Rainbow Website'
+    });
+
+    // Small delay to ensure Gmail handles sequential messages
+    await new Promise(r => setTimeout(r, 1000));
+
+    // Auto-reply to User
+    console.log(`DEBUG: Sending auto-reply to user for review: ${email}`);
+    const autoReplyRes = await sendEmail({
+      to: email,
+      subject: 'Review Received - Rainbow Preschool',
+      html: `
+        <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+          <h2 style="color: #f97316;">Hello ${parentName}!</h2>
+          <p>Thank you for sharing your experience with <strong>Rainbow Preschool</strong>.</p>
+          <p>We have successfully received your review. We deeply appreciate your feedback and support.</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <p style="font-size: 0.9rem; color: #666;">This is an automated response. Please do not reply directly to this email.</p>
+          <p style="font-weight: bold; color: #f97316;">Best Regards,<br>Rainbow Preschool Team</p>
+        </div>
+      `,
+      text: `Hello ${parentName}, Thank you for sharing your experience with Rainbow Preschool. We have successfully received your review and deeply appreciate your feedback.`
+    });
+
+    if (!autoReplyRes.success) {
+      console.warn(`Email delivery for review auto-reply failed: ${autoReplyRes.error || 'Unknown Error'}`);
+    }
 
     res.status(201).json({ success: true, message: 'Review submitted successfully!', data: review });
   } catch (err) {
+    console.error('❌ Review API Error:', err);
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });
   }
 };

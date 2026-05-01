@@ -191,11 +191,23 @@
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const name = document.getElementById('rv-name').value.trim();
+      const email = document.getElementById('rv-email').value.trim();
       const rating = +ratingInput.value;
       const text = document.getElementById('rv-text').value.trim();
-      if (!name || !text || rating < 1) { showLocalToast('Please fill all fields and select a rating.'); return; }
+      if (!name || !email || !text || rating < 1) { showLocalToast('Please fill all fields and select a rating.'); return; }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showLocalToast('Please enter a valid email address.');
+        return;
+      }
+
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
       try {
-        const res = await submitReview({ parentName: name, rating, reviewText: text });
+        const res = await submitReview({ parentName: name, email, rating, reviewText: text });
         if (res.success) {
           showLocalToast('Review submitted successfully!', 'success');
           form.reset(); ratingInput.value = 0; stars.forEach(s => s.textContent = '☆');
@@ -204,6 +216,9 @@
         }
       } catch {
         showLocalToast('Network error. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Submit Review';
       }
     });
   }
