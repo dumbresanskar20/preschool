@@ -22,7 +22,7 @@ const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
         to: [{ email: to || "bunnylandtalegaon@gmail.com" }],
         replyTo: { email: replyTo || "bunnylandtalegaon@gmail.com" },
         subject: subject,
-        htmlContent: html || `<p>${text}</p>`,
+        htmlContent: html || `<p style="font-family: sans-serif; line-height: 1.6;">${(text || '').replace(/\n/g, '<br>')}</p>`,
         textContent: text
       })
     });
