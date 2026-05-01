@@ -7,17 +7,19 @@ console.log("DEBUG: EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // use STARTTLS
+  port: 465,
+  secure: true, // SSL
+  pool: true,   // Use connection pooling
+  maxConnections: 1,
+  maxMessages: 5,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
   tls: {
-    rejectUnauthorized: false // Necessary for many cloud hosting environments
+    rejectUnauthorized: false
   },
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
+  connectionTimeout: 15000,
   socketTimeout: 15000
 });
 
