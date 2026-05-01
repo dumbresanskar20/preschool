@@ -1,43 +1,34 @@
 const sendEmail = async ({ to, subject, text, html, replyTo, fromName }) => {
   try {
-    console.log(`📧 Sending via Web API to: ${to || 'Admin'}`);
+    console.log(`📧 Web API attempt for: ${subject}`);
 
     const response = await fetch("https://formsubmit.co/ajax/bunnylandtalegaon@gmail.com", {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({
-        _subject: subject,
-        _replyto: replyTo || to,
-        from_name: fromName || 'Rainbow Preschool',
-        message: text,
-        _template: 'table',
-        _autoresponse: "Thank you for reaching out to Rainbow Preschool. We have received your inquiry and will get back to you shortly!"
+        subject: subject,
+        name: fromName || 'Rainbow Preschool',
+        email: replyTo || to,
+        message: text
       })
     });
 
-    // Check if the response is actually JSON
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      const result = await response.json();
-      if (result.success === "true") {
-        console.log("✅ Web API Email Sent Successfully");
-        return { success: true };
-      }
+    const responseText = await response.text();
+    console.log("DEBUG: FormSubmit Raw:", responseText);
+
+    if (response.ok) {
+      return { success: true };
     }
 
-    // If we are here, it's likely an activation issue or a non-JSON error page
-    if (response.status === 403 || response.status === 401) {
-      return { success: false, error: "Please check bunnylandtalegaon@gmail.com and click ACTIVATE in the FormSubmit email." };
+    if (response.status === 403 || response.status === 401 || responseText.includes("activate")) {
+      return { success: false, error: "FormSubmit says: Activation needed. Check bunnylandtalegaon@gmail.com one more time." };
     }
 
-    return { success: false, error: `Web API Status: ${response.status}. Please ensure the form is activated.` };
+    return { success: false, error: `Error (${response.status}): ${responseText.substring(0, 40)}` };
 
   } catch (error) {
-    console.error("❌ Web API Connection Error:", error);
-    return { success: false, error: "Network error. Please try again in a moment." };
+    console.error("❌ Web API Error:", error);
+    return { success: false, error: "Connection error. Please try again." };
   }
 };
 
