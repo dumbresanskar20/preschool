@@ -273,3 +273,24 @@ img[loading="lazy"].loaded,
 img.loaded {
   opacity: 1;
 }
+
+/* --- Floating Icon Animation --- */
+@keyframes float-icon {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg) scale(1.1); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.floating-icon {
+  position: absolute;
+  font-size: 3rem;
+  animation: float-icon 4s ease-in-out infinite;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 0;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.floating-icon.delay-1 { animation-delay: 1s; }
+.floating-icon.delay-2 { animation-delay: 2s; }
+.floating-icon.delay-3 { animation-delay: 3s; }

@@ -69,26 +69,41 @@
     const track = document.getElementById('reviews-track');
     if (!track) return;
     try {
-      const res = await fetchApprovedReviews();
-      if (!res.success || !res.data.length) {
-        track.innerHTML = '<div class="review-card"><div class="bg-surface-container-low p-10 rounded-xl h-full flex items-center justify-center opacity-60">No approved reviews yet. Be the first!</div></div>';
-        return;
+      let res = null;
+      try { res = await fetchApprovedReviews(); } catch (e) { console.warn("Failed fetching API reviews."); }
+      
+      let reviews = [];
+      if (res && res.success && res.data && res.data.length) {
+        reviews = res.data;
       }
+
+      reviews.unshift({
+        rating: 5,
+        reviewText: "Rainbow Preschool is truly one of the best places for children to learn, grow and enjoy their early childhood education. The school has a team of highly qualified, caring and supportive teachers along with well-trained staff members who always ensure every child feels safe, comfortable and happy. The advanced learning methods and activity-based teaching techniques help children develop strong communication, creativity and confidence from an early age. The school maintains a very secure, clean and hygienic environment which gives complete peace of mind to parents. One of the best things about Rainbow Preschool is the way they celebrate Indian festivals and cultural events with great enthusiasm. These celebrations help children understand our traditions, values and culture in a joyful and educational manner. The school also focuses equally on physical development through various indoor and outdoor sports activities, fun games, karate, abacus and many creative programs. Every activity is planned in a way that supports the mental, social and physical growth of the children. Rainbow Preschool is truly a fun-filled and educational place where children learn with happiness every single day. Highly recommended for parents who want the best foundation for their child’s bright future.",
+        parentName: "Amit Murhe"
+      });
+
       const colors = ['bg-orange-200','bg-blue-200','bg-pink-200','bg-green-200','bg-purple-200'];
-      track.innerHTML = res.data.map((r, i) => `
+      track.innerHTML = reviews.map((r, i) => {
+        const isLong = r.reviewText.length > 150;
+        return `
         <div class="review-card">
-          <div class="bg-surface-container-low p-10 rounded-xl relative h-full">
+          <div class="bg-surface-container-low p-10 rounded-xl relative h-full flex flex-col">
             <div class="flex gap-1 mb-6 text-orange-500">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
-            <p class="text-lg italic mb-8 leading-relaxed">"${r.reviewText}"</p>
-            <div class="flex items-center gap-4">
+            <div class="flex-1">
+              <p class="text-lg italic mb-2 leading-relaxed ${isLong ? 'line-clamp-4 transition-all duration-300' : 'mb-8'}">"${r.reviewText}"</p>
+              ${isLong ? \`<button class="text-primary font-bold text-sm mb-6 hover:underline" onclick="this.previousElementSibling.classList.toggle('line-clamp-none'); this.textContent = this.textContent === 'Read more' ? 'Read less' : 'Read more'">Read more</button>\` : ''}
+            </div>
+            <div class="flex items-center gap-4 mt-auto">
               <div class="w-12 h-12 rounded-full ${colors[i % colors.length]} flex items-center justify-center font-bold text-lg">${r.parentName.charAt(0)}</div>
               <div><h4 class="font-bold">${r.parentName}</h4></div>
             </div>
           </div>
-        </div>`).join('');
+        </div>`;
+      }).join('');
       // re-init carousel after DOM update
       if (typeof initReviewCarousel === 'function') initReviewCarousel();
-    } catch { /* keep placeholder */ }
+    } catch (e) { console.error('Error loading reviews:', e); }
   }
 
   // ── Website Content ────────────────────────────────────────────
