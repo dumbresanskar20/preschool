@@ -145,7 +145,7 @@
   // =========================================================
   // 4. Review Carousel
   // =========================================================
-  function initReviewCarousel() {
+  window.initReviewCarousel = function() {
     var track = document.querySelector(".reviews-track");
     var prevBtn = document.getElementById("review-prev");
     var nextBtn = document.getElementById("review-next");

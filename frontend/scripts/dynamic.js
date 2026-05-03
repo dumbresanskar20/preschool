@@ -27,11 +27,39 @@
     if (!grid) return;
     try {
       const res = await fetchPrograms();
-      if (!res.success || !res.data.length) {
+      let programs = res && res.success && res.data ? res.data : [];
+      
+      const defaultPrograms = [
+        {
+          title: "Playgroup",
+          ageGroup: "2 - 3 Years",
+          description: "Our playgroup program is designed to introduce young children to a structured learning environment through fun, play-based activities.",
+          image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&q=80&w=400"
+        },
+        {
+          title: "Nursery",
+          ageGroup: "3 - 4 Years",
+          description: "The nursery program focuses on building foundational literacy and numeracy skills, encouraging creativity through art and music.",
+          image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=400"
+        },
+        {
+          title: "Kindergarten",
+          ageGroup: "4 - 5 Years",
+          description: "Our kindergarten curriculum prepares children for formal schooling by enhancing their language abilities, logical thinking, and independent learning.",
+          image: "https://images.unsplash.com/photo-1514050630650-70588523c92b?auto=format&fit=crop&q=80&w=400"
+        }
+      ];
+
+      // If less than 3 programs, add from default programs
+      if (programs.length < 3) {
+        programs = [...programs, ...defaultPrograms.slice(programs.length, 3)];
+      }
+
+      if (!programs.length) {
         grid.innerHTML = '<div class="col-span-3 text-center py-12 text-on-surface-variant opacity-60">No programs listed yet.</div>';
         return;
       }
-      grid.innerHTML = res.data.map((p, i) => `
+      grid.innerHTML = programs.map((p, i) => `
         <div class="${COLORS[i % COLORS.length]} p-8 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-sm">
           ${p.image ? `<img src="${p.image}" alt="${p.title}" class="w-full h-40 object-cover rounded-lg mb-5" loading="lazy" />` : ''}
           <span class="text-xs font-bold uppercase tracking-widest opacity-60">${p.ageGroup}</span>
@@ -85,14 +113,17 @@
 
       const colors = ['bg-orange-200','bg-blue-200','bg-pink-200','bg-green-200','bg-purple-200'];
       track.innerHTML = reviews.map((r, i) => {
-        const isLong = r.reviewText.length > 150;
+        const limit = 100;
+        const isLong = r.reviewText.length > limit;
+        const shortText = isLong ? r.reviewText.substring(0, limit) + '...' : r.reviewText;
+        const safeFullText = r.reviewText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         return `
         <div class="review-card">
-          <div class="bg-surface-container-low p-10 rounded-xl relative h-full flex flex-col">
-            <div class="flex gap-1 mb-6 text-orange-500">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
-            <div class="flex-1">
-              <p class="text-lg italic mb-2 leading-relaxed ${isLong ? 'line-clamp-4 transition-all duration-300' : 'mb-8'}">"${r.reviewText}"</p>
-              ${isLong ? \`<button class="text-primary font-bold text-sm mb-6 hover:underline" onclick="this.previousElementSibling.classList.toggle('line-clamp-none'); this.textContent = this.textContent === 'Read more' ? 'Read less' : 'Read more'">Read more</button>\` : ''}
+          <div class="bg-surface-container-low p-8 rounded-xl relative flex flex-col min-h-[380px]">
+            <div class="flex gap-1 mb-4 text-orange-500">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+            <div class="flex-1 flex flex-col">
+              <p class="text-lg italic mb-2 leading-relaxed" data-full-text="${safeFullText}">"${shortText}"</p>
+              ${isLong ? `<button class="text-primary font-bold text-sm mb-4 mt-2 hover:underline self-start" onclick="const p = this.previousElementSibling; if(this.textContent === 'Read more') { p.textContent = '\\"' + p.getAttribute('data-full-text') + '\\"'; this.textContent = 'Show less'; } else { p.textContent = '\\"' + p.getAttribute('data-full-text').substring(0, ${limit}) + '...\\"'; this.textContent = 'Read more'; }">Read more</button>` : '<div class="mb-4 mt-2"></div>'}
             </div>
             <div class="flex items-center gap-4 mt-auto">
               <div class="w-12 h-12 rounded-full ${colors[i % colors.length]} flex items-center justify-center font-bold text-lg">${r.parentName.charAt(0)}</div>
@@ -320,7 +351,7 @@
           }
 
           const isLocal = img.imageUrl.startsWith('/uploads');
-          const finalUrl = isLocal ? `https://preschool-k8ak.onrender.com${img.imageUrl}` : img.imageUrl;
+          const finalUrl = isLocal ? `${API_BASE.replace('/api', '')}${img.imageUrl}` : img.imageUrl;
 
           div.className = classes;
           div.innerHTML = `

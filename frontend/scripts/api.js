@@ -3,7 +3,18 @@
  * All backend calls go through this module.
  */
 
-const API_BASE = 'https://preschool-k8ak.onrender.com/api';
+// Determine the API base URL depending on where the frontend is running
+let API_BASE = '/api';
+
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  // If running via Live Server (e.g., port 5500), point to local backend on port 5000
+  if (window.location.port !== '5000') {
+    API_BASE = 'http://localhost:5000/api';
+  }
+} else {
+  // When deployed to production, use the remote Render API
+  API_BASE = 'https://preschool-k8ak.onrender.com/api';
+}
 
 /* ── Registration ─────────────────────────────── */
 async function submitRegistration(data) {

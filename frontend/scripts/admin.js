@@ -247,7 +247,7 @@ async function loadGalleryList() {
   const container = document.getElementById('list-gallery');
   container.innerHTML = res.data.map((img, index) => {
     const isLocal = img.imageUrl.startsWith('/uploads');
-    const finalUrl = isLocal ? `https://preschool-k8ak.onrender.com${img.imageUrl}` : img.imageUrl;
+    const finalUrl = isLocal ? `${API_BASE.replace('/api', '')}${img.imageUrl}` : img.imageUrl;
     return `
     <div data-id="${img._id}" class="relative group border rounded-lg overflow-hidden h-40 cursor-move bg-white shadow-sm">
       <img src="${finalUrl}" class="w-full h-full object-cover pointer-events-none">
