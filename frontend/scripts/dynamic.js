@@ -49,11 +49,6 @@
             <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2">${p.ageGroup}</span>
             <h3 class="text-2xl font-bold mb-4 text-stone-800">${p.title}</h3>
             <p class="text-sm leading-relaxed text-stone-600 mb-6 flex-1">${p.description}</p>
-            <div class="mt-auto">
-               <span class="inline-flex items-center gap-2 text-primary font-bold text-sm">
-                 Learn More <span class="material-symbols-outlined text-sm">arrow_forward</span>
-               </span>
-            </div>
           </div>
         </div>`;
       }).join('');
