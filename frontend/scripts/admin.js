@@ -245,9 +245,12 @@ async function loadGalleryList() {
   const res = await fetchGallery();
   if(!res.success) return;
   const container = document.getElementById('list-gallery');
-  container.innerHTML = res.data.map((img, index) => `
+  container.innerHTML = res.data.map((img, index) => {
+    const isLocal = img.imageUrl.startsWith('/uploads');
+    const finalUrl = isLocal ? `https://preschool-k8ak.onrender.com${img.imageUrl}` : img.imageUrl;
+    return `
     <div data-id="${img._id}" class="relative group border rounded-lg overflow-hidden h-40 cursor-move bg-white shadow-sm">
-      <img src="${img.imageUrl}" class="w-full h-full object-cover pointer-events-none">
+      <img src="${finalUrl}" class="w-full h-full object-cover pointer-events-none">
       <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
         <div class="flex gap-2">
           <button onclick="moveGalleryItem('${img._id}', -1)" class="bg-blue-600 text-white p-1 rounded hover:bg-blue-700" title="Move Up">
@@ -261,7 +264,8 @@ async function loadGalleryList() {
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-white/90 p-1 text-[10px] truncate pointer-events-none">${img.altText}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   // Initialize Sortable
   new Sortable(container, {

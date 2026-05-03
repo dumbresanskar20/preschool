@@ -320,7 +320,7 @@
           }
 
           const isLocal = img.imageUrl.startsWith('/uploads');
-          const finalUrl = isLocal ? `${window.location.origin}${img.imageUrl}` : img.imageUrl;
+          const finalUrl = isLocal ? `https://preschool-k8ak.onrender.com${img.imageUrl}` : img.imageUrl;
 
           div.className = classes;
           div.innerHTML = `

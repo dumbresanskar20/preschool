@@ -3,7 +3,7 @@
  * All backend calls go through this module.
  */
 
-const API_BASE = '/api';
+const API_BASE = 'https://preschool-k8ak.onrender.com/api';
 
 /* ── Registration ─────────────────────────────── */
 async function submitRegistration(data) {
