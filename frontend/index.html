@@ -360,6 +360,20 @@
             <span class="form-error-msg"><span class="material-symbols-outlined" style="font-size:0.9rem">error</span>
               Please enter a message</span>
           </div>
+          <!-- Robot Verification -->
+          <div class="bg-on-primary/10 p-5 rounded-2xl flex items-center justify-between mb-4 border border-on-primary/5">
+            <div class="flex items-center gap-4">
+              <input type="checkbox" id="reg-captcha"
+                class="w-7 h-7 rounded border-none bg-on-primary/20 cursor-pointer accent-secondary-fixed transition-all"
+                required />
+              <label for="reg-captcha" class="font-bold cursor-pointer select-none text-lg">I am not a robot</label>
+            </div>
+            <div class="flex flex-col items-center opacity-40">
+              <span class="material-symbols-outlined text-3xl">verified_user</span>
+              <span class="text-[10px] uppercase font-bold tracking-tighter">Verification</span>
+            </div>
+          </div>
+
           <button id="reg-submit"
             class="w-full bg-secondary-fixed text-on-secondary-fixed py-5 rounded-full font-black text-xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
             type="submit">Send Message</button>

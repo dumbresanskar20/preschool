@@ -169,6 +169,8 @@
       const message = document.getElementById('reg-message');
       const btn = document.getElementById('reg-submit');
 
+      const captcha = document.getElementById('reg-captcha');
+
       let valid = true;
       const showErr = (inp) => { inp.parentElement.querySelector('.form-error-msg')?.classList.add('visible'); valid = false; };
       if (!name.value.trim()) showErr(name);
@@ -179,7 +181,19 @@
       if (!emailRegex.test(email.value.trim())) showErr(email);
 
       if (!message.value.trim()) showErr(message);
-      if (!valid) { showLocalToast('Please fix the errors in the form.'); return; }
+      
+      if (!captcha.checked) {
+        showLocalToast('Please verify that you are not a robot.');
+        valid = false;
+      }
+
+      if (!valid) { 
+        if (captcha && !captcha.checked) {
+          captcha.parentElement.classList.add('animate-pulse');
+          setTimeout(() => captcha.parentElement.classList.remove('animate-pulse'), 1000);
+        }
+        return; 
+      }
 
       btn.disabled = true;
       btn.textContent = 'Sending...';
