@@ -165,6 +165,7 @@
     nextBtn.parentNode.replaceChild(newNext, nextBtn);
 
     var cards = track.querySelectorAll(".review-card");
+    console.log('Carousel Init: Found ' + cards.length + ' cards');
     var currentIndex = 0;
 
     // Ensure smooth CSS transition
