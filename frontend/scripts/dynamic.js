@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  const COLORS = ['bg-primary-container','bg-secondary-container','bg-tertiary-container','bg-surface-container-high'];
+  const COLORS = ['bg-primary-container', 'bg-secondary-container', 'bg-tertiary-container', 'bg-surface-container-high'];
 
   function showLocalToast(message, type = 'error') {
     const container = document.getElementById("toast-container");
@@ -61,7 +61,7 @@
           <div>
             <p class="font-bold">${a.title}</p>
             <p class="text-sm opacity-70">${a.description}</p>
-            <p class="text-xs opacity-50 mt-1">${new Date(a.date).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})}</p>
+            <p class="text-xs opacity-50 mt-1">${new Date(a.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
           </div>
         </div>`).join('');
     } catch { list.innerHTML = ''; }
@@ -84,7 +84,7 @@
       window._reviewTexts = reviews.map(r => r.reviewText);
 
       const LIMIT = 100;
-      const colors = ['bg-orange-200','bg-blue-200','bg-pink-200','bg-green-200','bg-purple-200'];
+      const colors = ['bg-orange-200', 'bg-blue-200', 'bg-pink-200', 'bg-green-200', 'bg-purple-200'];
 
       track.innerHTML = reviews.map((r, i) => {
         const isLong = r.reviewText.length > LIMIT;
@@ -96,9 +96,9 @@
             <div class="flex-1 flex flex-col">
               <p id="rv-text-${i}" class="text-lg italic mb-2 leading-relaxed">"${shortText}"</p>
               ${isLong
-                ? `<button class="text-primary font-bold text-sm mb-4 mt-2 hover:underline self-start" onclick="toggleReviewText(this, ${i}, ${LIMIT})">Read more</button>`
-                : '<div class="mb-4 mt-2"></div>'
-              }
+            ? `<button class="text-primary font-bold text-sm mb-4 mt-2 hover:underline self-start" onclick="toggleReviewText(this, ${i}, ${LIMIT})">Read more</button>`
+            : '<div class="mb-4 mt-2"></div>'
+          }
             </div>
             <div class="flex items-center gap-4 mt-auto">
               <div class="w-12 h-12 rounded-full ${colors[i % colors.length]} flex items-center justify-center font-bold text-lg">${r.parentName.charAt(0)}</div>
@@ -114,7 +114,7 @@
   }
 
   // Global toggle function for review "Read more / Show less"
-  window.toggleReviewText = function(btn, index, limit) {
+  window.toggleReviewText = function (btn, index, limit) {
     const p = document.getElementById('rv-text-' + index);
     if (!p) return;
     const fullText = window._reviewTexts[index];
@@ -161,24 +161,24 @@
       e.preventDefault();
       form.querySelectorAll('.form-error-msg').forEach(el => el.classList.remove('visible'));
 
-      const name    = document.getElementById('reg-name');
-      const age     = document.getElementById('reg-age');
-      const phone   = document.getElementById('reg-phone');
-      const email   = document.getElementById('reg-email');
+      const name = document.getElementById('reg-name');
+      const age = document.getElementById('reg-age');
+      const phone = document.getElementById('reg-phone');
+      const email = document.getElementById('reg-email');
       const inquiry = document.getElementById('reg-inquiry');
       const message = document.getElementById('reg-message');
-      const btn     = document.getElementById('reg-submit');
+      const btn = document.getElementById('reg-submit');
 
       let valid = true;
       const showErr = (inp) => { inp.parentElement.querySelector('.form-error-msg')?.classList.add('visible'); valid = false; };
-      if (!name.value.trim())                    showErr(name);
-      if (!age.value.trim())                     showErr(age);
-      if (phone.value.replace(/\D/g,'').length < 10) showErr(phone);
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email.value.trim()))  showErr(email);
+      if (!name.value.trim()) showErr(name);
+      if (!age.value.trim()) showErr(age);
+      if (phone.value.replace(/\D/g, '').length < 10) showErr(phone);
 
-      if (!message.value.trim())                 showErr(message);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value.trim())) showErr(email);
+
+      if (!message.value.trim()) showErr(message);
       if (!valid) { showLocalToast('Please fix the errors in the form.'); return; }
 
       btn.disabled = true;
@@ -187,11 +187,11 @@
       try {
         // Step 1: Save to local database
         const dbRes = await submitRegistration({
-          parentName: name.value.trim(), 
+          parentName: name.value.trim(),
           childAge: age.value.trim(),
-          phone: phone.value.trim(), 
+          phone: phone.value.trim(),
           email: email.value.trim(),
-          inquiryType: inquiry.value, 
+          inquiryType: inquiry.value,
           message: message.value.trim()
         });
 
@@ -218,45 +218,72 @@
     const ratingInput = document.getElementById('rv-rating');
     if (!form) return;
 
+    // Handle star rating clicks
     stars.forEach(star => {
-      star.addEventListener('mouseover', () => { const v = +star.dataset.v; stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; }); });
-      star.addEventListener('mouseout',  () => { const v = +ratingInput.value; stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; }); });
-      star.addEventListener('click',     () => { ratingInput.value = star.dataset.v; });
+      star.addEventListener('mouseover', () => {
+        const v = +star.dataset.v;
+        stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; });
+      });
+      star.addEventListener('mouseout', () => {
+        const v = +ratingInput.value;
+        stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; });
+      });
+      star.addEventListener('click', () => {
+        ratingInput.value = star.dataset.v;
+      });
     });
 
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const name = document.getElementById('rv-name').value.trim();
-      const email = document.getElementById('rv-email').value.trim();
-      const rating = +ratingInput.value;
-      const text = document.getElementById('rv-text').value.trim();
-      if (!name || !email || !text || rating < 1) { showLocalToast('Please fill all fields and select a rating.'); return; }
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        showLocalToast('Please enter a valid email address.');
+    // Handle form submission
+    form.addEventListener('submit', async function (event) {
+      // 1. Prevent default submission
+      event.preventDefault();
+
+      // 2. Capture form data
+      const formData = {
+        parentName: document.getElementById('rv-name').value.trim(),
+        email: document.getElementById('rv-email').value.trim(),
+        rating: Number(ratingInput.value),
+        reviewText: document.getElementById('rv-text').value.trim()
+      };
+
+      // Validation
+      if (!formData.parentName || !formData.email || !formData.reviewText || formData.rating < 1) {
+        showLocalToast('Please fill all fields and provide a star rating.');
         return;
       }
 
-      const btn = form.querySelector('button[type="submit"]');
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.textContent = 'Submitting...';
 
       try {
-        const res = await submitReview({ parentName: name, email, rating, reviewText: text });
-        if (res.success) {
+        // 3. Send captured data to the backend API using POST /api/reviews
+        const response = await submitReview(formData);
+
+        if (response.success) {
+          // 4. On successful response: Show success message and reset form
           showLocalToast('Review submitted successfully!', 'success');
-          form.reset(); ratingInput.value = 0; stars.forEach(s => s.textContent = '☆');
-          // Automatically refresh the reviews on the website
-          loadReviews();
+          form.reset();
+          ratingInput.value = 0;
+          stars.forEach(s => s.textContent = '☆');
+          if (document.getElementById('rv-char-count')) {
+            document.getElementById('rv-char-count').textContent = '100 characters left';
+          }
+
+          // 5. Immediately update the UI without page reload by re-fetching
+          await loadReviews();
         } else {
-          showLocalToast(res.message || 'Could not submit review.');
+          // 7. Handle errors from API
+          showLocalToast(response.message || 'Submission failed. Please try again.', 'error');
         }
-      } catch {
-        showLocalToast('Network error. Please try again.');
+      } catch (error) {
+        // 7. Handle network errors
+        console.error('API Error:', error);
+        showLocalToast('Could not connect to the server. Please try again later.', 'error');
       } finally {
-        btn.disabled = false;
-        btn.textContent = 'Submit Review';
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
       }
     });
   }
@@ -288,7 +315,7 @@
       try {
         // Step 1: Save to local database
         const dbRes = await submitContact({ name, email, message });
-        
+
         if (dbRes.success) {
           showLocalToast('Message sent successfully! Check your email for confirmation.', 'success');
           form.reset();
@@ -327,12 +354,12 @@
         grid.innerHTML = '';
         res.data.forEach((img, index) => {
           const div = document.createElement('div');
-          
+
           // Pattern logic: 
           // index % 4 == 0 -> col-span-2 row-span-2
           // index % 4 == 1 or 2 -> standard
           // index % 4 == 3 -> col-span-2
-          
+
           let classes = 'rounded-xl overflow-hidden group shadow-md';
           if (index % 4 === 0) {
             classes += ' col-span-2 row-span-2 h-[400px] md:h-[528px]';
@@ -363,11 +390,11 @@
   }
 
   // ── Modal Logic ──────────────────────────────────────────────
-  window.openGalleryModal = function(url) {
+  window.openGalleryModal = function (url) {
     const modal = document.getElementById('gallery-modal');
     const img = document.getElementById('modal-img');
     if (!modal || !img) return;
-    
+
     img.src = url;
     modal.classList.remove('hidden');
     setTimeout(() => { img.classList.remove('scale-95'); img.classList.add('scale-100'); }, 10);
