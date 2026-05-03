@@ -33,13 +33,30 @@
         grid.innerHTML = '<div class="col-span-3 text-center py-12 text-on-surface-variant opacity-60">No programs listed yet.</div>';
         return;
       }
-      grid.innerHTML = programs.map((p, i) => `
-        <div class="${COLORS[i % COLORS.length]} p-8 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-sm">
-          ${p.image ? `<img src="${p.image}" alt="${p.title}" class="w-full h-40 object-cover rounded-lg mb-5" loading="lazy" />` : ''}
-          <span class="text-xs font-bold uppercase tracking-widest opacity-60">${p.ageGroup}</span>
-          <h3 class="text-xl font-bold mt-2 mb-3">${p.title}</h3>
-          <p class="text-sm leading-relaxed opacity-80">${p.description}</p>
-        </div>`).join('');
+
+      const GHIBLI_BGS = [
+        'assets/ghibli/forest.png',
+        'assets/ghibli/classroom.png',
+        'assets/ghibli/garden.png'
+      ];
+
+      grid.innerHTML = programs.map((p, i) => {
+        const bg = GHIBLI_BGS[i % GHIBLI_BGS.length];
+        return `
+        <div class="relative overflow-hidden p-1 rounded-3xl hover:scale-[1.02] transition-all duration-500 group shadow-lg" 
+             style="background: url('${bg}') no-repeat center center; background-size: cover;">
+          <div class="bg-white/80 backdrop-blur-md p-8 rounded-[1.4rem] h-full flex flex-col border border-white/40 group-hover:bg-white/90 transition-colors">
+            <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2">${p.ageGroup}</span>
+            <h3 class="text-2xl font-bold mb-4 text-stone-800">${p.title}</h3>
+            <p class="text-sm leading-relaxed text-stone-600 mb-6 flex-1">${p.description}</p>
+            <div class="mt-auto">
+               <span class="inline-flex items-center gap-2 text-primary font-bold text-sm">
+                 Learn More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+               </span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
     } catch {
       grid.innerHTML = '<div class="col-span-3 text-center py-12 text-red-500">Could not load programs.</div>';
     }
