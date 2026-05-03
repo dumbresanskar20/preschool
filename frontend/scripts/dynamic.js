@@ -80,12 +80,6 @@
         reviews = res.data;
       }
 
-      reviews.unshift({
-        rating: 5,
-        reviewText: "Rainbow Preschool is truly one of the best places for children to learn, grow and enjoy their early childhood education. The school has a team of highly qualified, caring and supportive teachers along with well-trained staff members who always ensure every child feels safe, comfortable and happy. The advanced learning methods and activity-based teaching techniques help children develop strong communication, creativity and confidence from an early age. The school maintains a very secure, clean and hygienic environment which gives complete peace of mind to parents. One of the best things about Rainbow Preschool is the way they celebrate Indian festivals and cultural events with great enthusiasm. These celebrations help children understand our traditions, values and culture in a joyful and educational manner. The school also focuses equally on physical development through various indoor and outdoor sports activities, fun games, karate, abacus and many creative programs. Every activity is planned in a way that supports the mental, social and physical growth of the children. Rainbow Preschool is truly a fun-filled and educational place where children learn with happiness every single day. Highly recommended for parents who want the best foundation for their child's bright future.",
-        parentName: "Amit Murhe"
-      });
-
       // Store full texts in a global array so the toggle function can access them safely
       window._reviewTexts = reviews.map(r => r.reviewText);
 

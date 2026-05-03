@@ -284,9 +284,10 @@
               <span class="star-btn text-3xl cursor-pointer" data-v="5">☆</span>
             </div>
             <input id="rv-rating" type="hidden" value="0" />
-            <textarea id="rv-text" placeholder="Write your review..." rows="3"
+            <textarea id="rv-text" placeholder="Write your review... (max 100 characters)" rows="3" maxlength="100"
               class="w-full rounded-xl border-none bg-surface-container p-4 outline-none focus:ring-4 focus:ring-primary/30"
-              required></textarea>
+              required oninput="document.getElementById('rv-char-count').textContent = (100 - this.value.length) + ' characters left'"></textarea>
+            <p id="rv-char-count" class="text-xs text-on-surface-variant opacity-60 mt-1 text-right">100 characters left</p>
             <button type="submit"
               class="bg-primary text-white px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">Submit
               Review</button>
