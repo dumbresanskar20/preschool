@@ -37,13 +37,13 @@ async function submitContact(data) {
 
 /* ── Reviews (public) ────────────────────────── */
 async function fetchApprovedReviews() {
-  const r = await fetch(`${API_BASE}/review`);
+  const r = await fetch(`${API_BASE}/review?t=${Date.now()}`);
   return r.json();
 }
 async function submitReview(data) {
   const r = await fetch(`${API_BASE}/review`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify({ ...data, isApproved: true })
   });
   return r.json();
 }
