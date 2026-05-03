@@ -587,3 +587,34 @@ a.bg-surface-container-high:active {
   transform: scale(1.05);
 }
 
+/* ===================================================
+   Reviews Carousel
+   =================================================== */
+.reviews-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.review-card {
+  flex: 0 0 100%; /* Default mobile: 1 card */
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .review-card {
+    flex: 0 0 33.333333%; /* Desktop: 3 cards */
+  }
+}
+
+.review-card > div {
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover > div {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+

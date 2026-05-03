@@ -179,8 +179,11 @@
     }
 
     function updateCarousel() {
-      var percentage = (currentIndex * 100) / getVisibleCount();
-      track.style.transform = "translateX(-" + percentage + "%)";
+      if (cards.length === 0) return;
+      // The percentage in translateX is relative to the track's own width.
+      // Since each card is part of the flex track, we move by 1/totalCards per index.
+      var offset = (currentIndex * 100) / cards.length;
+      track.style.transform = "translateX(-" + offset + "%)";
     }
 
     function startAutoPlay() {
