@@ -247,6 +247,8 @@
         if (res.success) {
           showLocalToast('Review submitted successfully!', 'success');
           form.reset(); ratingInput.value = 0; stars.forEach(s => s.textContent = '☆');
+          // Automatically refresh the reviews on the website
+          loadReviews();
         } else {
           showLocalToast(res.message || 'Could not submit review.');
         }
