@@ -151,10 +151,7 @@ async function loadStats() {
   const rev = await adminFetch('/review/all');
   const prog = await fetchPrograms();
   if(reg.success) document.getElementById('stat-reg').textContent = reg.total || reg.data.length;
-  if(rev.success) {
-    document.getElementById('stat-rev').textContent = rev.data.length;
-    document.getElementById('stat-pend').textContent = rev.data.filter(r => !r.isApproved).length;
-  }
+  if(rev.success) document.getElementById('stat-rev').textContent = rev.data.length;
   if(prog.success) document.getElementById('stat-prog').textContent = prog.data.length;
 }
 
@@ -173,12 +170,16 @@ async function loadReviewsList() {
   if(!res.success) return;
   const tbody = document.getElementById('list-reviews');
   tbody.innerHTML = res.data.map(r => `
-    <tr class="border-b"><td class="p-4">${r.parentName}</td><td class="p-4"><a href="mailto:${r.email}" class="text-blue-500 hover:underline">${r.email || 'N/A'}</a></td><td class="p-4">${r.rating}/5</td><td class="p-4 text-sm">${r.reviewText}</td>
-    <td class="p-4"><span class="${r.isApproved ? 'text-green-500' : 'text-orange-500'} font-bold">${r.isApproved ? 'Approved' : 'Pending'}</span></td>
-    <td class="p-4">
-      <button onclick="toggleReview('${r._id}', ${!r.isApproved})" class="text-blue-500 hover:underline mr-2">${r.isApproved ? 'Reject' : 'Approve'}</button>
-      <button onclick="deleteItem('/review/${r._id}', loadReviewsList)" class="text-red-500 hover:underline">Delete</button>
-    </td></tr>
+    <tr class="border-b">
+      <td class="p-4">${new Date(r.createdAt).toLocaleDateString()}</td>
+      <td class="p-4 font-bold">${r.parentName}</td>
+      <td class="p-4"><a href="mailto:${r.email}" class="text-blue-500 hover:underline">${r.email || 'N/A'}</a></td>
+      <td class="p-4">${r.rating}/5</td>
+      <td class="p-4 text-sm max-w-xs truncate">${r.reviewText}</td>
+      <td class="p-4">
+        <button onclick="deleteItem('/review/${r._id}', loadReviewsList)" class="text-red-500 hover:underline font-bold">Delete</button>
+      </td>
+    </tr>
   `).join('');
 }
 
