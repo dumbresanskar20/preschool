@@ -147,12 +147,63 @@ window.showTab = function(tabId) {
 };
 
 async function loadStats() {
-  const reg = await adminFetch('/registration');
-  const rev = await adminFetch('/review/all');
-  const prog = await fetchPrograms();
-  if(reg.success) document.getElementById('stat-reg').textContent = reg.total || reg.data.length;
-  if(rev.success) document.getElementById('stat-rev').textContent = rev.data.length;
-  if(prog.success) document.getElementById('stat-prog').textContent = prog.data.length;
+  // Set today's date
+  const dateEl = document.getElementById('dash-date');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const [reg, rev, prog, msg] = await Promise.all([
+    adminFetch('/registration'),
+    adminFetch('/review/all'),
+    fetchPrograms(),
+    adminFetch('/contact')
+  ]);
+
+  // Stat counters
+  if (reg.success) document.getElementById('stat-reg').textContent = reg.data.length;
+  if (rev.success) document.getElementById('stat-rev').textContent = rev.data.length;
+  if (prog.success) document.getElementById('stat-prog').textContent = prog.data.length;
+
+  // Recent Registrations (last 5)
+  const regEl = document.getElementById('dash-recent-reg');
+  if (regEl && reg.success) {
+    const recent = reg.data.slice(0, 5);
+    regEl.innerHTML = recent.length ? recent.map(r => `
+      <div class="flex items-center justify-between border-b pb-2">
+        <div>
+          <p class="font-semibold text-gray-700">${r.parentName}</p>
+          <p class="text-xs text-gray-400">${r.phone} &bull; Age: ${r.childAge}</p>
+        </div>
+        <span class="text-xs text-gray-400 whitespace-nowrap ml-2">${new Date(r.createdAt).toLocaleDateString('en-IN')}</span>
+      </div>`).join('') : '<p class="text-center py-4 opacity-50">No registrations yet.</p>';
+  }
+
+  // Recent Reviews (last 5)
+  const revEl = document.getElementById('dash-recent-rev');
+  if (revEl && rev.success) {
+    const recent = rev.data.slice(0, 5);
+    revEl.innerHTML = recent.length ? recent.map(r => `
+      <div class="flex items-center justify-between border-b pb-2">
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-gray-700">${r.parentName} <span class="text-orange-400 font-normal">${'★'.repeat(r.rating)}</span></p>
+          <p class="text-xs text-gray-400 truncate">${r.reviewText.substring(0, 60)}...</p>
+        </div>
+        <span class="text-xs text-gray-400 whitespace-nowrap ml-2">${new Date(r.createdAt).toLocaleDateString('en-IN')}</span>
+      </div>`).join('') : '<p class="text-center py-4 opacity-50">No reviews yet.</p>';
+  }
+
+  // Recent Messages (last 5)
+  const msgEl = document.getElementById('dash-recent-msg');
+  if (msgEl && msg.success) {
+    const recent = msg.data.slice(0, 5);
+    msgEl.innerHTML = recent.length ? recent.map(m => `
+      <div class="flex items-start justify-between border-b pb-3">
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-gray-700">${m.name} <span class="text-gray-400 font-normal text-xs">&lt;${m.email}&gt;</span></p>
+          <p class="text-xs text-gray-400 mt-1 truncate">${m.message.substring(0, 80)}...</p>
+        </div>
+        <span class="text-xs text-gray-400 whitespace-nowrap ml-4">${new Date(m.createdAt).toLocaleDateString('en-IN')}</span>
+      </div>`).join('') : '<p class="text-center py-4 opacity-50">No messages yet.</p>';
+  }
 }
 
 async function loadRegistrations() {
