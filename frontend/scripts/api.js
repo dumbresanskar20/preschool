@@ -1,19 +1,20 @@
-/**
- * Rainbow Preschool – API Integration Layer
- * All backend calls go through this module.
- */
+// ── API Base URL ──────────────────────────────────────────────
+// Three environments:
+// 1. Production (cPanel): frontend on cPanel → backend on Render
+// 2. Local dev via backend (port 5000): relative /api works fine
+// 3. Local dev via Live Server (port 5500 etc): point to localhost:5000
 
-// Determine the API base URL depending on where the frontend is running
-let API_BASE = '/api';
+const RENDER_API = 'https://preschool-k8ak.onrender.com/api';
 
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  // If running via Live Server (e.g., port 5500), point to local backend on port 5000
-  if (window.location.port !== '5000') {
-    API_BASE = 'http://localhost:5000/api';
-  }
+let API_BASE;
+const { hostname, port } = window.location;
+
+if (hostname === 'localhost' || hostname === '127.0.0.1') {
+  // Running locally: if served by Node (port 5000) use relative path, else point to backend
+  API_BASE = port === '5000' ? '/api' : 'http://localhost:5000/api';
 } else {
-  // When deployed to production, use the remote Render API
-  API_BASE = 'https://preschool-k8ak.onrender.com/api';
+  // Production / cPanel: always use Render backend
+  API_BASE = RENDER_API;
 }
 
 /* ── Registration ─────────────────────────────── */

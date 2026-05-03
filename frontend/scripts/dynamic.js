@@ -27,33 +27,7 @@
     if (!grid) return;
     try {
       const res = await fetchPrograms();
-      let programs = res && res.success && res.data ? res.data : [];
-      
-      const defaultPrograms = [
-        {
-          title: "Playgroup",
-          ageGroup: "2 - 3 Years",
-          description: "Our playgroup program is designed to introduce young children to a structured learning environment through fun, play-based activities.",
-          image: "https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&q=80&w=400"
-        },
-        {
-          title: "Nursery",
-          ageGroup: "3 - 4 Years",
-          description: "The nursery program focuses on building foundational literacy and numeracy skills, encouraging creativity through art and music.",
-          image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=400"
-        },
-        {
-          title: "Kindergarten",
-          ageGroup: "4 - 5 Years",
-          description: "Our kindergarten curriculum prepares children for formal schooling by enhancing their language abilities, logical thinking, and independent learning.",
-          image: "https://images.unsplash.com/photo-1514050630650-70588523c92b?auto=format&fit=crop&q=80&w=400"
-        }
-      ];
-
-      // If less than 3 programs, add from default programs
-      if (programs.length < 3) {
-        programs = [...programs, ...defaultPrograms.slice(programs.length, 3)];
-      }
+      const programs = res && res.success && res.data ? res.data : [];
 
       if (!programs.length) {
         grid.innerHTML = '<div class="col-span-3 text-center py-12 text-on-surface-variant opacity-60">No programs listed yet.</div>';
@@ -70,6 +44,7 @@
       grid.innerHTML = '<div class="col-span-3 text-center py-12 text-red-500">Could not load programs.</div>';
     }
   }
+
 
   // ── Announcements ──────────────────────────────────────────────
   async function loadAnnouncements() {
@@ -351,7 +326,8 @@
           }
 
           const isLocal = img.imageUrl.startsWith('/uploads');
-          const finalUrl = isLocal ? `${API_BASE.replace('/api', '')}${img.imageUrl}` : img.imageUrl;
+          const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
+          const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
 
           div.className = classes;
           div.innerHTML = `

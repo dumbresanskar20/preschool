@@ -247,7 +247,8 @@ async function loadGalleryList() {
   const container = document.getElementById('list-gallery');
   container.innerHTML = res.data.map((img, index) => {
     const isLocal = img.imageUrl.startsWith('/uploads');
-    const finalUrl = isLocal ? `${API_BASE.replace('/api', '')}${img.imageUrl}` : img.imageUrl;
+    const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
+    const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
     return `
     <div data-id="${img._id}" class="relative group border rounded-lg overflow-hidden h-40 cursor-move bg-white shadow-sm">
       <img src="${finalUrl}" class="w-full h-full object-cover pointer-events-none">
