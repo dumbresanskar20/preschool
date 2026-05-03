@@ -189,6 +189,7 @@
 
     function startAutoPlay() {
       window._reviewCarouselTimer = setInterval(function () {
+        console.log('Carousel: Auto-scrolling...');
         currentIndex = currentIndex < getMaxIndex() ? currentIndex + 1 : 0;
         updateCarousel();
       }, 5000);
