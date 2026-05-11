@@ -294,3 +294,32 @@ img.loaded {
 .floating-icon.delay-1 { animation-delay: 1s; }
 .floating-icon.delay-2 { animation-delay: 2s; }
 .floating-icon.delay-3 { animation-delay: 3s; }
+
+/* --- Image Slider Fade --- */
+.slider-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  animation: fade-slider 12s infinite;
+}
+
+.slider-img:nth-child(1) { animation-delay: 0s; }
+.slider-img:nth-child(2) { animation-delay: 4s; }
+.slider-img:nth-child(3) { animation-delay: 8s; }
+
+@keyframes fade-slider {
+  0% { opacity: 0; transform: scale(1.05); }
+  10% { opacity: 1; transform: scale(1); }
+  33% { opacity: 1; transform: scale(1); }
+  43% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 0; }
+}
