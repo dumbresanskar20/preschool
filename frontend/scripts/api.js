@@ -1,9 +1,21 @@
-/**
- * Rainbow Preschool – API Integration Layer
- * All backend calls go through this module.
- */
+// ── API Base URL ──────────────────────────────────────────────
+// Three environments:
+// 1. Production (cPanel): frontend on cPanel → backend on Render
+// 2. Local dev via backend (port 5000): relative /api works fine
+// 3. Local dev via Live Server (port 5500 etc): point to localhost:5000
 
-const API_BASE = '/api';
+const RENDER_API = 'https://preschool-k8ak.onrender.com/api';
+
+let API_BASE;
+const { hostname, port } = window.location;
+
+if (hostname === 'localhost' || hostname === '127.0.0.1') {
+  // Running locally: if served by Node (port 5000) use relative path, else point to backend
+  API_BASE = port === '5000' ? '/api' : 'http://localhost:5000/api';
+} else {
+  // Production / cPanel: always use Render backend
+  API_BASE = RENDER_API;
+}
 
 /* ── Registration ─────────────────────────────── */
 async function submitRegistration(data) {
@@ -25,13 +37,13 @@ async function submitContact(data) {
 
 /* ── Reviews (public) ────────────────────────── */
 async function fetchApprovedReviews() {
-  const r = await fetch(`${API_BASE}/review`);
+  const r = await fetch(`${API_BASE}/review?t=${Date.now()}`);
   return r.json();
 }
 async function submitReview(data) {
   const r = await fetch(`${API_BASE}/review`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify({ ...data, isApproved: true })
   });
   return r.json();
 }

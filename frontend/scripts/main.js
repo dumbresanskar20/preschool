@@ -145,88 +145,97 @@
   // =========================================================
   // 4. Review Carousel
   // =========================================================
-  function initReviewCarousel() {
+  window.initReviewCarousel = function() {
     var track = document.querySelector(".reviews-track");
     var prevBtn = document.getElementById("review-prev");
     var nextBtn = document.getElementById("review-next");
 
     if (!track || !prevBtn || !nextBtn) return;
 
+    // Clear any existing autoplay timer to prevent stacking
+    if (window._reviewCarouselTimer) {
+      clearInterval(window._reviewCarouselTimer);
+      window._reviewCarouselTimer = null;
+    }
+
+    // Remove old button listeners by cloning
+    var newPrev = prevBtn.cloneNode(true);
+    var newNext = nextBtn.cloneNode(true);
+    prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+    nextBtn.parentNode.replaceChild(newNext, nextBtn);
+
     var cards = track.querySelectorAll(".review-card");
+    console.log('Carousel Init: Found ' + cards.length + ' cards');
     var currentIndex = 0;
-    var autoPlayTimer = null;
+
+    // Ensure smooth CSS transition
+    track.style.transition = "transform 0.5s ease";
 
     function getVisibleCount() {
       return window.innerWidth >= 768 ? 3 : 1;
     }
 
     function getMaxIndex() {
-      var visible = getVisibleCount();
-      return Math.max(0, cards.length - visible);
+      return Math.max(0, cards.length - getVisibleCount());
     }
 
     function updateCarousel() {
-      var visible = getVisibleCount();
-      var percentage = (currentIndex * 100) / visible;
-      track.style.transform = "translateX(-" + percentage + "%)";
+      if (cards.length === 0) return;
+      // The percentage in translateX is relative to the track's own width.
+      // Since each card is part of the flex track, we move by 1/totalCards per index.
+      var offset = (currentIndex * 100) / cards.length;
+      track.style.transform = "translateX(-" + offset + "%)";
     }
 
-    prevBtn.addEventListener("click", function () {
-      currentIndex = currentIndex > 0 ? currentIndex - 1 : getMaxIndex();
-      updateCarousel();
-      resetAutoPlay();
-    });
-
-    nextBtn.addEventListener("click", function () {
-      currentIndex = currentIndex < getMaxIndex() ? currentIndex + 1 : 0;
-      updateCarousel();
-      resetAutoPlay();
-    });
-
-    function autoPlay() {
-      autoPlayTimer = setInterval(function () {
+    function startAutoPlay() {
+      window._reviewCarouselTimer = setInterval(function () {
+        console.log('Carousel: Auto-scrolling...');
         currentIndex = currentIndex < getMaxIndex() ? currentIndex + 1 : 0;
         updateCarousel();
       }, 5000);
     }
 
     function resetAutoPlay() {
-      clearInterval(autoPlayTimer);
-      autoPlay();
+      clearInterval(window._reviewCarouselTimer);
+      startAutoPlay();
     }
+
+    newPrev.addEventListener("click", function () {
+      currentIndex = currentIndex > 0 ? currentIndex - 1 : getMaxIndex();
+      updateCarousel();
+      resetAutoPlay();
+    });
+
+    newNext.addEventListener("click", function () {
+      currentIndex = currentIndex < getMaxIndex() ? currentIndex + 1 : 0;
+      updateCarousel();
+      resetAutoPlay();
+    });
 
     // Touch/Swipe support
     var touchStartX = 0;
-    var touchEndX = 0;
-
     track.addEventListener("touchstart", function (e) {
       touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
 
     track.addEventListener("touchend", function (e) {
-      touchEndX = e.changedTouches[0].screenX;
-      var diff = touchStartX - touchEndX;
+      var diff = touchStartX - e.changedTouches[0].screenX;
       if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-          // Swipe left → next
-          currentIndex = currentIndex < getMaxIndex() ? currentIndex + 1 : 0;
-        } else {
-          // Swipe right → prev
-          currentIndex = currentIndex > 0 ? currentIndex - 1 : getMaxIndex();
-        }
+        currentIndex = diff > 0
+          ? (currentIndex < getMaxIndex() ? currentIndex + 1 : 0)
+          : (currentIndex > 0 ? currentIndex - 1 : getMaxIndex());
         updateCarousel();
         resetAutoPlay();
       }
     }, { passive: true });
 
-    // Handle window resize
     window.addEventListener("resize", function () {
       if (currentIndex > getMaxIndex()) currentIndex = getMaxIndex();
       updateCarousel();
     });
 
     updateCarousel();
-    autoPlay();
+    startAutoPlay();
   }
 
   // =========================================================

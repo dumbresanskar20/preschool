@@ -11,13 +11,13 @@ exports.createReview = async (req, res) => {
     if (rating < 1 || rating > 5) {
       return res.status(400).json({ success: false, message: 'Rating must be between 1 and 5.' });
     }
-    const review = await Review.create({ parentName, email, rating: Number(rating), reviewText, isApproved: false });
+    const review = await Review.create({ parentName, email, rating: Number(rating), reviewText, isApproved: true });
 
     console.log("DEBUG: Sending notification to school for review...");
     await sendEmail({
       to: 'bunnylandtalegaon@gmail.com',
       subject: `New Review Submitted by ${parentName}`,
-      text: `Name: ${parentName}\nEmail: ${email}\nRating: ${rating}/5\nReview: ${reviewText}\n\nPlease review and approve from the admin dashboard.`,
+      text: `Name: ${parentName}\nEmail: ${email}\nRating: ${rating}/5\nReview: ${reviewText}`,
       replyTo: email,
       fromName: 'Rainbow Website'
     });
@@ -64,7 +64,7 @@ exports.createReview = async (req, res) => {
 // GET /api/review  (approved only — public)
 exports.getApprovedReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({ isApproved: true }).sort({ createdAt: -1 });
+    const reviews = await Review.find().sort({ createdAt: -1 });
     res.json({ success: true, data: reviews });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error.', error: err.message });

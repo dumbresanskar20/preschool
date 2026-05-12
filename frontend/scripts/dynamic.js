@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  const COLORS = ['bg-primary-container','bg-secondary-container','bg-tertiary-container','bg-surface-container-high'];
+  const COLORS = ['bg-primary-container', 'bg-secondary-container', 'bg-tertiary-container', 'bg-surface-container-high'];
 
   function showLocalToast(message, type = 'error') {
     const container = document.getElementById("toast-container");
@@ -27,21 +27,36 @@
     if (!grid) return;
     try {
       const res = await fetchPrograms();
-      if (!res.success || !res.data.length) {
+      const programs = res && res.success && res.data ? res.data : [];
+
+      if (!programs.length) {
         grid.innerHTML = '<div class="col-span-3 text-center py-12 text-on-surface-variant opacity-60">No programs listed yet.</div>';
         return;
       }
-      grid.innerHTML = res.data.map((p, i) => `
-        <div class="${COLORS[i % COLORS.length]} p-8 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-sm">
-          ${p.image ? `<img src="${p.image}" alt="${p.title}" class="w-full h-40 object-cover rounded-lg mb-5" loading="lazy" />` : ''}
-          <span class="text-xs font-bold uppercase tracking-widest opacity-60">${p.ageGroup}</span>
-          <h3 class="text-xl font-bold mt-2 mb-3">${p.title}</h3>
-          <p class="text-sm leading-relaxed opacity-80">${p.description}</p>
-        </div>`).join('');
+
+      const GHIBLI_BGS = [
+        'assets/ghibli/forest.png',
+        'assets/ghibli/classroom.png',
+        'assets/ghibli/garden.png'
+      ];
+
+      grid.innerHTML = programs.map((p, i) => {
+        const bg = GHIBLI_BGS[i % GHIBLI_BGS.length];
+        return `
+        <div class="relative overflow-hidden p-1 rounded-3xl hover:scale-[1.02] transition-all duration-500 group shadow-lg" 
+             style="background: url('${bg}') no-repeat center center; background-size: cover;">
+          <div class="bg-white/80 backdrop-blur-md p-8 rounded-[1.4rem] h-full flex flex-col border border-white/40 group-hover:bg-white/90 transition-colors">
+            <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2">${p.ageGroup}</span>
+            <h3 class="text-2xl font-bold mb-4 text-stone-800">${p.title}</h3>
+            <p class="text-sm leading-relaxed text-stone-600 mb-6 flex-1">${p.description}</p>
+          </div>
+        </div>`;
+      }).join('');
     } catch {
       grid.innerHTML = '<div class="col-span-3 text-center py-12 text-red-500">Could not load programs.</div>';
     }
   }
+
 
   // ── Announcements ──────────────────────────────────────────────
   async function loadAnnouncements() {
@@ -58,7 +73,7 @@
           <div>
             <p class="font-bold">${a.title}</p>
             <p class="text-sm opacity-70">${a.description}</p>
-            <p class="text-xs opacity-50 mt-1">${new Date(a.date).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})}</p>
+            <p class="text-xs opacity-50 mt-1">${new Date(a.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
           </div>
         </div>`).join('');
     } catch { list.innerHTML = ''; }
@@ -70,29 +85,32 @@
     if (!track) return;
     try {
       let res = null;
-      try { res = await fetchApprovedReviews(); } catch (e) { console.warn("Failed fetching API reviews."); }
-      
+      try { res = await fetchApprovedReviews(); } catch (e) { console.warn('Failed fetching API reviews.'); }
+
       let reviews = [];
       if (res && res.success && res.data && res.data.length) {
         reviews = res.data;
       }
 
-      reviews.unshift({
-        rating: 5,
-        reviewText: "Rainbow Preschool is truly one of the best places for children to learn, grow and enjoy their early childhood education. The school has a team of highly qualified, caring and supportive teachers along with well-trained staff members who always ensure every child feels safe, comfortable and happy. The advanced learning methods and activity-based teaching techniques help children develop strong communication, creativity and confidence from an early age. The school maintains a very secure, clean and hygienic environment which gives complete peace of mind to parents. One of the best things about Rainbow Preschool is the way they celebrate Indian festivals and cultural events with great enthusiasm. These celebrations help children understand our traditions, values and culture in a joyful and educational manner. The school also focuses equally on physical development through various indoor and outdoor sports activities, fun games, karate, abacus and many creative programs. Every activity is planned in a way that supports the mental, social and physical growth of the children. Rainbow Preschool is truly a fun-filled and educational place where children learn with happiness every single day. Highly recommended for parents who want the best foundation for their child’s bright future.",
-        parentName: "Amit Murhe"
-      });
+      // Store full texts in a global array so the toggle function can access them safely
+      window._reviewTexts = reviews.map(r => r.reviewText);
 
-      const colors = ['bg-orange-200','bg-blue-200','bg-pink-200','bg-green-200','bg-purple-200'];
+      const LIMIT = 100;
+      const colors = ['bg-orange-200', 'bg-blue-200', 'bg-pink-200', 'bg-green-200', 'bg-purple-200'];
+
       track.innerHTML = reviews.map((r, i) => {
-        const isLong = r.reviewText.length > 150;
+        const isLong = r.reviewText.length > LIMIT;
+        const shortText = isLong ? r.reviewText.substring(0, LIMIT) + '...' : r.reviewText;
         return `
         <div class="review-card">
-          <div class="bg-surface-container-low p-10 rounded-xl relative h-full flex flex-col">
-            <div class="flex gap-1 mb-6 text-orange-500">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
-            <div class="flex-1">
-              <p class="text-lg italic mb-2 leading-relaxed ${isLong ? 'line-clamp-4 transition-all duration-300' : 'mb-8'}">"${r.reviewText}"</p>
-              ${isLong ? \`<button class="text-primary font-bold text-sm mb-6 hover:underline" onclick="this.previousElementSibling.classList.toggle('line-clamp-none'); this.textContent = this.textContent === 'Read more' ? 'Read less' : 'Read more'">Read more</button>\` : ''}
+          <div class="bg-surface-container-low p-8 rounded-xl relative flex flex-col min-h-[380px]">
+            <div class="flex gap-1 mb-4 text-orange-500">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+            <div class="flex-1 flex flex-col">
+              <p id="rv-text-${i}" class="text-lg italic mb-2 leading-relaxed">"${shortText}"</p>
+              ${isLong
+            ? `<button class="text-primary font-bold text-sm mb-4 mt-2 hover:underline self-start" onclick="toggleReviewText(this, ${i}, ${LIMIT})">Read more</button>`
+            : '<div class="mb-4 mt-2"></div>'
+          }
             </div>
             <div class="flex items-center gap-4 mt-auto">
               <div class="w-12 h-12 rounded-full ${colors[i % colors.length]} flex items-center justify-center font-bold text-lg">${r.parentName.charAt(0)}</div>
@@ -101,10 +119,25 @@
           </div>
         </div>`;
       }).join('');
+
       // re-init carousel after DOM update
       if (typeof initReviewCarousel === 'function') initReviewCarousel();
     } catch (e) { console.error('Error loading reviews:', e); }
   }
+
+  // Global toggle function for review "Read more / Show less"
+  window.toggleReviewText = function (btn, index, limit) {
+    const p = document.getElementById('rv-text-' + index);
+    if (!p) return;
+    const fullText = window._reviewTexts[index];
+    if (btn.textContent === 'Read more') {
+      p.textContent = '"' + fullText + '"';
+      btn.textContent = 'Show less';
+    } else {
+      p.textContent = '"' + fullText.substring(0, limit) + '..."';
+      btn.textContent = 'Read more';
+    }
+  };
 
   // ── Website Content ────────────────────────────────────────────
   async function loadContent() {
@@ -140,25 +173,39 @@
       e.preventDefault();
       form.querySelectorAll('.form-error-msg').forEach(el => el.classList.remove('visible'));
 
-      const name    = document.getElementById('reg-name');
-      const age     = document.getElementById('reg-age');
-      const phone   = document.getElementById('reg-phone');
-      const email   = document.getElementById('reg-email');
+      const name = document.getElementById('reg-name');
+      const age = document.getElementById('reg-age');
+      const phone = document.getElementById('reg-phone');
+      const email = document.getElementById('reg-email');
       const inquiry = document.getElementById('reg-inquiry');
       const message = document.getElementById('reg-message');
-      const btn     = document.getElementById('reg-submit');
+      const btn = document.getElementById('reg-submit');
+
+      const captcha = document.getElementById('reg-captcha');
 
       let valid = true;
       const showErr = (inp) => { inp.parentElement.querySelector('.form-error-msg')?.classList.add('visible'); valid = false; };
-      if (!name.value.trim())                    showErr(name);
-      if (!age.value.trim())                     showErr(age);
-      if (phone.value.replace(/\D/g,'').length < 10) showErr(phone);
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email.value.trim()))  showErr(email);
+      if (!name.value.trim()) showErr(name);
+      if (!age.value.trim()) showErr(age);
+      if (phone.value.replace(/\D/g, '').length < 10) showErr(phone);
 
-      if (!message.value.trim())                 showErr(message);
-      if (!valid) { showLocalToast('Please fix the errors in the form.'); return; }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value.trim())) showErr(email);
+
+      if (!message.value.trim()) showErr(message);
+      
+      if (!captcha.checked) {
+        showLocalToast('Please verify that you are not a robot.');
+        valid = false;
+      }
+
+      if (!valid) { 
+        if (captcha && !captcha.checked) {
+          captcha.parentElement.classList.add('animate-pulse');
+          setTimeout(() => captcha.parentElement.classList.remove('animate-pulse'), 1000);
+        }
+        return; 
+      }
 
       btn.disabled = true;
       btn.textContent = 'Sending...';
@@ -166,11 +213,11 @@
       try {
         // Step 1: Save to local database
         const dbRes = await submitRegistration({
-          parentName: name.value.trim(), 
+          parentName: name.value.trim(),
           childAge: age.value.trim(),
-          phone: phone.value.trim(), 
+          phone: phone.value.trim(),
           email: email.value.trim(),
-          inquiryType: inquiry.value, 
+          inquiryType: inquiry.value,
           message: message.value.trim()
         });
 
@@ -197,43 +244,72 @@
     const ratingInput = document.getElementById('rv-rating');
     if (!form) return;
 
+    // Handle star rating clicks
     stars.forEach(star => {
-      star.addEventListener('mouseover', () => { const v = +star.dataset.v; stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; }); });
-      star.addEventListener('mouseout',  () => { const v = +ratingInput.value; stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; }); });
-      star.addEventListener('click',     () => { ratingInput.value = star.dataset.v; });
+      star.addEventListener('mouseover', () => {
+        const v = +star.dataset.v;
+        stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; });
+      });
+      star.addEventListener('mouseout', () => {
+        const v = +ratingInput.value;
+        stars.forEach(s => { s.textContent = +s.dataset.v <= v ? '★' : '☆'; });
+      });
+      star.addEventListener('click', () => {
+        ratingInput.value = star.dataset.v;
+      });
     });
 
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const name = document.getElementById('rv-name').value.trim();
-      const email = document.getElementById('rv-email').value.trim();
-      const rating = +ratingInput.value;
-      const text = document.getElementById('rv-text').value.trim();
-      if (!name || !email || !text || rating < 1) { showLocalToast('Please fill all fields and select a rating.'); return; }
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        showLocalToast('Please enter a valid email address.');
+    // Handle form submission
+    form.addEventListener('submit', async function (event) {
+      // 1. Prevent default submission
+      event.preventDefault();
+
+      // 2. Capture form data
+      const formData = {
+        parentName: document.getElementById('rv-name').value.trim(),
+        email: document.getElementById('rv-email').value.trim(),
+        rating: Number(ratingInput.value),
+        reviewText: document.getElementById('rv-text').value.trim()
+      };
+
+      // Validation
+      if (!formData.parentName || !formData.email || !formData.reviewText || formData.rating < 1) {
+        showLocalToast('Please fill all fields and provide a star rating.');
         return;
       }
 
-      const btn = form.querySelector('button[type="submit"]');
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.textContent = 'Submitting...';
 
       try {
-        const res = await submitReview({ parentName: name, email, rating, reviewText: text });
-        if (res.success) {
+        // 3. Send captured data to the backend API using POST /api/reviews
+        const response = await submitReview(formData);
+
+        if (response.success) {
+          // 4. On successful response: Show success message and reset form
           showLocalToast('Review submitted successfully!', 'success');
-          form.reset(); ratingInput.value = 0; stars.forEach(s => s.textContent = '☆');
+          form.reset();
+          ratingInput.value = 0;
+          stars.forEach(s => s.textContent = '☆');
+          if (document.getElementById('rv-char-count')) {
+            document.getElementById('rv-char-count').textContent = '100 characters left';
+          }
+
+          // 5. Immediately update the UI without page reload by re-fetching
+          await loadReviews();
         } else {
-          showLocalToast(res.message || 'Could not submit review.');
+          // 7. Handle errors from API
+          showLocalToast(response.message || 'Submission failed. Please try again.', 'error');
         }
-      } catch {
-        showLocalToast('Network error. Please try again.');
+      } catch (error) {
+        // 7. Handle network errors
+        console.error('API Error:', error);
+        showLocalToast('Could not connect to the server. Please try again later.', 'error');
       } finally {
-        btn.disabled = false;
-        btn.textContent = 'Submit Review';
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
       }
     });
   }
@@ -265,7 +341,7 @@
       try {
         // Step 1: Save to local database
         const dbRes = await submitContact({ name, email, message });
-        
+
         if (dbRes.success) {
           showLocalToast('Message sent successfully! Check your email for confirmation.', 'success');
           form.reset();
@@ -304,12 +380,12 @@
         grid.innerHTML = '';
         res.data.forEach((img, index) => {
           const div = document.createElement('div');
-          
+
           // Pattern logic: 
           // index % 4 == 0 -> col-span-2 row-span-2
           // index % 4 == 1 or 2 -> standard
           // index % 4 == 3 -> col-span-2
-          
+
           let classes = 'rounded-xl overflow-hidden group shadow-md';
           if (index % 4 === 0) {
             classes += ' col-span-2 row-span-2 h-[400px] md:h-[528px]';
@@ -320,7 +396,8 @@
           }
 
           const isLocal = img.imageUrl.startsWith('/uploads');
-          const finalUrl = isLocal ? `${window.location.origin}${img.imageUrl}` : img.imageUrl;
+          const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
+          const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
 
           div.className = classes;
           div.innerHTML = `
@@ -339,11 +416,11 @@
   }
 
   // ── Modal Logic ──────────────────────────────────────────────
-  window.openGalleryModal = function(url) {
+  window.openGalleryModal = function (url) {
     const modal = document.getElementById('gallery-modal');
     const img = document.getElementById('modal-img');
     if (!modal || !img) return;
-    
+
     img.src = url;
     modal.classList.remove('hidden');
     setTimeout(() => { img.classList.remove('scale-95'); img.classList.add('scale-100'); }, 10);

@@ -80,26 +80,84 @@
 
       <!-- Tab: Dashboard -->
       <section id="tab-dashboard" class="tab-content">
-        <h2 class="text-3xl font-bold mb-6">Overview</h2>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div class="bg-white p-6 rounded-xl shadow-sm">
-            <p class="text-gray-500">Registrations</p>
-            <h3 id="stat-reg" class="text-3xl font-bold">0</h3>
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
+            <p class="text-gray-400 text-sm mt-1">Welcome back, Admin 👋</p>
           </div>
-          <div class="bg-white p-6 rounded-xl shadow-sm">
-            <p class="text-gray-500">Total Reviews</p>
-            <h3 id="stat-rev" class="text-3xl font-bold">0</h3>
+          <span id="dash-date" class="text-sm text-gray-400"></span>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-2xl shadow-md flex items-center gap-5">
+            <div class="bg-white/20 p-3 rounded-xl">
+              <span class="material-symbols-outlined text-3xl">assignment</span>
+            </div>
+            <div>
+              <p class="text-blue-100 text-sm font-medium">Total Registrations</p>
+              <h3 id="stat-reg" class="text-4xl font-extrabold">0</h3>
+            </div>
           </div>
-          <div class="bg-white p-6 rounded-xl shadow-sm">
-            <p class="text-gray-500">Pending Reviews</p>
-            <h3 id="stat-pend" class="text-3xl font-bold text-orange-500">0</h3>
+          <div class="bg-gradient-to-br from-amber-400 to-orange-500 text-white p-6 rounded-2xl shadow-md flex items-center gap-5">
+            <div class="bg-white/20 p-3 rounded-xl">
+              <span class="material-symbols-outlined text-3xl">star</span>
+            </div>
+            <div>
+              <p class="text-orange-100 text-sm font-medium">Total Reviews</p>
+              <h3 id="stat-rev" class="text-4xl font-extrabold">0</h3>
+            </div>
           </div>
-          <div class="bg-white p-6 rounded-xl shadow-sm">
-            <p class="text-gray-500">Programs</p>
-            <h3 id="stat-prog" class="text-3xl font-bold">0</h3>
+          <div class="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-2xl shadow-md flex items-center gap-5">
+            <div class="bg-white/20 p-3 rounded-xl">
+              <span class="material-symbols-outlined text-3xl">school</span>
+            </div>
+            <div>
+              <p class="text-green-100 text-sm font-medium">Programs</p>
+              <h3 id="stat-prog" class="text-4xl font-extrabold">0</h3>
+            </div>
           </div>
         </div>
+
+        <!-- Recent Activity: 2 columns -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          <!-- Recent Registrations -->
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-gray-700">Recent Registrations</h3>
+              <button onclick="showTab('registrations')" class="text-xs text-blue-500 hover:underline font-medium">View All →</button>
+            </div>
+            <div id="dash-recent-reg" class="space-y-3 text-sm text-gray-500">
+              <p class="text-center py-4 opacity-50">Loading...</p>
+            </div>
+          </div>
+
+          <!-- Recent Reviews -->
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-gray-700">Recent Reviews</h3>
+              <button onclick="showTab('reviews')" class="text-xs text-blue-500 hover:underline font-medium">View All →</button>
+            </div>
+            <div id="dash-recent-rev" class="space-y-3 text-sm text-gray-500">
+              <p class="text-center py-4 opacity-50">Loading...</p>
+            </div>
+          </div>
+
+          <!-- Recent Messages -->
+          <div class="bg-white rounded-2xl shadow-sm p-6 lg:col-span-2">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-gray-700">Recent Contact Messages</h3>
+              <button onclick="showTab('messages')" class="text-xs text-blue-500 hover:underline font-medium">View All →</button>
+            </div>
+            <div id="dash-recent-msg" class="space-y-3 text-sm text-gray-500">
+              <p class="text-center py-4 opacity-50">Loading...</p>
+            </div>
+          </div>
+
+        </div>
       </section>
+
 
       <!-- Tab: Registrations -->
       <section id="tab-registrations" class="tab-content hidden">
@@ -130,11 +188,11 @@
           <table class="w-full text-left">
             <thead class="bg-gray-50 text-gray-600">
               <tr class="p-4">
+                <th class="p-4 border-b">Date</th>
                 <th class="p-4 border-b">Parent Name</th>
                 <th class="p-4 border-b">Email</th>
                 <th class="p-4 border-b">Rating</th>
                 <th class="p-4 border-b">Review</th>
-                <th class="p-4 border-b">Status</th>
                 <th class="p-4 border-b">Actions</th>
               </tr>
             </thead>

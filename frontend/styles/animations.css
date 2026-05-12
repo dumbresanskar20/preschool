@@ -323,3 +323,61 @@ img.loaded {
   43% { opacity: 0; transform: scale(0.95); }
   100% { opacity: 0; }
 }
+
+/* --- Sparkle Effect --- */
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1) rotate(180deg); opacity: 1; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+.magic-sparkle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, #fff 0%, transparent 70%);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: sparkle 2s infinite;
+  pointer-events: none;
+}
+
+/* --- Section Wave Dividers --- */
+.wave-divider {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  z-index: 10;
+}
+
+.wave-divider svg {
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 60px;
+}
+
+.wave-top { top: -1px; }
+.wave-bottom { bottom: -1px; }
+
+/* --- Whimsical Blob Shapes --- */
+.blob-shape {
+  position: absolute;
+  z-index: -1;
+  opacity: 0.15;
+  filter: blur(40px);
+  animation: blob-move 10s infinite alternate;
+}
+
+@keyframes blob-move {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(30px, 50px) scale(1.2); }
+}
+
+/* --- Hover "Pop" for cards --- */
+.hover-pop {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, .64, 1);
+}
+.hover-pop:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(255, 120, 0, 0.15);
+}

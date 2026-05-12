@@ -147,15 +147,63 @@ window.showTab = function(tabId) {
 };
 
 async function loadStats() {
-  const reg = await adminFetch('/registration');
-  const rev = await adminFetch('/review/all');
-  const prog = await fetchPrograms();
-  if(reg.success) document.getElementById('stat-reg').textContent = reg.total || reg.data.length;
-  if(rev.success) {
-    document.getElementById('stat-rev').textContent = rev.data.length;
-    document.getElementById('stat-pend').textContent = rev.data.filter(r => !r.isApproved).length;
+  // Set today's date
+  const dateEl = document.getElementById('dash-date');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const [reg, rev, prog, msg] = await Promise.all([
+    adminFetch('/registration'),
+    adminFetch('/review/all'),
+    fetchPrograms(),
+    adminFetch('/contact')
+  ]);
+
+  // Stat counters
+  if (reg.success) document.getElementById('stat-reg').textContent = reg.data.length;
+  if (rev.success) document.getElementById('stat-rev').textContent = rev.data.length;
+  if (prog.success) document.getElementById('stat-prog').textContent = prog.data.length;
+
+  // Recent Registrations (last 5)
+  const regEl = document.getElementById('dash-recent-reg');
+  if (regEl && reg.success) {
+    const recent = reg.data.slice(0, 5);
+    regEl.innerHTML = recent.length ? recent.map(r => `
+      <div class="flex items-center justify-between border-b pb-2">
+        <div>
+          <p class="font-semibold text-gray-700">${r.parentName}</p>
+          <p class="text-xs text-gray-400">${r.phone} &bull; Age: ${r.childAge}</p>
+        </div>
+        <span class="text-xs text-gray-400 whitespace-nowrap ml-2">${new Date(r.createdAt).toLocaleDateString('en-IN')}</span>
+      </div>`).join('') : '<p class="text-center py-4 opacity-50">No registrations yet.</p>';
   }
-  if(prog.success) document.getElementById('stat-prog').textContent = prog.data.length;
+
+  // Recent Reviews (last 5)
+  const revEl = document.getElementById('dash-recent-rev');
+  if (revEl && rev.success) {
+    const recent = rev.data.slice(0, 5);
+    revEl.innerHTML = recent.length ? recent.map(r => `
+      <div class="flex items-center justify-between border-b pb-2">
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-gray-700">${r.parentName} <span class="text-orange-400 font-normal">${'★'.repeat(r.rating)}</span></p>
+          <p class="text-xs text-gray-400 truncate">${r.reviewText.substring(0, 60)}...</p>
+        </div>
+        <span class="text-xs text-gray-400 whitespace-nowrap ml-2">${new Date(r.createdAt).toLocaleDateString('en-IN')}</span>
+      </div>`).join('') : '<p class="text-center py-4 opacity-50">No reviews yet.</p>';
+  }
+
+  // Recent Messages (last 5)
+  const msgEl = document.getElementById('dash-recent-msg');
+  if (msgEl && msg.success) {
+    const recent = msg.data.slice(0, 5);
+    msgEl.innerHTML = recent.length ? recent.map(m => `
+      <div class="flex items-start justify-between border-b pb-3">
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-gray-700">${m.name} <span class="text-gray-400 font-normal text-xs">&lt;${m.email}&gt;</span></p>
+          <p class="text-xs text-gray-400 mt-1 truncate">${m.message.substring(0, 80)}...</p>
+        </div>
+        <span class="text-xs text-gray-400 whitespace-nowrap ml-4">${new Date(m.createdAt).toLocaleDateString('en-IN')}</span>
+      </div>`).join('') : '<p class="text-center py-4 opacity-50">No messages yet.</p>';
+  }
 }
 
 async function loadRegistrations() {
@@ -173,12 +221,16 @@ async function loadReviewsList() {
   if(!res.success) return;
   const tbody = document.getElementById('list-reviews');
   tbody.innerHTML = res.data.map(r => `
-    <tr class="border-b"><td class="p-4">${r.parentName}</td><td class="p-4"><a href="mailto:${r.email}" class="text-blue-500 hover:underline">${r.email || 'N/A'}</a></td><td class="p-4">${r.rating}/5</td><td class="p-4 text-sm">${r.reviewText}</td>
-    <td class="p-4"><span class="${r.isApproved ? 'text-green-500' : 'text-orange-500'} font-bold">${r.isApproved ? 'Approved' : 'Pending'}</span></td>
-    <td class="p-4">
-      <button onclick="toggleReview('${r._id}', ${!r.isApproved})" class="text-blue-500 hover:underline mr-2">${r.isApproved ? 'Reject' : 'Approve'}</button>
-      <button onclick="deleteItem('/review/${r._id}', loadReviewsList)" class="text-red-500 hover:underline">Delete</button>
-    </td></tr>
+    <tr class="border-b">
+      <td class="p-4">${new Date(r.createdAt).toLocaleDateString()}</td>
+      <td class="p-4 font-bold">${r.parentName}</td>
+      <td class="p-4"><a href="mailto:${r.email}" class="text-blue-500 hover:underline">${r.email || 'N/A'}</a></td>
+      <td class="p-4">${r.rating}/5</td>
+      <td class="p-4 text-sm max-w-xs truncate">${r.reviewText}</td>
+      <td class="p-4">
+        <button onclick="deleteItem('/review/${r._id}', loadReviewsList)" class="text-red-500 hover:underline font-bold">Delete</button>
+      </td>
+    </tr>
   `).join('');
 }
 
@@ -245,9 +297,13 @@ async function loadGalleryList() {
   const res = await fetchGallery();
   if(!res.success) return;
   const container = document.getElementById('list-gallery');
-  container.innerHTML = res.data.map((img, index) => `
+  container.innerHTML = res.data.map((img, index) => {
+    const isLocal = img.imageUrl.startsWith('/uploads');
+    const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
+    const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
+    return `
     <div data-id="${img._id}" class="relative group border rounded-lg overflow-hidden h-40 cursor-move bg-white shadow-sm">
-      <img src="${img.imageUrl}" class="w-full h-full object-cover pointer-events-none">
+      <img src="${finalUrl}" class="w-full h-full object-cover pointer-events-none">
       <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
         <div class="flex gap-2">
           <button onclick="moveGalleryItem('${img._id}', -1)" class="bg-blue-600 text-white p-1 rounded hover:bg-blue-700" title="Move Up">
@@ -261,7 +317,8 @@ async function loadGalleryList() {
       </div>
       <div class="absolute bottom-0 left-0 right-0 bg-white/90 p-1 text-[10px] truncate pointer-events-none">${img.altText}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   // Initialize Sortable
   new Sortable(container, {

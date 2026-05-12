@@ -23,6 +23,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../frontend/uploads')))
 app.use('/api/auth',         require('./routes/auth'));
 app.use('/api/registration', require('./routes/registration'));
 app.use('/api/review',       require('./routes/review'));
+app.use('/api/reviews',      require('./routes/review'));
 app.use('/api/program',      require('./routes/program'));
 app.use('/api/announcement', require('./routes/announcement'));
 app.use('/api/content',      require('./routes/content'));
