@@ -146,57 +146,105 @@
   // 4. Review Carousel
   // =========================================================
   window.initReviewCarousel = function() {
-    var track = document.querySelector(".reviews-track");
-    var prevBtn = document.getElementById("review-prev");
-    var nextBtn = document.getElementById("review-next");
+    const track = document.querySelector(".reviews-track");
+    const prevBtn = document.getElementById("review-prev");
+    const nextBtn = document.getElementById("review-next");
+    const dotsContainer = document.getElementById("reviews-dots");
 
     if (!track || !prevBtn || !nextBtn) return;
 
-    // Clear any existing autoplay timer to prevent stacking
+    // Clear any existing autoplay timer
     if (window._reviewCarouselTimer) {
       clearInterval(window._reviewCarouselTimer);
       window._reviewCarouselTimer = null;
     }
 
-    // Remove old button listeners by cloning
-    var newPrev = prevBtn.cloneNode(true);
-    var newNext = nextBtn.cloneNode(true);
+    // Reset listeners by cloning
+    const newPrev = prevBtn.cloneNode(true);
+    const newNext = nextBtn.cloneNode(true);
     prevBtn.parentNode.replaceChild(newPrev, prevBtn);
     nextBtn.parentNode.replaceChild(newNext, nextBtn);
 
-    var cards = track.querySelectorAll(".review-card");
-    console.log('Carousel Init: Found ' + cards.length + ' cards');
-    var currentIndex = 0;
+    const cards = track.querySelectorAll(".review-card");
+    if (cards.length === 0) return;
 
-    // Ensure smooth CSS transition
-    track.style.transition = "transform 0.5s ease";
+    let currentIndex = 0;
+    let visibleCount = 1;
 
     function getVisibleCount() {
-      return window.innerWidth >= 768 ? 3 : 1;
+      if (window.innerWidth >= 1200) return 3;
+      if (window.innerWidth >= 992) return 2.5;
+      if (window.innerWidth >= 768) return 2;
+      if (window.innerWidth >= 480) return 1.2;
+      return 1;
     }
 
     function getMaxIndex() {
-      return Math.max(0, cards.length - getVisibleCount());
+      // Allow partial scrolling if visibleCount is not integer
+      return Math.max(0, cards.length - Math.floor(getVisibleCount()));
+    }
+
+    function createDots() {
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = '';
+      const maxIdx = getMaxIndex();
+      
+      for (let i = 0; i <= maxIdx; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === currentIndex ? ' active' : '');
+        dot.addEventListener('click', () => {
+          currentIndex = i;
+          updateCarousel();
+          resetAutoPlay();
+        });
+        dotsContainer.appendChild(dot);
+      }
     }
 
     function updateCarousel() {
-      if (cards.length === 0) return;
-      // The percentage in translateX is relative to the track's own width.
-      // Since each card is part of the flex track, we move by 1/totalCards per index.
-      var offset = (currentIndex * 100) / cards.length;
-      track.style.transform = "translateX(-" + offset + "%)";
+      visibleCount = getVisibleCount();
+      const maxIdx = getMaxIndex();
+      if (currentIndex > maxIdx) currentIndex = maxIdx;
+
+      const gap = 8; // Must match CSS
+      const containerWidth = track.parentElement.offsetWidth;
+      
+      // Calculate card width accounting for gaps
+      // Formula: (TotalWidth - (GapsInViewport)) / visibleCount
+      // If visibleCount is 3, there are 2 gaps.
+      const cardWidth = (containerWidth - (Math.ceil(visibleCount) - 1) * gap) / visibleCount;
+      
+      cards.forEach(card => {
+        card.style.width = cardWidth + 'px';
+      });
+
+      // Calculate translation: (cardWidth + gap) * currentIndex
+      const offset = currentIndex * (cardWidth + gap);
+      track.style.transform = `translateX(-${offset}px)`;
+
+      // Update dots
+      if (dotsContainer) {
+        const dots = dotsContainer.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentIndex);
+        });
+      }
     }
 
     function startAutoPlay() {
       window._reviewCarouselTimer = setInterval(function () {
-        console.log('Carousel: Auto-scrolling...');
-        currentIndex = currentIndex < getMaxIndex() ? currentIndex + 1 : 0;
+        const maxIdx = getMaxIndex();
+        if (currentIndex < maxIdx) {
+          currentIndex++;
+        } else {
+          currentIndex = 0;
+        }
         updateCarousel();
       }, 5000);
     }
 
     function resetAutoPlay() {
-      clearInterval(window._reviewCarouselTimer);
+      if (window._reviewCarouselTimer) clearInterval(window._reviewCarouselTimer);
       startAutoPlay();
     }
 
@@ -213,27 +261,35 @@
     });
 
     // Touch/Swipe support
-    var touchStartX = 0;
-    track.addEventListener("touchstart", function (e) {
-      touchStartX = e.changedTouches[0].screenX;
+    let touchStartX = 0;
+    let touchMoveX = 0;
+    
+    track.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchMoveX = touchStartX; // Prevent movement on simple tap
+      if (window._reviewCarouselTimer) clearInterval(window._reviewCarouselTimer);
     }, { passive: true });
 
-    track.addEventListener("touchend", function (e) {
-      var diff = touchStartX - e.changedTouches[0].screenX;
+    track.addEventListener("touchmove", (e) => {
+      touchMoveX = e.touches[0].clientX;
+    }, { passive: true });
+
+    track.addEventListener("touchend", () => {
+      const diff = touchStartX - touchMoveX;
       if (Math.abs(diff) > 50) {
-        currentIndex = diff > 0
-          ? (currentIndex < getMaxIndex() ? currentIndex + 1 : 0)
-          : (currentIndex > 0 ? currentIndex - 1 : getMaxIndex());
+        if (diff > 0) {
+          currentIndex = currentIndex < getMaxIndex() ? currentIndex + 1 : 0;
+        } else {
+          currentIndex = currentIndex > 0 ? currentIndex - 1 : getMaxIndex();
+        }
         updateCarousel();
-        resetAutoPlay();
       }
-    }, { passive: true });
-
-    window.addEventListener("resize", function () {
-      if (currentIndex > getMaxIndex()) currentIndex = getMaxIndex();
-      updateCarousel();
+      startAutoPlay();
     });
 
+    window.addEventListener("resize", updateCarousel);
+
+    createDots();
     updateCarousel();
     startAutoPlay();
   }

@@ -603,29 +603,49 @@ a.bg-surface-container-high:active {
    =================================================== */
 .reviews-track {
   display: flex;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 8px; /* Further decreased gap for even tighter layout */
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: transform;
+  align-items: stretch; /* Ensure all cards are same height */
 }
 
 .review-card {
-  flex: 0 0 100%; /* Default mobile: 1 card */
-  padding: 0 12px;
+  flex: 0 0 auto;
   box-sizing: border-box;
-}
-
-@media (min-width: 768px) {
-  .review-card {
-    flex: 0 0 33.333333%; /* Desktop: 3 cards */
-  }
+  height: auto; /* Allow stretch from parent */
 }
 
 .review-card > div {
   height: 100%;
+  display: flex;
+  flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .review-card:hover > div {
   transform: translateY(-5px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* Dots Navigation */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: #f97316;
+  transform: scale(1.3);
 }
 

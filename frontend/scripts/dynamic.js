@@ -29,10 +29,11 @@
       const res = await fetchPrograms();
       const programs = res && res.success && res.data ? res.data : [];
 
-      if (!programs.length) {
-        grid.innerHTML = '<div class="col-span-3 text-center py-12 text-on-surface-variant opacity-60">No programs listed yet.</div>';
-        return;
-      }
+      // Filter out programs that are already hardcoded in index.html
+      const hardcodedTitles = ['Playgroup', 'Nursery', 'Kindergarten'];
+      const extraPrograms = programs.filter(p => !hardcodedTitles.some(t => t.toLowerCase() === p.title.toLowerCase()));
+
+      if (!extraPrograms.length) return;
 
       const GHIBLI_BGS = [
         'assets/ghibli/forest.png',
@@ -40,8 +41,8 @@
         'assets/ghibli/garden.png'
       ];
 
-      grid.innerHTML = programs.map((p, i) => {
-        const bg = GHIBLI_BGS[i % GHIBLI_BGS.length];
+      const html = extraPrograms.map((p, i) => {
+        const bg = GHIBLI_BGS[(i + hardcodedTitles.length) % GHIBLI_BGS.length];
         return `
         <div class="relative overflow-hidden p-1 rounded-3xl hover:scale-[1.02] transition-all duration-500 group shadow-lg" 
              style="background: url('${bg}') no-repeat center center; background-size: cover;">
@@ -52,8 +53,10 @@
           </div>
         </div>`;
       }).join('');
-    } catch {
-      grid.innerHTML = '<div class="col-span-3 text-center py-12 text-red-500">Could not load programs.</div>';
+      
+      grid.insertAdjacentHTML('beforeend', html);
+    } catch (err) {
+      console.warn('Could not load extra programs:', err);
     }
   }
 
@@ -103,18 +106,18 @@
         const shortText = isLong ? r.reviewText.substring(0, LIMIT) + '...' : r.reviewText;
         return `
         <div class="review-card">
-          <div class="bg-surface-container-low p-8 rounded-xl relative flex flex-col min-h-[380px]">
-            <div class="flex gap-1 mb-4 text-orange-500">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+          <div class="bg-surface-container-low p-8 rounded-xl relative flex flex-col h-full shadow-sm border border-orange-100/30">
+            <div class="flex gap-1 mb-4 text-orange-500 text-sm">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
             <div class="flex-1 flex flex-col">
-              <p id="rv-text-${i}" class="text-lg italic mb-2 leading-relaxed">"${shortText}"</p>
+              <p id="rv-text-${i}" class="text-lg italic mb-4 leading-relaxed text-stone-700">"${shortText}"</p>
               ${isLong
-            ? `<button class="text-primary font-bold text-sm mb-4 mt-2 hover:underline self-start" onclick="toggleReviewText(this, ${i}, ${LIMIT})">Read more</button>`
-            : '<div class="mb-4 mt-2"></div>'
+            ? `<button class="text-primary font-bold text-sm mb-6 hover:underline self-start flex items-center gap-1" onclick="toggleReviewText(this, ${i}, ${LIMIT})">Read more <span class="material-symbols-outlined text-xs">keyboard_arrow_down</span></button>`
+            : '<div class="mb-6"></div>'
           }
             </div>
-            <div class="flex items-center gap-4 mt-auto">
-              <div class="w-12 h-12 rounded-full ${colors[i % colors.length]} flex items-center justify-center font-bold text-lg">${r.parentName.charAt(0)}</div>
-              <div><h4 class="font-bold">${r.parentName}</h4></div>
+            <div class="flex items-center gap-4 mt-auto pt-4 border-t border-stone-100">
+              <div class="w-11 h-11 rounded-full ${colors[i % colors.length]} flex items-center justify-center font-bold text-lg shadow-inner">${r.parentName.charAt(0)}</div>
+              <div><h4 class="font-bold text-stone-800">${r.parentName}</h4></div>
             </div>
           </div>
         </div>`;
@@ -130,12 +133,12 @@
     const p = document.getElementById('rv-text-' + index);
     if (!p) return;
     const fullText = window._reviewTexts[index];
-    if (btn.textContent === 'Read more') {
+    if (btn.innerHTML.includes('Read more')) {
       p.textContent = '"' + fullText + '"';
-      btn.textContent = 'Show less';
+      btn.innerHTML = 'Show less <span class="material-symbols-outlined text-xs">keyboard_arrow_up</span>';
     } else {
       p.textContent = '"' + fullText.substring(0, limit) + '..."';
-      btn.textContent = 'Read more';
+      btn.innerHTML = 'Read more <span class="material-symbols-outlined text-xs">keyboard_arrow_down</span>';
     }
   };
 
@@ -368,6 +371,16 @@
     initReviewForm();
     initContactForm();
     initGallery();
+
+    // Gallery Modal setup
+    const modal = document.getElementById('gallery-modal');
+    const closeBtn = document.getElementById('modal-close');
+    if (modal) {
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeGalleryModal(); });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeGalleryModal);
+    }
   });
 
   // ── Static gallery fallback images (12 images: 6 original + 6 new) ──
@@ -424,23 +437,33 @@
     try {
       const res = await fetchGallery();
       if (res.success && res.data && res.data.length > 0) {
-        grid.innerHTML = '';
-        // Show only first 8 images as a preview on the home page
-        const displayData = res.data.slice(0, 8);
-        displayData.forEach((img, index) => {
+        // First 8 images are already hardcoded in index.html
+        const hardcodedFiles = [
+          'assets/IMG_1223.jpg', 'assets/IMG_1228.jpg', 'assets/IMG_1240.jpg', 'assets/IMG_1483.JPG',
+          'assets/pic3.jpeg', 'assets/pic4.jpeg', 'assets/IMG_2113.JPG', 'assets/IMG_2133.JPG'
+        ];
+
+        const extraImages = res.data.filter(img => {
           const isLocal = img.imageUrl.startsWith('/uploads');
           const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
           const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
-          grid.appendChild(buildGalleryDiv(finalUrl, img.altText || 'Preschool Gallery', index));
+          // Check if it matches any of our hardcoded files
+          return !hardcodedFiles.some(f => finalUrl.includes(f));
         });
-      } else {
-        // No images in DB – show static local images
-        renderStaticGallery(grid);
+
+        if (!extraImages.length) return;
+
+        // Append extra images to the home page preview
+        extraImages.slice(0, 8).forEach((img, index) => {
+          const isLocal = img.imageUrl.startsWith('/uploads');
+          const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
+          const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
+          // Use offset 8 for index to maintain grid pattern variety
+          grid.appendChild(buildGalleryDiv(finalUrl, img.altText || 'Preschool Gallery', index + 8));
+        });
       }
     } catch (err) {
-      console.error('Failed to load gallery:', err);
-      // On any error, gracefully show static images
-      renderStaticGallery(grid);
+      console.error('Failed to load extra gallery images:', err);
     }
   }
 
@@ -469,14 +492,5 @@
     }, 200);
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('gallery-modal');
-    const closeBtn = document.getElementById('modal-close');
-    if (modal) {
-      modal.addEventListener('click', (e) => { if (e.target === modal) closeGalleryModal(); });
-    }
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeGalleryModal);
-    }
-  });
+
 })();

@@ -267,7 +267,33 @@
             traditions, values and culture in a joyful and educational manner.</p>
         </div>
         <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
-          <div class="col-span-3 text-center py-8 text-on-surface-variant">Loading programs...</div>
+          <!-- Static Program 1 -->
+          <div class="relative overflow-hidden p-1 rounded-3xl hover:scale-[1.02] transition-all duration-500 group shadow-lg" 
+               style="background: url('assets/ghibli/forest.png') no-repeat center center; background-size: cover;">
+            <div class="bg-white/80 backdrop-blur-md p-8 rounded-[1.4rem] h-full flex flex-col border border-white/40 group-hover:bg-white/90 transition-colors">
+              <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2">2 - 3 Years</span>
+              <h3 class="text-2xl font-bold mb-4 text-stone-800">Playgroup</h3>
+              <p class="text-sm leading-relaxed text-stone-600 mb-6 flex-1">Our playgroup program introduces young children to a structured learning environment through fun, play-based activities that foster social skills and early cognitive development.</p>
+            </div>
+          </div>
+          <!-- Static Program 2 -->
+          <div class="relative overflow-hidden p-1 rounded-3xl hover:scale-[1.02] transition-all duration-500 group shadow-lg" 
+               style="background: url('assets/ghibli/classroom.png') no-repeat center center; background-size: cover;">
+            <div class="bg-white/80 backdrop-blur-md p-8 rounded-[1.4rem] h-full flex flex-col border border-white/40 group-hover:bg-white/90 transition-colors">
+              <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2">3 - 4 Years</span>
+              <h3 class="text-2xl font-bold mb-4 text-stone-800">Nursery</h3>
+              <p class="text-sm leading-relaxed text-stone-600 mb-6 flex-1">The nursery program focuses on building foundational literacy and numeracy skills, encouraging creativity through art and music, and developing fine and gross motor skills.</p>
+            </div>
+          </div>
+          <!-- Static Program 3 -->
+          <div class="relative overflow-hidden p-1 rounded-3xl hover:scale-[1.02] transition-all duration-500 group shadow-lg" 
+               style="background: url('assets/ghibli/garden.png') no-repeat center center; background-size: cover;">
+            <div class="bg-white/80 backdrop-blur-md p-8 rounded-[1.4rem] h-full flex flex-col border border-white/40 group-hover:bg-white/90 transition-colors">
+              <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2">4 - 5 Years</span>
+              <h3 class="text-2xl font-bold mb-4 text-stone-800">Kindergarten</h3>
+              <p class="text-sm leading-relaxed text-stone-600 mb-6 flex-1">Our kindergarten curriculum prepares children for formal schooling by enhancing language abilities, logical thinking, and independent learning in a supportive and engaging atmosphere.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -287,7 +313,46 @@
           <div class="h-2 w-24 bg-primary mx-auto rounded-full"></div>
         </div>
         <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          <div class="col-span-4 text-center py-12 text-on-surface-variant">Loading gallery images...</div>
+          <!-- Static Gallery Item 0 -->
+          <div class="rounded-xl overflow-hidden group shadow-md col-span-2 row-span-2 h-[400px] md:h-[528px]">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/IMG_1223.jpg" alt="Outdoor play activities" onclick="openGalleryModal('assets/IMG_1223.jpg')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
+          <!-- Static Gallery Item 1 -->
+          <div class="rounded-xl overflow-hidden group shadow-md h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/IMG_1228.jpg" alt="Children playing outdoors" onclick="openGalleryModal('assets/IMG_1228.jpg')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
+          <!-- Static Gallery Item 2 -->
+          <div class="rounded-xl overflow-hidden group shadow-md h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/IMG_1240.jpg" alt="Celebration at Rainbow Preschool" onclick="openGalleryModal('assets/IMG_1240.jpg')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
+          <!-- Static Gallery Item 3 -->
+          <div class="rounded-xl overflow-hidden group shadow-md col-span-2 h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/IMG_1483.JPG" alt="Birthday celebration" onclick="openGalleryModal('assets/IMG_1483.JPG')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
+          <!-- Static Gallery Item 4 -->
+          <div class="rounded-xl overflow-hidden group shadow-md col-span-2 row-span-2 h-[400px] md:h-[528px]">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/pic3.jpeg" alt="Festival celebration" onclick="openGalleryModal('assets/pic3.jpeg')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
+          <!-- Static Gallery Item 5 -->
+          <div class="rounded-xl overflow-hidden group shadow-md h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/pic4.jpeg" alt="Cultural activity" onclick="openGalleryModal('assets/pic4.jpeg')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
+          <!-- Static Gallery Item 6 -->
+          <div class="rounded-xl overflow-hidden group shadow-md h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/IMG_2113.JPG" alt="Children learning together" onclick="openGalleryModal('assets/IMG_2113.JPG')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
+          <!-- Static Gallery Item 7 -->
+          <div class="rounded-xl overflow-hidden group shadow-md col-span-2 h-48 md:h-64">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+              src="assets/IMG_2133.JPG" alt="Festival activity" onclick="openGalleryModal('assets/IMG_2133.JPG')" onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+          </div>
         </div>
 
         <!-- More Images Button -->
@@ -326,7 +391,7 @@
       <!-- Floating Icons -->
       <div class="floating-icon delay-2" style="top: 8%; right: 35%;">🍫</div>
       <div class="floating-icon" style="bottom: 15%; left: 5%;">🌈</div>
-      <div class="max-w-7xl mx-auto">
+      <div class="max-w-[1440px] mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4 reveal">
           <div>
             <h2 class="font-headline text-4xl md:text-5xl font-bold mb-4">Parent Stories</h2>
@@ -354,6 +419,8 @@
             </div>
           </div>
         </div>
+        <!-- Dots Navigation -->
+        <div id="reviews-dots" class="carousel-dots"></div>
         <!-- Submit Review Form -->
         <div class="mt-16 bg-surface-container-low p-8 rounded-xl reveal" id="write-review">
           <h3 class="font-headline text-2xl font-bold mb-6">Share Your Experience ⭐</h3>
