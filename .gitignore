@@ -1,6 +1,9 @@
 node_modules/
-**/node_modules/
 .env
-**/.env
 *.zip
-.DS_Store
+backend/node_modules/
+backend/.env
+frontend/node_modules/
+frontend/.env
+uploads/
+assets/uploads/
