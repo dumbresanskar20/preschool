@@ -4,15 +4,21 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure uploads directory exists
-const uploadDir = path.join(__dirname, '../../frontend/uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// ── Ensure both upload directories exist ──────────────────────
+const uploadDir      = path.join(__dirname, '../../frontend/uploads');
+const assetsUploadDir = path.join(__dirname, '../../frontend/assets/uploads');
 
-// Storage configuration
+[uploadDir, assetsUploadDir].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`Created directory: ${dir}`);
+  }
+});
+
+// ── Storage configuration ─────────────────────────────────────
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    // Primary save location: frontend/uploads/
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
@@ -21,15 +27,15 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif/;
+    const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
     if (extname && mimetype) return cb(null, true);
-    cb(new Error('Only images are allowed (jpeg, jpg, png, gif)'));
+    cb(new Error('Only images are allowed (jpeg, jpg, png, gif, webp)'));
   }
 });
 
@@ -38,9 +44,28 @@ router.post('/', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ success: false, message: 'No file uploaded.' });
   }
-  // Return the relative path for the frontend
-  const filePath = `/uploads/${req.file.filename}`;
-  res.json({ success: true, url: filePath });
+
+  const filename = req.file.filename;
+
+  // ── Also copy file to assets/uploads/ for the assets folder structure ──
+  try {
+    const srcPath  = path.join(uploadDir, filename);
+    const destPath = path.join(assetsUploadDir, filename);
+    fs.copyFileSync(srcPath, destPath);
+    console.log(`Image also copied to assets/uploads/${filename}`);
+  } catch (copyErr) {
+    // Non-fatal: log warning but still return success
+    console.warn(`Warning: Could not copy to assets/uploads: ${copyErr.message}`);
+  }
+
+  // Return the relative path for the frontend (served via /uploads/ static route)
+  const filePath = `/uploads/${filename}`;
+  res.json({
+    success: true,
+    url: filePath,
+    assetsUrl: `/assets/uploads/${filename}`,
+    filename: filename
+  });
 });
 
 module.exports = router;

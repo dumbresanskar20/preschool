@@ -300,11 +300,11 @@
           // 5. Immediately update the UI without page reload by re-fetching
           await loadReviews();
         } else {
-          // 7. Handle errors from API
+          // Handle errors from API
           showLocalToast(response.message || 'Submission failed. Please try again.', 'error');
         }
       } catch (error) {
-        // 7. Handle network errors
+        // Handle network errors
         console.error('API Error:', error);
         showLocalToast('Could not connect to the server. Please try again later.', 'error');
       } finally {
@@ -370,48 +370,77 @@
     initGallery();
   });
 
+  // ── Static gallery fallback images (12 images: 6 original + 6 new) ──
+  const STATIC_GALLERY = [
+    { src: 'assets/IMG_1223.jpg',  alt: 'Outdoor play activities' },
+    { src: 'assets/IMG_1228.jpg',  alt: 'Children playing outdoors' },
+    { src: 'assets/IMG_1240.jpg',  alt: 'Celebration at Rainbow Preschool' },
+    { src: 'assets/IMG_1483.JPG',  alt: 'Birthday celebration' },
+    { src: 'assets/pic3.jpeg',     alt: 'Festival celebration' },
+    { src: 'assets/pic4.jpeg',     alt: 'Cultural activity' },
+    // 6 additional images from assets folder
+    { src: 'assets/IMG_2113.JPG',  alt: 'Children learning together' },
+    { src: 'assets/IMG_2133.JPG',  alt: 'Festival activity' },
+    { src: 'assets/IMG_2195.JPG',  alt: 'School event' },
+    { src: 'assets/IMG_2229.JPG',  alt: 'Special event at school' },
+    { src: 'assets/IMG_2257.JPG',  alt: 'Fun moment at Rainbow Preschool' },
+    { src: 'assets/IMG_2263.JPG',  alt: 'School celebration' },
+  ];
+
+  function buildGalleryDiv(src, alt, index) {
+    let classes = 'rounded-xl overflow-hidden group shadow-md';
+    if (index % 4 === 0) {
+      classes += ' col-span-2 row-span-2 h-[400px] md:h-[528px]';
+    } else if (index % 4 === 3) {
+      classes += ' col-span-2 h-48 md:h-64';
+    } else {
+      classes += ' h-48 md:h-64';
+    }
+    const div = document.createElement('div');
+    div.className = classes;
+    div.innerHTML = `
+      <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
+        src="${src}"
+        alt="${alt}"
+        onclick="openGalleryModal('${src}')"
+        onerror="this.src='assets/pic1.jpeg'; this.onerror=null;" />
+    `;
+    return div;
+  }
+
+  function renderStaticGallery(grid) {
+    grid.innerHTML = '';
+    // Show only first 8 images as a preview on the home page
+    const previewImages = STATIC_GALLERY.slice(0, 8);
+    previewImages.forEach((img, index) => {
+      grid.appendChild(buildGalleryDiv(img.src, img.alt, index));
+    });
+  }
+
   async function initGallery() {
     const grid = document.getElementById('gallery-grid');
     if (!grid) return;
 
     try {
       const res = await fetchGallery();
-      if (res.success && res.data.length > 0) {
+      if (res.success && res.data && res.data.length > 0) {
         grid.innerHTML = '';
-        res.data.forEach((img, index) => {
-          const div = document.createElement('div');
-
-          // Pattern logic: 
-          // index % 4 == 0 -> col-span-2 row-span-2
-          // index % 4 == 1 or 2 -> standard
-          // index % 4 == 3 -> col-span-2
-
-          let classes = 'rounded-xl overflow-hidden group shadow-md';
-          if (index % 4 === 0) {
-            classes += ' col-span-2 row-span-2 h-[400px] md:h-[528px]';
-          } else if (index % 4 === 3) {
-            classes += ' col-span-2 h-48 md:h-64';
-          } else {
-            classes += ' h-48 md:h-64';
-          }
-
+        // Show only first 8 images as a preview on the home page
+        const displayData = res.data.slice(0, 8);
+        displayData.forEach((img, index) => {
           const isLocal = img.imageUrl.startsWith('/uploads');
           const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
           const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
-
-          div.className = classes;
-          div.innerHTML = `
-            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 block cursor-pointer"
-              src="${finalUrl}"
-              alt="${img.altText || 'Preschool Gallery'}"
-              onclick="openGalleryModal('${finalUrl}')"
-              onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800'; this.onerror=null;" />
-          `;
-          grid.appendChild(div);
+          grid.appendChild(buildGalleryDiv(finalUrl, img.altText || 'Preschool Gallery', index));
         });
+      } else {
+        // No images in DB – show static local images
+        renderStaticGallery(grid);
       }
     } catch (err) {
       console.error('Failed to load gallery:', err);
+      // On any error, gracefully show static images
+      renderStaticGallery(grid);
     }
   }
 

@@ -17,7 +17,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // ─── Serve Frontend Static Files ─────────────────────────────
 app.use(express.static(path.join(__dirname, '../frontend')));
+// Serve uploaded images via /uploads/ (legacy + admin panel path)
 app.use('/uploads', express.static(path.join(__dirname, '../frontend/uploads')));
+// Also serve via /assets/uploads/ for the new assets folder structure
+app.use('/assets/uploads', express.static(path.join(__dirname, '../frontend/assets/uploads')));
 
 // ─── API Routes ───────────────────────────────────────────────
 app.use('/api/auth',         require('./routes/auth'));
