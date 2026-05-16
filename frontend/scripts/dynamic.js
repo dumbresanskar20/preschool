@@ -445,7 +445,7 @@
 
         const extraImages = res.data.filter(img => {
           const isLocal = img.imageUrl.startsWith('/uploads');
-          const imageBase = (typeof PRODUCTION_API !== 'undefined') ? PRODUCTION_API.replace('/api', '') : API_BASE.replace('/api', '');
+          const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
           const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
           // Check if it matches any of our hardcoded files
           return !hardcodedFiles.some(f => finalUrl.includes(f));
@@ -456,7 +456,7 @@
         // Append extra images to the home page preview
         extraImages.slice(0, 8).forEach((img, index) => {
           const isLocal = img.imageUrl.startsWith('/uploads');
-          const imageBase = (typeof PRODUCTION_API !== 'undefined') ? PRODUCTION_API.replace('/api', '') : API_BASE.replace('/api', '');
+          const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
           const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
           // Use offset 8 for index to maintain grid pattern variety
           grid.appendChild(buildGalleryDiv(finalUrl, img.altText || 'Preschool Gallery', index + 8));

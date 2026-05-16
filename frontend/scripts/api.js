@@ -4,7 +4,7 @@
 // 2. Local dev via backend (port 5000): relative /api works fine
 // 3. Local dev via Live Server (port 5500 etc): point to localhost:5000
 
-const PRODUCTION_API = 'https://preschool-production.up.railway.app/api';
+const RENDER_API = 'https://preschool-k8ak.onrender.com/api';
 
 let API_BASE;
 const { hostname, port } = window.location;
@@ -13,8 +13,8 @@ if (hostname === 'localhost' || hostname === '127.0.0.1') {
   // Running locally: if served by Node (port 5000) use relative path, else point to backend
   API_BASE = port === '5000' ? '/api' : 'http://localhost:5000/api';
 } else {
-  // Production: use Railway backend
-  API_BASE = PRODUCTION_API;
+  // Production / cPanel: always use Render backend
+  API_BASE = RENDER_API;
 }
 
 /* ── Registration ─────────────────────────────── */

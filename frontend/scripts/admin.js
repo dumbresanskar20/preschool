@@ -299,7 +299,7 @@ async function loadGalleryList() {
   const container = document.getElementById('list-gallery');
   container.innerHTML = res.data.map((img, index) => {
     const isLocal = img.imageUrl.startsWith('/uploads');
-    const imageBase = (typeof PRODUCTION_API !== 'undefined') ? PRODUCTION_API.replace('/api', '') : API_BASE.replace('/api', '');
+    const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
     const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
     return `
     <div data-id="${img._id}" class="relative group border rounded-lg overflow-hidden h-40 cursor-move bg-white shadow-sm">
