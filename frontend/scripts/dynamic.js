@@ -431,40 +431,8 @@
   }
 
   async function initGallery() {
-    const grid = document.getElementById('gallery-grid');
-    if (!grid) return;
-
-    try {
-      const res = await fetchGallery();
-      if (res.success && res.data && res.data.length > 0) {
-        // First 8 images are already hardcoded in index.html
-        const hardcodedFiles = [
-          'assets/IMG_1223.jpg', 'assets/IMG_1228.jpg', 'assets/IMG_1240.jpg', 'assets/IMG_1483.JPG',
-          'assets/pic3.jpeg', 'assets/pic4.jpeg', 'assets/IMG_2113.JPG', 'assets/IMG_2133.JPG'
-        ];
-
-        const extraImages = res.data.filter(img => {
-          const isLocal = img.imageUrl.startsWith('/uploads');
-          const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
-          const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
-          // Check if it matches any of our hardcoded files
-          return !hardcodedFiles.some(f => finalUrl.includes(f));
-        });
-
-        if (!extraImages.length) return;
-
-        // Append extra images to the home page preview
-        extraImages.slice(0, 8).forEach((img, index) => {
-          const isLocal = img.imageUrl.startsWith('/uploads');
-          const imageBase = (typeof RENDER_API !== 'undefined') ? RENDER_API.replace('/api', '') : API_BASE.replace('/api', '');
-          const finalUrl = isLocal ? `${imageBase}${img.imageUrl}` : img.imageUrl;
-          // Use offset 8 for index to maintain grid pattern variety
-          grid.appendChild(buildGalleryDiv(finalUrl, img.altText || 'Preschool Gallery', index + 8));
-        });
-      }
-    } catch (err) {
-      console.error('Failed to load extra gallery images:', err);
-    }
+    // Dynamic gallery loading has been disabled to make the gallery section completely static.
+    return;
   }
 
   // ── Modal Logic ──────────────────────────────────────────────
